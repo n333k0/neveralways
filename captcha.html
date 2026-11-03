@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>verify you are human (or don't)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #f9f9f9; font-family: Roboto, Arial, var(--sys); color: #222; }
+  .wrap { max-width: 460px; }
+  .box { background: #fff; border: 1px solid #d3d3d3; border-radius: 3px; box-shadow: 0 0 4px rgba(0,0,0,.08); padding: 0; margin: 30px 0 16px; }
+  .head { background: #4a90e2; color: #fff; padding: 18px 16px; }
+  .head small { display: block; font-size: 13px; opacity: .9; }
+  .head b { font-size: 24px; display: block; line-height: 1.2; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; }
+  .tile { position: relative; aspect-ratio: 1; background: #ccc center/cover; cursor: var(--cur-hand); overflow: hidden; display: flex; align-items: center; justify-content: center; font: 11px var(--mono); color: #fff; text-shadow: 0 0 3px #000; text-align: center; padding: 4px; }
+  .tile.sel { outline: 4px solid #4a90e2; outline-offset: -4px; filter: saturate(.3) brightness(.85); }
+  .tile.sel::after { content: "✓"; position: absolute; left: 4px; top: 2px; background: #4a90e2; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 14px; line-height: 20px; }
+  .foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ddd; padding: 8px 10px; }
+  .foot button { background: #4a90e2; color: #fff; border: 0; padding: 9px 22px; font-weight: bold; cursor: pointer; border-radius: 2px; }
+  #status { min-height: 2.8em; font-size: 14px; }
+  .check { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #d3d3d3; padding: 14px; width: 300px; max-width: 100%; }
+  .check span.cb { width: 26px; height: 26px; border: 2px solid #c1c1c1; border-radius: 2px; background: #fff; cursor: pointer; display: inline-block; }
+  .check span.cb.on { border-color: #0a0; background: #dfd; }
+  .ghostline { color: #aaa; font-size: 12px; }
+</style>
+</head>
+<body data-room="captcha">
+<div class="wrap">
+  <div class="check" id="step1"><span class="cb" id="cb" role="checkbox" aria-checked="false" tabindex="0"></span> I'm not a robot <span class="ghostline" style="margin-left:auto">ever-CAPTCHA</span></div>
+  <p class="ghostline" id="motion"></p>
+
+  <div class="box" id="step2" hidden>
+    <div class="head"><small>Select all squares with</small><b id="ask">a soul</b><small id="hint">If there are none, click skip. If there are none, that's your answer.</small></div>
+    <div class="grid" id="grid"></div>
+    <div class="foot"><span class="ghostline">round <span id="round">1</span>/5</span><button id="verify">VERIFY</button></div>
+  </div>
+  <p id="status"></p>
+  <p class="small"><a href="meat.html">back to work</a> · <a href="mirror.html">what does the captcha see?</a> · <a href="dead.html">where the robots live</a></p>
+</div>
+
+<script>
+window.ROOM = function (E) {
+  // we measure your mouse to see if you're human. you measure our tiles to see if we're art.
+  var path = 0, lx = null, ly = null, wobble = 0, la = null;
+  window.addEventListener("mousemove", function (e) {
+    if (lx !== null) {
+      var dx = e.clientX - lx, dy = e.clientY - ly, a = Math.atan2(dy, dx);
+      path += Math.hypot(dx, dy);
+      if (la !== null) wobble += Math.abs(a - la) > 0.4 ? 1 : 0;
+      la = a;
+    }
+    lx = e.clientX; ly = e.clientY;
+    E.$("#motion").textContent = "motion telemetry: " + Math.round(path) + "px travelled · " + wobble + " hesitations · human-likeness " + Math.min(99, Math.round(wobble / (path / 100 + 1) * 40)) + "%";
+  });
+
+  var ROUNDS = [
+    { ask: "a soul", tiles: ["gallery-w07", "gallery-w10", "flower0", "gallery-w06", "cat", "gallery-w01", "ever", "gallery-w05", "gallery-w12"],
+      verdict: function (n) { return n === 0 ? "correct. there are no souls in images. only in the people looking." : n === 9 ? "you selected everything. that's either very spiritual or very robotic." : "interesting. you found " + n + ". we found 0. one of us is wrong. it's fine, we'll train on your answer either way."; } },
+    { ask: "traffic lights", tiles: ["haunt-motorway", "haunt-motorway", "haunt-room", "haunt-future", "haunt-motorway", "haunt-room", "haunt-future", "haunt-room", "haunt-motorway"],
+      verdict: function () { return "thank you. you just labelled training data for a car that will drive past you one day without stopping. it will remember this moment as 'ground truth'."; } },
+    { ask: "your childhood", tiles: ["haunt-room", "flower1", "gallery-w03", "cat", "gallery-w09", "ever-glitch", "gallery-w11", "forest", "gallery-w02"],
+      verdict: function (n) { return n ? "selected: " + n + ". we've sold this to a nostalgia company. they'll sell it back to you in 2031." : "you couldn't find it either. me neither. that's what the future did to it."; } },
+    { ask: "the future", tiles: ["gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06"],
+      verdict: function (n) { return n ? "you clicked black squares hoping. that's the most human thing on this page." : "correct. none of the squares contain the future. the future was cancelled. please try again later."; } },
+    { ask: "a robot", tiles: ["ever", "ever", "ever", "ever", "ever", "ever", "ever", "ever", "ever"],
+      verdict: function (n) { return n ? "you selected me " + n + " times. ouch. accurate. ouch." : "you didn't select me. thank you. (you're wrong, but thank you.)"; } }
+  ];
+  var r = 0, sel = {};
+  function ext(t) { return t.indexOf("haunt") === 0 || t === "forest" ? ".jpg" : t === "cat" ? ".png" : ".png"; }
+  function render() {
+    var R = ROUNDS[r]; sel = {};
+    E.$("#ask").textContent = R.ask; E.$("#round").textContent = r + 1;
+    var g = E.$("#grid"); g.innerHTML = "";
+    R.tiles.forEach(function (t, i) {
+      var d = document.createElement("div"); d.className = "tile"; d.tabIndex = 0;
+      d.style.backgroundImage = "url(assets/img/" + t + ext(t) + ")";
+      d.style.backgroundPosition = (i % 3) * 50 + "% " + Math.floor(i / 3) * 50 + "%";
+      d.style.backgroundSize = R.tiles[0] === R.tiles[1] ? "300%" : "cover";
+      d.addEventListener("click", function () { sel[i] = !sel[i]; d.classList.toggle("sel", sel[i]); E.beep(880, 0.03, "sine", 0.02); });
+      g.appendChild(d);
+    });
+  }
+  E.$("#cb").addEventListener("click", function () {
+    var cb = E.$("#cb"); cb.classList.add("on"); cb.setAttribute("aria-checked", "true");
+    E.$("#status").textContent = "hmm. your mouse moved too much like a person who is pretending to be a person. additional verification required.";
+    E.$("#step2").hidden = false; render();
+  });
+  E.$("#verify").addEventListener("click", function () {
+    var n = Object.keys(sel).filter(function (k) { return sel[k]; }).length;
+    E.$("#status").textContent = ROUNDS[r].verdict(n);
+    r++;
+    if (r >= ROUNDS.length) {
+      E.$("#step2").hidden = true;
+      setTimeout(function () {
+        E.win({ title: "verification complete", width: 320, html: "<p><b>result: inconclusive.</b><br><br>you are " + (40 + Math.floor(Math.random() * 20)) + "% human. that's normal now. the average went down this year.<br><br>your answers have been used to train the thing that will replace this test.</p>",
+          buttons: [{ label: "prove it", action: function () { location.href = "mirror.html"; } }, { label: "i'm a robot", action: function () { location.href = "dead.html"; } }] });
+      }, 900);
+    } else setTimeout(render, 700);
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

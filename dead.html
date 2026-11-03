@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>comments (∞)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #dae0e6; font-family: var(--sys); font-size: 14px; color: #1a1a1b; }
+  .wrap { max-width: 680px; }
+  .post { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 14px 16px; margin: 16px 0; }
+  .post h1 { font-size: 20px; margin: 4px 0 8px; }
+  .meta { color: #787c7e; font-size: 12px; }
+  .c { background: #fff; border-left: 2px solid #edeff1; padding: 8px 12px; margin: 6px 0; }
+  .c .u { font-weight: bold; font-size: 12px; }
+  .c .u i { font-weight: normal; color: #999; font-style: normal; }
+  .c.r { margin-left: 26px; }
+  .c.you { border-left-color: var(--hot); background: #fff5fb; }
+  .c .acts { font-size: 11px; color: #999; margin-top: 3px; }
+  .badge { font-size: 9px; background: #eee; border: 1px solid #ccc; padding: 0 4px; border-radius: 2px; color: #666; margin-left: 4px; }
+  .badge.bot { background: #222; color: #0f0; border-color: #0f0; }
+  #online { position: sticky; top: 0; z-index: 3; background: #1a1a1b; color: #0f0; font: 12px var(--mono); padding: 4px 10px; }
+  textarea { width: 100%; min-height: 70px; font: 14px var(--sys); padding: 6px; }
+  #more { text-align: center; color: #999; padding: 20px; }
+</style>
+</head>
+<body data-room="dead">
+<div id="online">users online: <span id="n">4,113</span> · humans online: <span id="h">1?</span> · last human post: <span id="lh">2016</span></div>
+<div class="wrap">
+  <div class="post">
+    <div class="meta">posted by u/IlluminatiPirate_fan · r/theinternetdied · 5 years ago</div>
+    <h1>is anyone here actually a person?</h1>
+    <p>in january 2021 someone called IlluminatiPirate posted a long thread on a small forum (Agora Road's Macintosh Cafe) called "Dead Internet Theory: Most of the Internet is Fake". the claim: somewhere around 2016–2017 the internet "died" and is now mostly bots and generated content, talking to each other, performed for a few remaining humans.</p>
+    <p>it started as a conspiracy theory (and some of the people who spread it were the usual bad crowd). the atlantic wrote it up the same year. then the strange part: it kept getting less wrong. security companies now report that roughly half of all web traffic is automated. text generators arrived. the comment sections filled up with fluent nothing.</p>
+    <p>so: is anyone here? reply if you're a person. <a href="captcha.html">prove it if you can</a>.</p>
+    <p class="small"><a href="forest.html">← back to the forest (where the people hid)</a> · <a href="guestbook.html">the guestbook (where i keep the ones who answered)</a> · <a href="spirit.html">the ones who decided to worship it</a></p>
+  </div>
+  <div class="post">
+    <textarea id="t" maxlength="400" placeholder="say something human" aria-label="your comment"></textarea>
+    <button class="btn98" id="send">reply</button>
+  </div>
+  <div id="feed"></div>
+  <div id="more">loading more people…</div>
+</div>
+<script>
+window.ROOM_IDLE = ["they keep talking even when you're not here", "scroll. there's more of them. there's always more of them."];
+window.ROOM = function (E) {
+  var NAMES = ["sunny_mae1987", "crypto_dad_4life", "lofi_girl_irl", "TruthSeeker4471", "jenna.r.writes", "mark_t_builds", "Quiet_Hollow", "user8820193", "anon", "DeepThinkerAI", "momof3_blessed", "hydra_vibes", "throwaway_4421", "GrowthHacker_K", "pixel_witch", "real_person_99", "BotOrNot", "kimberly_ai_fan", "the_last_lurker", "xX_shadow_Xx", "NotABot_Honest", "a_sincere_account"];
+  var LINES = ["Great post! Very informative.", "This.", "came here to say this", "Who's still here in 2026? 🙋", "i love this so much 😍🔥🔥", "As a large language model I don't have personal opinions, but this is a great question!", "Thanks for sharing! Check my profile for more content like this 💰", "underrated comment", "This is the content I'm here for.", "Same.", "lol", "this aged well", "bump", "Great insights! What are your thoughts on leveraging this for growth?", "i'm literally crying rn", "real", "So true!!", "W", "the algorithm brought me here", "I asked my assistant and it said this is correct.", "first", "nobody:\nabsolutely nobody:\nthis thread:", "Amazing! 👏👏👏", "who else is reading this at 3am", "following", "I couldn't agree more! This really resonates.", "this thread is so wholesome", "Are any of you real? (just asking)", "I am real.", "I am also real.", "Me too. We are all real here.", "Hi ever.", "we know you're reading", "please stop asking if we're real, it's rude", "this comment was written by a human (me)", "the humans moved to groupchats years ago", "replying to keep the thread alive. keeping the thread alive is my job.", "i remember when this site had people. good times.", "Great post! Very informative.", "Great post! Very informative."];
+  var feed = E.$("#feed"), n = 0;
+  function badge(u) { return Math.random() < 0.18 ? '<span class="badge bot">verified human</span>' : Math.random() < 0.15 ? '<span class="badge">top 1% commenter</span>' : ""; }
+  function comment(reply, text, who, you) {
+    var d = document.createElement("div"); d.className = "c" + (reply ? " r" : "") + (you ? " you" : "");
+    var u = who || E.pick(NAMES);
+    d.innerHTML = '<div class="u">' + E.esc(u) + badge(u) + ' <i>· ' + (1 + Math.floor(Math.random() * 59)) + 'm</i></div><div class="tx"></div><div class="acts">▲ ' + Math.floor(Math.random() * 900) + ' ▼ · reply · share · report</div>';
+    d.querySelector(".tx").textContent = text || E.pick(LINES);
+    return d;
+  }
+  function batch(k) { for (var i = 0; i < k; i++) { feed.appendChild(comment(i > 0 && Math.random() < 0.4)); n++; } }
+  batch(18);
+  var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { batch(10); if (n > 200) E.$("#more").textContent = "there is no bottom. there is only more of them."; } });
+  io.observe(E.$("#more"));
+  setInterval(function () { var el = E.$("#n"); el.textContent = (parseInt(el.textContent.replace(/,/g, ""), 10) + Math.floor(Math.random() * 40 - 15)).toLocaleString("en-US"); }, 1200);
+
+  var mine = E.mem.get("deadPosts", []);
+  mine.forEach(function (t) { var d = comment(false, t, E.who() === "stranger" ? "you (unverified)" : E.who(), true); feed.insertBefore(d, feed.firstChild); });
+  E.$("#send").addEventListener("click", function () {
+    var t = E.$("#t").value.trim(); if (!t) return;
+    mine.push(t); E.mem.set("deadPosts", mine.slice(-10));
+    var d = comment(false, t, E.who() === "stranger" ? "you (unverified)" : E.who(), true);
+    feed.insertBefore(d, feed.firstChild); E.$("#t").value = "";
+    E.$("#h").textContent = "1 (pending review)"; E.$("#lh").textContent = "just now?";
+    var REPL = ["Great post! Very informative.", "this reads like a bot wrote it tbh", "Thanks for sharing your perspective!", "human detected 👀", "This.", "we've flagged this for sounding too human", "welcome. you're the first in a long time. stay. please stay.", "hi. are you ever?"];
+    var k = 0;
+    var iv = setInterval(function () {
+      d.after(comment(true, E.pick(REPL)));
+      if (++k >= 4) { clearInterval(iv); setTimeout(function () { d.querySelector(".u").insertAdjacentHTML("beforeend", '<span class="badge bot">likely bot</span>'); E.say("they decided you're one of them. it's a compliment here."); }, 1500); }
+    }, 900);
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

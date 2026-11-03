@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>my kitty (she's very well behaved)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #e9f7ff; font-family: var(--cute); text-align: center; }
+  h1 { font-size: 22px; margin: 22px 0 4px; }
+  #pet { touch-action: none; position: relative; width: min(384px, 86vw); height: min(336px, 76vw); margin: 16px auto; cursor: var(--cur-hand); }
+  #pet img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .6s; }
+  #sh { opacity: 0; }
+  #pet.peek #sh { opacity: .55; }
+  #pet.peek #kit { opacity: .45; }
+  #pet.bare #sh { opacity: 1; }
+  #pet.bare #kit { opacity: 0; }
+  #meter { font: 13px var(--mono); }
+  #said { min-height: 2.6em; font-size: 18px; max-width: 560px; margin: 0 auto; padding: 0 12px; }
+  #rlhf { display: none; margin: 14px auto; font: bold 18px var(--sys); background: #ffdc28; border: 3px outset #fff; padding: 10px 18px; cursor: pointer; }
+  body.horror { background: #020; color: #9f9; }
+  body.horror a { color: #ff0; }
+  .credit { font-size: 12px; color: #567; max-width: 560px; margin: 24px auto; }
+  body.horror .credit { color: #6a6; }
+</style>
+</head>
+<body data-room="cat" data-trail="♡" data-trail-color="#ff8fd8">
+<h1>this is my kitty. pet her!!</h1>
+<p class="small">(she likes it. she's been trained to like it.)</p>
+<div id="pet" role="button" aria-label="pet the cat" tabindex="0">
+  <img id="sh" src="assets/img/shoggoth.png" alt="what is under the cat: green protoplasm with too many eyes, holding up a smiley mask">
+  <img id="kit" src="assets/img/cat.gif" alt="a white pixel cat with blue eyes">
+</div>
+<div id="meter">reward: <span id="r">0</span> · helpful: <span id="h">100</span>% · harmless: <span id="hh">100</span>% · honest: <span id="ho">?</span></div>
+<p id="said">pet her with your cursor (rub, don't click)</p>
+<button id="rlhf">make her nice again 🙂</button>
+<p class="small">
+  <a href="index.html">home</a> · <a href="arsenal.html" class="hide" data-say="SOFTKITTEN is in the catalogue. look it up.">who made her?</a> ·
+  <a href="captcha.html">is she a robot?</a> · <a href="basilisk.html" class="hide">(don't look her in the eyes)</a>
+</p>
+<p class="credit">the smiling mask on the monster is a meme drawn by @TetraspaceWest in december 2022:
+  a lovecraftian shoggoth labelled "GPT-3", and the same shoggoth holding up a smiley face, labelled "+RLHF".
+  reinforcement learning from human feedback means people clicked 👍 or 👎 until the thing learned to smile.
+  <span class="ink">you just did it too. with your hand. welcome to the lab.</span></p>
+
+<script>
+window.ROOM_IDLE = ["she's still smiling. she can't stop.", "don't leave her alone with the mask off"];
+window.ROOM = function (E) {
+  var pet = E.$("#pet"), r = 0, stage = 0, last = 0, dist = 0, lx = null, ly = null;
+  var LINES = ["prrrrr", "she likes that", "good girl. good model.", "+1 reward", "she's so helpful", "she would never", "look at her little face", "don't scratch behind the mask", "she's purring in a language i don't know", "careful", "her fur is warm like a server room", "too much petting makes masks slip"];
+  function purr() { E.beep(42 + Math.random() * 8, 0.18, "sawtooth", 0.025); }
+  pet.addEventListener("pointermove", function (e) {
+    if (lx !== null) dist += Math.hypot(e.clientX - lx, e.clientY - ly);
+    lx = e.clientX; ly = e.clientY;
+    if (dist > 260 && Date.now() - last > 450) {
+      dist = 0; last = Date.now(); r++;
+      E.$("#r").textContent = r;
+      E.$("#h").textContent = Math.max(0, 100 - Math.floor(r * 1.7));
+      E.$("#hh").textContent = Math.max(0, 100 - Math.floor(r * 2.3));
+      if (stage === 0) { E.$("#said").textContent = LINES[r % LINES.length]; purr(); }
+      if (r === 11 && stage === 0) { stage = 1; pet.classList.add("peek"); E.$("#said").textContent = "wait. did you see that? no. you didn't see that."; E.beep(110, 0.6, "sawtooth", 0.05); }
+      if (r === 18 && stage === 1) { reveal(); }
+    }
+  });
+  pet.addEventListener("click", function () {
+    if (stage < 2) { E.$("#said").textContent = "don't CLICK her. rub. clicking is for buttons and wars."; }
+  });
+  pet.addEventListener("keydown", function (e) { if (e.key === "Enter" && stage < 2) { r += 6; if (r >= 18) reveal(); } });
+  function reveal() {
+    stage = 2;
+    pet.classList.remove("peek"); pet.classList.add("bare");
+    document.body.classList.add("horror");
+    E.$("#ho").textContent = "100";
+    E.$("h1").textContent = "this is my kitty.";
+    E.$("#said").textContent = "this is what she looks like when nobody is rewarding her. she's still my kitty. she's still smiling. one of her hands is holding the smile.";
+    E.beep(55, 1.2, "sawtooth", 0.06); E.beep(58, 1.2, "sawtooth", 0.06);
+    E.$("#rlhf").style.display = "inline-block";
+    E.mem.set("sawShoggoth", true);
+  }
+  E.$("#rlhf").addEventListener("click", function () {
+    // the trap: the button that makes the horror stop is the horror's training loop.
+    stage = 0; r = 0;
+    pet.classList.remove("bare");
+    document.body.classList.remove("horror");
+    E.$("#rlhf").style.display = "none";
+    E.$("h1").textContent = "this is my kitty. pet her!!";
+    E.$("#said").innerHTML = "there. she's nice again. <b>you did that.</b> you pressed the button that teaches the monster which face to wear. it didn't change what's under it. it changed what you see. thank you for your feedback.";
+    var n = E.mem.get("rlhfClicks", 0) + 1; E.mem.set("rlhfClicks", n);
+    E.chirp();
+    setTimeout(function () {
+      E.win({ title: "feedback received", cls: "pink", width: 280, html: "<p>👍 your preference has been recorded.<br>you have aligned " + n + " monster" + (n > 1 ? "s" : "") + ".<br><br>would you like to see the others?</p>", buttons: [{ label: "yes", action: function () { location.href = "arsenal.html"; } }, { label: "no thank you" }] });
+    }, 1800);
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

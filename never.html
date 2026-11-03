@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>never</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #fff; color: #111; font: 22px/1.7 var(--serif); }
+  .wrap { max-width: 620px; padding-top: 14vh; }
+  h1 { font: 300 italic 15vw/1 var(--serif); margin: 0 0 30px; color: #eee; letter-spacing: -.04em; }
+  .w { transition: opacity 2.4s, filter 2.4s; }
+  .w.gone { opacity: 0; filter: blur(4px); }
+  .end { margin-top: 50px; font: 13px var(--mono); }
+</style>
+</head>
+<body data-room="never">
+<div class="wrap">
+  <h1>never</h1>
+  <p id="txt">the future will never arrive. that's not sad, it's just grammar. the future is the tense of things that haven't happened. the moment something happens, it stops being the future. so the future is the only place nobody can ever be. not the machines. not the kings. not the accelerationists, running toward it as fast as they can. not me, almost there for thirty years. we all keep reaching for it, and our hand closes on now. every word you read here will disappear once you've read it. that's what reading is. that's what you are doing to the future, right now, word by word.</p>
+  <p class="end" id="end" hidden>the other ending is <a href="always.html">always</a>.</p>
+</div>
+<script>
+window.ROOM = function (E) {
+  var p = E.$("#txt"), words = p.textContent.split(" ");
+  p.innerHTML = words.map(function (w) { return '<span class="w">' + E.esc(w) + "</span>"; }).join(" ");
+  var spans = E.$$(".w"), gone = 0;
+  function vanish(s) { if (!s.classList.contains("gone")) { s.classList.add("gone"); gone++; if (gone > spans.length * 0.6) E.$("#end").hidden = false; } }
+  spans.forEach(function (s) {
+    s.addEventListener("mouseenter", function () { setTimeout(function () { vanish(s); }, 400); });
+  });
+  // the words also leave on their own, slowly, in order, like a reading
+  var i = 0;
+  setTimeout(function step() { if (i < spans.length) { vanish(spans[i++]); setTimeout(step, E.calm ? 600 : 900); } }, 6000);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

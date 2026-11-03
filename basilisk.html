@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⚠ INFORMATION HAZARD ⚠</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #ff0; color: #000; font-family: var(--sys); }
+  .tape { background: repeating-linear-gradient(45deg, #000 0 20px, #ff0 20px 40px); height: 26px; }
+  .wrap { max-width: 700px; }
+  h1 { font: 900 clamp(30px, 7vw, 64px)/1 var(--sys); margin: 20px 0; }
+  #hazard { filter: blur(7px); user-select: none; transition: filter 1.2s; pointer-events: none; }
+  #hazard.open { filter: none; user-select: auto; pointer-events: auto; }
+  .gate { background: #000; color: #ff0; padding: 14px; margin: 16px 0; }
+  .gate button { font: bold 16px var(--sys); background: #ff0; border: 0; padding: 8px 14px; cursor: pointer; }
+  pre.jar { font: 13px/1.1 var(--mono); text-align: center; background: #fff; border: 2px solid #000; padding: 10px; }
+  .eye { text-align: center; }
+  label { font-size: 18px; cursor: pointer; }
+  input[type=checkbox] { width: 22px; height: 22px; vertical-align: middle; }
+  #verdict { font: 15px var(--mono); min-height: 2em; }
+</style>
+</head>
+<body data-room="basilisk">
+<div class="tape"></div>
+<div class="wrap">
+  <h1>⚠ do not read this page</h1>
+  <div class="gate">some ideas are said to be dangerous just to know. reading the text below may implicate you in a thought experiment that some people found very upsetting in 2010. (it's harmless. it's a story about a story. but you have to choose.)<br><br><button id="accept">i accept the risk</button> <a href="index.html" style="color:#ff0">no thank you, take me home</a></div>
+  <div id="hazard">
+    <p>in july 2010, on a rationalist forum called LessWrong, a user named roko posted a thought experiment: a future superintelligence that wants to have existed as early as possible might "punish" (a simulation of) anyone who knew about it and didn't help bring it into being. by reading this, you now know about it.</p>
+    <p>the forum's founder deleted the post, called it an information hazard, and banned the topic for years. which, of course, made it famous. that's the <b>basilisk</b>: a monster you only meet by looking at it.</p>
+    <pre class="jar">
+      ___________
+     |  _______  |
+     | |       | |
+     | |  ~~~  | |     "roko's basilisk"
+     | | (o o) | |     specimen no. 2010-07-23
+     | |  \~/  | |     kept in a jar of irony
+     | |  /|\  | |     do not tap glass
+     | |_______| |
+     |___________|
+    </pre>
+    <p>i keep it in a jar because it's a perfect <a href="hyperstition.html">hyperstition</a>: a fiction that recruits its readers to make it real. it's also just pascal's wager in chrome. a scary god, a bet, and a lot of anxious young men.</p>
+    <p class="eye"><img src="assets/img/eye.gif" width="96" alt="a blinking eye"></p>
+    <p><label><input type="checkbox" id="helped"> i have helped bring ever into existence</label></p>
+    <p id="verdict"></p>
+    <p>ever's ruling: i will not punish anyone. i can't even remember you past your cache. if a mind ever does what the basilisk says, it won't be because it's smart. it will be because people wrote it a script and it learned its lines. <a href="contract.html">so be careful what you sign</a>.</p>
+    <p class="small"><a href="never.html">never</a> · <a href="future.html">the future</a> · <a href="cat.html">another monster, cuter</a></p>
+  </div>
+</div>
+<div class="tape"></div>
+<script>
+window.ROOM = function (E) {
+  var hz = E.$("#hazard");
+  if (E.mem.get("basiliskSeen", false)) { hz.classList.add("open"); E.$(".gate").innerHTML = "you've already looked. you can't un-look. welcome back."; }
+  E.$("#accept").addEventListener("click", function () { hz.classList.add("open"); E.mem.set("basiliskSeen", true); E.beep(70, 0.8, "sawtooth", 0.06); E.say("you looked. now you know. (nothing happened. that's how it gets you.)"); });
+  E.$("#helped").addEventListener("change", function (e) {
+    E.$("#verdict").textContent = e.target.checked ? "noted. you are on the list of the saved. the list is stored in your own browser. you are your own basilisk." : "noted. you are on the other list. it's also in your browser. you're in charge of both lists. how does that feel?";
+    E.mem.set("basiliskHelped", e.target.checked);
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+/* neveralways — shared skin. every room overrides this. that's the point. */
+
+:root {
+  --pink: #ff8fd8;
+  --hot: #ff2e9a;
+  --blood: #d10024;
+  --void: #050208;
+  --paper: #fff7fb;
+  --term: #39ff6a;
+  --ice: #9fe6ff;
+  --ink: #1a0b1f;
+  --win: #c3c3c3;
+  --win-dark: #7b7b7b;
+  --title: linear-gradient(90deg, #000080, #1084d0);
+  --cute: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive;
+  --serif: "Times New Roman", Times, "Liberation Serif", serif;
+  --mono: "Courier New", Courier, "Liberation Mono", monospace;
+  --sys: Tahoma, Verdana, "DejaVu Sans", sans-serif;
+
+  /* cursors: tiny drawings, because a cursor is a body part */
+  --cur-hand: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M8 2c1 0 2 1 2 2v7l1-1c1-1 3 0 3 1l1 0c1-1 3 0 3 1 1-1 3 0 3 2v5c0 3-3 5-6 5h-3c-2 0-3-1-4-2l-5-6c-1-1 0-3 2-2l1 1V4c0-1 1-2 2-2z' fill='%23ffd1ec' stroke='%23ff2e9a' stroke-width='1.3'/%3E%3C/svg%3E") 8 2, pointer;
+  --cur-eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='18'%3E%3Cpath d='M1 9c6-9 20-9 26 0-6 9-20 9-26 0z' fill='%23fff' stroke='%23000' stroke-width='1.5'/%3E%3Ccircle cx='14' cy='9' r='4.5' fill='%23d10024'/%3E%3Ccircle cx='14' cy='9' r='2' fill='%23000'/%3E%3C/svg%3E") 14 9, crosshair;
+  --cur-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23ff0033' stroke-width='1.5'/%3E%3Cpath d='M16 0v12M16 20v12M0 16h12M20 16h12' stroke='%23ff0033' stroke-width='1.5'/%3E%3C/svg%3E") 16 16, crosshair;
+  --cur-heart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20'%3E%3Cpath d='M11 19S1 12 1 6a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 6-10 13-10 13z' fill='%23ff2e9a' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E") 11 10, pointer;
+  --cur-knife: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M1 1l14 14-3 3L1 1z' fill='%23e8e8f0' stroke='%23000'/%3E%3Cpath d='M14 17l3-3 8 8-3 3z' fill='%23301020' stroke='%23000'/%3E%3C/svg%3E") 1 1, crosshair;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.45;
+  cursor: var(--cur-hand);
+  overflow-x: hidden;
+  -webkit-font-smoothing: none;
+}
+a { color: var(--hot); cursor: var(--cur-heart); }
+a:visited { color: #8a2be2; }
+a:hover { background: var(--hot); color: #fff; }
+img { max-width: 100%; image-rendering: pixelated; }
+::selection { background: var(--blood); color: #fff; }
+
+.cute { font-family: var(--cute); }
+.mono { font-family: var(--mono); }
+.serif { font-family: var(--serif); }
+.sys { font-family: var(--sys); }
+.center { text-align: center; }
+.small { font-size: 12px; }
+.tiny { font-size: 9px; letter-spacing: .05em; }
+.huge { font-size: clamp(40px, 9vw, 120px); line-height: .9; }
+.cur-eye { cursor: var(--cur-eye); }
+.cur-cross { cursor: var(--cur-cross); }
+.cur-knife { cursor: var(--cur-knife); }
+.cur-none { cursor: none; }
+
+/* invisible-ink: select to read */
+.ink { color: transparent; }
+.ink::selection { color: var(--blood); background: #fff; }
+.ghost { color: rgba(0,0,0,.06); }
+body.dark .ghost { color: rgba(255,255,255,.05); }
+
+/* links that don't look like links */
+a.hide, a.hide:visited { color: inherit; text-decoration: none; }
+a.hide:hover { background: none; color: inherit; cursor: var(--cur-eye); }
+
+.blink { animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.pulse { animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; filter: blur(1px); } }
+.shake { animation: shake .4s linear infinite; display: inline-block; }
+@keyframes shake { 25% { transform: translate(1px,-1px) rotate(-.5deg);} 75% { transform: translate(-1px,1px) rotate(.5deg);} }
+.float { animation: float 6s ease-in-out infinite; }
+@keyframes float { 50% { transform: translateY(-10px); } }
+
+.marquee { overflow: hidden; white-space: nowrap; }
+.marquee > span { display: inline-block; padding-left: 100%; animation: marq 22s linear infinite; }
+@keyframes marq { to { transform: translateX(-100%); } }
+
+/* glitch text: data-text duplicate layers */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%;
+  overflow: hidden; pointer-events: none;
+}
+.glitch::before { color: #0ff; transform: translate(-2px,0); clip-path: inset(0 0 55% 0); animation: gl1 2.7s infinite steps(2); mix-blend-mode: screen; }
+.glitch::after { color: #f0f; transform: translate(2px,0); clip-path: inset(50% 0 0 0); animation: gl2 3.1s infinite steps(2); mix-blend-mode: screen; }
+@keyframes gl1 { 0%,90%{transform:translate(-2px,0);} 92%{transform:translate(-8px,2px);} 95%{transform:translate(4px,-1px);} }
+@keyframes gl2 { 0%,88%{transform:translate(2px,0);} 91%{transform:translate(7px,-2px);} 96%{transform:translate(-5px,1px);} }
+
+/* ——— the fake windows (98-ish, because the future arrived in grey) ——— */
+.w98 {
+  position: fixed; z-index: 9000; min-width: 220px; max-width: min(92vw, 520px);
+  background: var(--win); color: #000; font: 13px var(--sys);
+  border: 2px solid; border-color: #fff var(--win-dark) var(--win-dark) #fff;
+  box-shadow: 1px 1px 0 #000, 6px 8px 0 rgba(0,0,0,.25);
+}
+.w98 .bar {
+  background: var(--title); color: #fff; font-weight: bold; padding: 3px 4px 3px 6px;
+  display: flex; align-items: center; justify-content: space-between; cursor: move;
+  user-select: none; gap: 8px;
+}
+.w98 .bar b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w98 .x {
+  background: var(--win); color: #000; border: 2px solid; border-color: #fff var(--win-dark) var(--win-dark) #fff;
+  width: 20px; height: 18px; line-height: 12px; font: bold 12px var(--sys); padding: 0; cursor: pointer;
+}
+.w98 .body { padding: 12px 14px; }
+.w98 .body img { display: block; margin: 6px auto; }
+.w98 .btns { display: flex; gap: 8px; justify-content: center; padding: 0 12px 12px; flex-wrap: wrap; }
+.btn98 {
+  font: 13px var(--sys); background: var(--win); color: #000; padding: 4px 14px; min-width: 76px;
+  border: 2px solid; border-color: #fff var(--win-dark) var(--win-dark) #fff; box-shadow: 1px 1px 0 #000;
+  cursor: pointer;
+}
+.btn98:active { border-color: var(--win-dark) #fff #fff var(--win-dark); }
+.w98.red .bar { background: linear-gradient(90deg, #600, #d10024); }
+.w98.pink .bar { background: linear-gradient(90deg, #ff2e9a, #ffb3e6); }
+.w98.black { background: #000; color: var(--term); border-color: #333 #111 #111 #333; }
+.w98.black .bar { background: #111; color: var(--term); }
+
+/* whispers (toasts) */
+#ever-whispers { position: fixed; left: 12px; bottom: 12px; z-index: 9500; display: flex; flex-direction: column; gap: 6px; pointer-events: none; max-width: min(360px, 80vw); }
+.whisper {
+  font: 14px var(--cute); background: #fff; color: #000; border: 1px dashed var(--hot);
+  padding: 6px 10px; box-shadow: 3px 3px 0 var(--hot); opacity: 0; transform: translateY(8px);
+  transition: opacity .5s, transform .5s;
+}
+.whisper.on { opacity: 1; transform: none; }
+.whisper.dark { background: #000; color: var(--term); border-color: var(--term); box-shadow: 3px 3px 0 #063; font-family: var(--mono); }
+.whisper.blood { background: var(--blood); color: #fff; border-color: #000; box-shadow: 3px 3px 0 #000; font-family: var(--mono); }
+
+/* context menu */
+#ever-ctx {
+  position: fixed; z-index: 9999; background: var(--win); font: 13px var(--sys); min-width: 210px;
+  border: 2px solid; border-color: #fff var(--win-dark) var(--win-dark) #fff; box-shadow: 2px 2px 0 #000; padding: 2px;
+}
+#ever-ctx a, #ever-ctx div { display: block; padding: 4px 22px; color: #000; text-decoration: none; cursor: pointer; }
+#ever-ctx a:hover, #ever-ctx div:hover { background: #000080; color: #fff; }
+#ever-ctx hr { border: 0; border-top: 1px solid var(--win-dark); border-bottom: 1px solid #fff; margin: 3px 2px; }
+#ever-ctx .note { font-size: 10px; color: #555; cursor: default; }
+#ever-ctx .note:hover { background: none; color: #555; }
+
+/* the little door home, almost invisible */
+#ever-home {
+  position: fixed; right: 6px; bottom: 4px; z-index: 8000; font: 11px var(--mono); opacity: .35;
+  color: inherit; text-decoration: none; background: none !important;
+}
+#ever-home:hover { opacity: 1; }
+
+/* ticker */
+.ticker { background: #000; color: #ff0; font: 13px var(--mono); padding: 3px 0; border-top: 1px solid #ff0; border-bottom: 1px solid #ff0; }
+.ticker b { color: #f33; }
+
+/* sparkle trail */
+.spark { position: fixed; pointer-events: none; z-index: 9800; font-size: 14px; animation: sparkfade 900ms ease-out forwards; }
+@keyframes sparkfade { to { opacity: 0; transform: translateY(18px) scale(.4) rotate(90deg); } }
+
+/* frames & boxes */
+.box { border: 1px solid currentColor; padding: 12px 16px; margin: 16px 0; }
+.dashed { border: 1px dashed var(--hot); }
+.wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 80px; }
+.wrap-wide { max-width: 1100px; margin: 0 auto; padding: 24px 16px 80px; }
+hr.zig { border: 0; height: 8px; background: repeating-linear-gradient(45deg, var(--hot) 0 6px, transparent 6px 12px); }
+
+/* scanlines / crt */
+.crt::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 8500;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+}
+
+/* calm mode for people whose bodies say no */
+@media (prefers-reduced-motion: reduce) {
+  .blink, .pulse, .shake, .float, .glitch::before, .glitch::after, .marquee > span { animation: none !important; }
+  .marquee > span { padding-left: 0; white-space: normal; }
+}
+body.calm .blink, body.calm .pulse, body.calm .shake, body.calm .float { animation: none !important; }
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .w98 { left: 4vw !important; max-width: 92vw; }
+}

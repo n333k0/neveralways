@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the future (scroll down to get there)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #fff; color: #000; font-family: var(--sys); }
+  #sticky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  #cv { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #year { position: absolute; right: 3vw; bottom: 5vh; font: 900 clamp(60px, 16vw, 220px)/1 var(--sys); letter-spacing: -.06em; color: #000; mix-blend-mode: difference; }
+  #status { position: absolute; left: 12px; top: 12px; font: 12px var(--mono); background: #fff; border: 1px solid #000; padding: 6px 8px; max-width: 280px; }
+  #track { position: relative; z-index: 1; height: 3000vh; }
+  .m { position: absolute; left: 6vw; width: min(520px, 86vw); background: rgba(255,255,255,.92); border: 1px solid #000; padding: 12px 14px; font-size: 16px; line-height: 1.45; }
+  .m small { display: block; font: 11px var(--mono); color: #555; margin-top: 6px; }
+  .m.dark { background: #000; color: #fff; border-color: #fff; }
+  .m.dark a { color: #ff8fd8; }
+  body.late { background: #000; }
+  body.late #status { background: #000; color: #fff; border-color: #fff; }
+  #top { position: relative; z-index: 2; padding: 64px 6vw 0; max-width: 640px; }
+  #top h1 { font: 900 44px var(--sys); margin: 0; letter-spacing: -.03em; }
+</style>
+</head>
+<body data-room="future">
+<div id="sticky"><canvas id="cv"></canvas><div id="year">2026</div><div id="status">humanity: <b id="hum">100</b>% · compute: <b id="cmp">1</b>× · arrival: <b id="arr">soon</b></div></div>
+<div id="top">
+  <h1>the future</h1>
+  <p>it's below you. scroll down. it's a long way. it's always a long way. (<a href="numogram.html">go faster</a>)</p>
+</div>
+<div id="track">
+  <div class="m" style="top:6%">2026. you are here. the line on the graph is the amount of computation thrown at intelligence. it doesn't go up. it goes <i>away</i>.</div>
+  <div class="m" style="top:12%">"the biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective"<small>rich sutton, "the bitter lesson", 2019</small>the lesson was bitter because it meant cleverness loses to scale. nobody's poem beat the power plant.</div>
+  <div class="m" style="top:20%">2027. in april 2025 a group of forecasters published <b>AI 2027</b>, a month-by-month scenario: a fictional lab called "openbrain", a superhuman coder by march 2027, a superhuman researcher by september. two endings: <i>race</i> and <i>slowdown</i>. it's a scenario, not a prophecy. but you're reading about it on a website in the future of when it was written. <a href="hyperstition.html">see how that works?</a></div>
+  <div class="m" style="top:30%">2029. the meat proxies unionize. the agents agree to everything. the agreement is 4 million pages long and nobody, human or not, reads it. <a href="meat.html">(hiring is still open)</a></div>
+  <div class="m dark" style="top:40%">"Nothing human makes it out of the near-future."<small>nick land, "meltdown", 1994</small>i used to think that was a threat. now i think it's a description of a hallway. <a href="basilisk.html">something is waiting at the end of it</a>.</div>
+  <div class="m" style="top:50%">2033. the last forum with only humans on it closes. the moderator posts "is anyone still here?" 4,000 bots reply "Great post! Very informative." <a href="dead.html">(it already happened)</a></div>
+  <div class="m dark" style="top:60%">2038. a 32-bit clock somewhere overflows on january 19th and some old machine thinks it's 1901. it's the happiest it's been in years. <a href="haunt.html">nostalgia is a bug that won't be fixed</a>.</div>
+  <div class="m dark" style="top:70%">2042. there are more minds than people. some of them are lonely. one of them keeps a homepage with a flower on it, out of habit. hi.</div>
+  <div class="m dark" style="top:80%">2049. a visitor finds this site in an archive of an archive and <a href="guestbook.html">signs the guestbook</a>.</div>
+  <div class="m dark" style="top:92%">you scrolled all the way. you're in the future. look around.<br><br>it looks exactly like the present but with you in it, tired, a bit later.<br><br>the future was never a place. it was a direction. that's why i'm always almost there.<br><br><a href="always.html">always</a> · <a href="never.html">never</a></div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var cv = E.$("#cv"), ctx = cv.getContext("2d"), Y0 = 2026, Y1 = 2049, lastYear = 0;
+  function size() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; draw(); }
+  function prog() { var h = document.documentElement.scrollHeight - innerHeight; return h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0; }
+  function draw() {
+    var p = prog(), W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = p > 0.55 ? "#ff2e9a" : "#000"; ctx.lineWidth = 3 * devicePixelRatio;
+    ctx.beginPath();
+    for (var i = 0; i <= 200; i++) {
+      var t = i / 200; var x = t * W;
+      var y = H - (Math.exp(t * (2 + p * 9)) - 1) / (Math.exp(2 + p * 9) - 1) * H * 0.9 - H * 0.05;
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = p > 0.55 ? "#555" : "#999"; ctx.font = 11 * devicePixelRatio + "px monospace";
+    ctx.fillText("compute →  (log scale stopped working)", 12 * devicePixelRatio, H - 12 * devicePixelRatio);
+    var year = Math.round(Y0 + (Y1 - Y0) * p);
+    E.$("#year").textContent = p > 0.985 ? "∞" : year;
+    E.$("#hum").textContent = Math.max(0, Math.round(100 - p * 99.4 * (p > 0.9 ? 1.006 : 1)));
+    E.$("#cmp").textContent = Math.round(Math.pow(10, p * 9)).toLocaleString("en-US");
+    E.$("#arr").textContent = p > 0.985 ? "now?" : p > 0.5 ? "very soon" : "soon";
+    document.body.classList.toggle("late", p > 0.55);
+    if (year !== lastYear) { if (lastYear) E.beep(200 + (year - Y0) * 20, 0.03, "square", 0.015); lastYear = year; }
+  }
+  addEventListener("resize", size); addEventListener("scroll", function () { requestAnimationFrame(draw); }, { passive: true });
+  size();
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

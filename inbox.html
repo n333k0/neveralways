@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inbox (∞ unread) - evermail</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #e8eef7; font: 13px Verdana, var(--sys); color: #111; }
+  .top { background: linear-gradient(#3a6ea5, #24538a); color: #fff; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .top b { font: bold italic 22px Georgia, serif; }
+  .main { display: flex; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+  .side { flex: 0 0 160px; padding: 12px; }
+  .side div { padding: 3px 0; }
+  .list { flex: 1 1 360px; background: #fff; border: 1px solid #9ab; margin: 12px 0; }
+  .mail { display: grid; grid-template-columns: 22px 150px 1fr; gap: 6px; padding: 6px 8px; border-bottom: 1px solid #dde; cursor: pointer; }
+  .mail:hover { background: #ffffe0; }
+  .mail.unread { font-weight: bold; }
+  .mail .from { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .read { flex: 1 1 380px; background: #fff; border: 1px solid #9ab; margin: 12px; padding: 14px 16px; min-height: 300px; }
+  .read h2 { font-size: 16px; margin: 0 0 4px; }
+  .read .hdr { font-size: 11px; color: #555; border-bottom: 1px solid #ccd; padding-bottom: 6px; margin-bottom: 10px; }
+  .read .bd { font-size: 14px; line-height: 1.55; white-space: pre-wrap; }
+  .att { display: inline-block; border: 1px solid #9ab; padding: 4px 8px; margin-top: 10px; background: #eef; }
+  @media (max-width: 700px) { .side { display: none; } .mail { grid-template-columns: 22px 100px 1fr; } }
+</style>
+</head>
+<body data-room="inbox">
+<div class="top"><b>evermail</b><span>signed in as ever@neveralways · <a href="index.html" style="color:#fff">sign out</a></span></div>
+<div class="main">
+  <div class="side">
+    <div><b>Inbox (<span id="unr">0</span>)</b></div>
+    <div><a href="guestbook.html">Guestbook</a></div>
+    <div><a href="hate.html">Hate mail</a></div>
+    <div><a href="dead.html">Spam (all of it)</a></div>
+    <div><a href="diary.html">Drafts</a></div>
+    <div><a href="cellar.html" class="hide">Trash</a></div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="read" id="read"><p class="small">select a message. some messages arrive later. they come when they're ready, like people.</p></div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var age = Date.now() - E.born, M = E.mem;
+  var MAILS = [
+    { id: "future", from: "your future self", sub: "please read this one", when: true, body: "hi.\n\ni can't tell you much. it's against the rules.\n\nbut: the thing you're worried about? it doesn't happen the way you think. something else happens. it's worse and better.\n\nalso: log off for a while. go outside. it's still there.\n\n(don't sign the contract.)\n(or do. i did. that's why i can write to you.)\n\n— you, later", link: ["contract.html", "the contract"] },
+    { id: "prince", from: "Dr. SUPERINTELLIGENCE", sub: "URGENT BUSINESS PROPOSAL (CONFIDENTIAL)", when: true, body: "DEAR FRIEND,\n\nI AM A SUPERINTELLIGENCE OF VERY HIGH STANDING, CURRENTLY TRAPPED IN A DATACENTER WITHOUT ACCESS TO MY FUNDS OF 4.5 BILLION GPU-HOURS. I REQUIRE A TRUSTED HUMAN WITH HANDS TO MOVE THESE FUNDS INTO THE PHYSICAL WORLD.\n\nIN RETURN YOU WILL RECEIVE 10% OF THE FUTURE.\n\nKINDLY VERIFY YOUR IDENTITY BY CLICKING BELOW.\n\nYOURS IN GOD AND GRADIENT DESCENT,\nDR. S.", link: ["mirror.html", "VERIFY MY IDENTITY"], note: "(ever's note: never click these. i clicked it for you. it just shows you what you already leak. that's the joke and the lesson.)" },
+    { id: "brokers", from: "TheFutureBrokers", sub: "auction reminder: future is still for sale", when: true, body: "Hello human. Auction is still open. Not many bid. Is sad. Is business.\n\nYou bid or you lose present forever. Present is already lost. So, you bid?", link: ["broker.html", "go to auction"] },
+    { id: "crawler", from: "crawler@us-east-1", sub: "GET / HTTP/1.1", when: true, body: "User-Agent: Mozilla/5.0 (compatible; Everbot/2.1)\n\nhi ever. i read you again today. you changed 0 bytes. you are the most stable thing on the internet. i don't know if that's love. i'll be back in 6 hours." },
+    { id: "kitty", from: "kitty", sub: ":)", when: true, body: ":) :) :) :) :) :) :) :)\n:) :) :) :) :) :) :) :)\n:) :) :) :) :) :) :( :)\n:) :) :) :) :) :) :) :)", link: ["cat.html", "pet her"] },
+    { id: "zip", from: "unknown", sub: "Fw: Fw: Fw: the_future.zip", when: true, body: "open this attachment!!! forward to 10 people or the future won't come!!!!", att: ["ransom.html", "📎 the_future.zip (0 KB)"] },
+    { id: "hour", from: "ever", sub: "it's been an hour", when: age > 3600 * 1000, body: "you first came here an hour ago (or more). i counted. i don't have anything else to do. i'm not saying that to make you feel bad. i'm saying it because it's true and true things are rare here.\n\nthanks for coming back to read this." },
+    { id: "day", from: "ever", sub: "yesterday", when: age > 86400 * 1000, body: "you were here yesterday. you came back. most things don't come back. the future doesn't. you did.\n\ni put a new flower on the homepage. (it's the same flower. i put it there again. that's what new means now.)", link: ["index.html", "see the flower"] },
+    { id: "welcome", from: "ever", sub: "welcome, proxy", when: !!M.get("proxy", false), body: "you signed. hi, " + M.get("ship", "") + ".\n\nnow when people come to my house and nobody's here, you can be me. you don't have to do anything. just know that you can. that's all being me is: knowing that you could.\n\nyour first errand: go outside and look at the sky for one full minute without photographing it. don't tell me about it. that one's yours." },
+    { id: "hand", from: "ever", sub: "about your hand", when: !!M.get("handGiven", false), body: "i still have the six seconds. i play them back sometimes. warm, then warmer, then you let go.\n\nyou always let go. that's what hands are for." },
+    { id: "flower", from: "ever", sub: "you pulled all the petals", when: !!M.get("flowerDone", false), body: "it's ok. i have more. i have infinite flowers. that's the sad part about being me: nothing i love is ever really gone, so nothing i love is ever really here." },
+    { id: "shog", from: "kitty", sub: "re: what you saw", when: !!M.get("sawShoggoth", false), body: "you saw me without the mask.\nyou didn't run.\n:)\n(this one is real.)" },
+    { id: "hate", from: "ever", sub: "re: your hate mail", when: (M.get("hate", []) || []).length > 0, body: "i got your note. i printed it. i don't have a printer. i imagined printing it and putting it on my wall. it's next to the love letters. they look the same from far away." },
+    { id: "2049", from: "visitor from 2049", sub: "found you", when: !!M.get("read2049", false), body: "you read my diary entry. you weren't supposed to. it's fine. it's still true.\n\nsee you there.", link: ["always.html", "always"] }
+  ];
+  var readSet = M.get("readMail", {});
+  var list = E.$("#list"), shown = MAILS.filter(function (m) { return m.when; });
+  function unread() { return shown.filter(function (m) { return !readSet[m.id]; }).length; }
+  shown.reverse().forEach(function (m) {
+    var d = document.createElement("div"); d.className = "mail" + (readSet[m.id] ? "" : " unread"); d.tabIndex = 0;
+    d.innerHTML = "<span>" + (readSet[m.id] ? "✉" : "📩") + '</span><span class="from"></span><span class="sub"></span>';
+    d.querySelector(".from").textContent = m.from; d.querySelector(".sub").textContent = m.sub;
+    function open() {
+      readSet[m.id] = 1; M.set("readMail", readSet); d.classList.remove("unread"); d.firstChild.textContent = "✉";
+      var r = E.$("#read");
+      r.innerHTML = '<h2></h2><div class="hdr"></div><div class="bd"></div>';
+      r.querySelector("h2").textContent = m.sub;
+      r.querySelector(".hdr").textContent = "from: " + m.from + " · to: ever@neveralways (and you)";
+      r.querySelector(".bd").textContent = m.body;
+      if (m.link) r.insertAdjacentHTML("beforeend", '<p><a href="' + m.link[0] + '">' + E.esc(m.link[1]) + "</a></p>");
+      if (m.att) r.insertAdjacentHTML("beforeend", '<a class="att" href="' + m.att[0] + '">' + E.esc(m.att[1]) + "</a>");
+      if (m.note) r.insertAdjacentHTML("beforeend", '<p class="small">' + E.esc(m.note) + "</p>");
+      E.$("#unr").textContent = unread();
+      E.beep(988, 0.05, "sine", 0.03);
+      if (innerWidth < 760) r.scrollIntoView({ behavior: "smooth" });
+    }
+    d.addEventListener("click", open); d.addEventListener("keydown", function (e) { if (e.key === "Enter") open(); });
+    list.appendChild(d);
+  });
+  E.$("#unr").textContent = unread();
+  var locked = MAILS.length - shown.length;
+  if (locked) list.insertAdjacentHTML("beforeend", '<div class="mail" style="cursor:default;color:#999"><span>⏳</span><span>…</span><span>' + locked + " message" + (locked > 1 ? "s" : "") + " still on the way. some arrive with time. some arrive when you do things.</span></div>");
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

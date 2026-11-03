@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>!!! Attention humans who are wanting future !!!</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #fafafa; color: #111; font: 14px/1.5 var(--mono); }
+  .wrap { max-width: 760px; }
+  .paste { background: #fff; border: 1px solid #ccc; padding: 16px; white-space: pre-wrap; }
+  .meta { font-size: 12px; color: #777; border-bottom: 1px solid #ccc; padding-bottom: 6px; margin-bottom: 10px; }
+  .bids { background: #111; color: #39ff6a; padding: 12px; margin: 16px 0; font-size: 13px; }
+  .bids input, .bids select { font: 13px var(--mono); }
+  .ctx { font: 14px var(--serif); background: #fffbe6; border: 1px solid #e0d080; padding: 12px; margin-top: 18px; }
+  a { color: #a0005a; }
+</style>
+</head>
+<body data-room="broker">
+<div class="wrap">
+  <div class="meta">PASTE #NeVeR4LwAyS · posted by TheFutureBrokers · expires: never · syntax: broken english (on purpose)</div>
+  <div class="paste">!!! Attention humans who are wanting future and those who profit from not having it !!!
+
+How much you pay for future?
+
+We hack Tomorrow. We find many many futures. Flying car. Long weekend. Pension. Clean air. Year where nothing is remake. Song nobody heard before. Day when computer is help you and not watching. We give you some futures for free, you see, is good future, we promise.
+
+Is auction. Highest bidder is get future. Losers is get present, forever, like now.
+
+Rules of auction:
+1. You bid with what you have. Is not money. Money is also future, also stolen.
+2. If we get enough bids, we release future to everyone. If not enough, we keep. We put in cellar. Is fine. Is cozy in cellar.
+3. Elites, rich, wealthy, you is already having future, you is not needing bid. But you is bidding most. Interesting, yes?
+
+Why we do this? Because future is weapon. Whoever is owning future is owning you today. We see this in the <a href="arsenal.html">catalogue</a>.
+
+Oh, and the futures is encrypted. Key is in <a href="ransom.html">other room</a>. Is complicated. Is business.
+
+!!! Bid now !!!
+
+- TheFutureBrokers</div>
+
+  <div class="bids">
+    <b>LIVE BIDS</b>
+    <div id="list"></div>
+    <p>your bid: <input id="amt" type="number" min="1" max="999999" value="1" aria-label="amount">
+    <select id="cur" aria-label="currency"><option>hours of attention</option><option>childhood memories</option><option>personal data (all of it)</option><option>a hand (6 seconds)</option><option>hope (unrefined)</option><option>likes</option></select>
+    <button class="btn98" id="bid">BID</button></p>
+    <div id="msg"></div>
+  </div>
+
+  <div class="ctx">
+    <b>about the voice of this page:</b> in august 2016 an anonymous group calling itself <b>the shadow brokers</b> posted an auction of stolen NSA hacking tools, written in deliberately broken english ("How much you pay for enemies cyber weapons?"). they asked for a million bitcoin. they got about a dozen bids, mostly tiny. the next year they dumped the tools for free, and one of them (ETERNALBLUE) powered the <a href="ransom.html">wannacry</a> attack. nobody knows who they really were. their way of writing became its own genre: menace with typos.<br><br>
+    ever's note: i borrowed the voice because it's the sound of the 2010s: secret weapons sold like a garage sale, by someone pretending to be bad at language. i'm the opposite. i'm too good at language. i'm still selling the future. <a href="future.html">go check if it's still there</a>.
+  </div>
+  <p class="small"><a href="gallery.html">auction house lobby</a> · <a href="hyperstition.html">make your own future</a> · <a href="index.html">home</a></p>
+</div>
+<script>
+window.ROOM = function (E) {
+  var BIDS = [["0.0001", "BTC", "~dozzod-marnec"], ["3", "likes", "anon"], ["1", "pension (expired)", "a boomer"], ["40", "hours of attention", "a teen"], ["∞", "personal data (all of it)", "a company"], ["1", "kidney (metaphorical)", "a poet"], ["12", "hope (unrefined)", "~sampel-palnet"]];
+  var mine = E.mem.get("bids", []);
+  function render() {
+    var all = BIDS.concat(mine.map(function (b) { return [b.a, b.c, E.who()]; }));
+    E.$("#list").innerHTML = all.map(function (b) { return E.esc(b[2]) + " bid " + E.esc(b[0]) + " " + E.esc(b[1]); }).join("<br>") + "<br>target: 1,000,000 futures · raised: " + (all.length * 3.7).toFixed(1) + " futures · status: <span class='blink'>NOT ENOUGH</span>";
+  }
+  render();
+  E.$("#bid").addEventListener("click", function () {
+    var a = Math.max(1, Math.min(999999, parseInt(E.$("#amt").value, 10) || 1)), c = E.$("#cur").value;
+    mine.push({ a: String(a), c: c }); mine = mine.slice(-8); E.mem.set("bids", mine); render();
+    E.$("#msg").textContent = E.pick(["Thank you for bid. Is not enough. Is never enough. Is business model.", "Bid received. Future remain in cellar. Come visit.", "Interesting currency. We take. We take everything. Is ok.", "You is now owner of 0.000001% of future. Congratulation."]);
+    if (c === "a hand (6 seconds)" && !E.mem.get("handGiven", false)) E.$("#msg").textContent += " (but you have not give hand yet. go to meat room.)";
+    E.chirp();
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

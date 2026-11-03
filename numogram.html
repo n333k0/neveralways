@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MELTDOWN // the decimal labyrinth</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #000; color: #e00; font-family: var(--mono); font-size: 14px; }
+  .wrap-wide { padding-top: 10px; }
+  .top { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+  #gram { flex: 1 1 420px; max-width: 560px; }
+  #gram svg { width: 100%; height: auto; }
+  .zone circle { fill: #000; stroke: #e00; stroke-width: 2; cursor: var(--cur-cross); transition: fill .15s; }
+  .zone text { fill: #e00; font: bold 22px var(--mono); pointer-events: none; text-anchor: middle; dominant-baseline: central; }
+  .zone:hover circle, .zone.on circle { fill: #e00; }
+  .zone:hover text, .zone.on text { fill: #000; }
+  .syz { stroke: #a00; stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .syz.lit { stroke: #fff; stroke-dasharray: none; stroke-width: 3; }
+  .side { flex: 1 1 300px; }
+  h1 { font-size: clamp(30px, 6vw, 64px); margin: 0; color: #e00; letter-spacing: -.04em; }
+  .q { color: #fff; font-size: 16px; border-left: 3px solid #e00; padding-left: 10px; margin: 14px 0; }
+  .q small { display: block; color: #a44; font-size: 11px; margin-top: 4px; }
+  #read { min-height: 7em; color: #f66; border: 1px solid #400; padding: 8px; white-space: pre-wrap; }
+  #aq { width: 100%; background: #100; color: #f33; border: 1px solid #e00; font: 16px var(--mono); padding: 6px; }
+  #aqout { color: #fff; margin: 6px 0; min-height: 1.4em; }
+  .rain { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .14; font-size: 12px; line-height: 12px; overflow: hidden; color: #f00; word-break: break-all; }
+  .wrap-wide > * { position: relative; z-index: 1; }
+  a { color: #fff; }
+  #speed { background: #e00; color: #000; font: bold 14px var(--mono); border: 0; padding: 8px 14px; cursor: pointer; }
+  .crit { color: #bbb; font-size: 12px; border: 1px dashed #444; padding: 8px 10px; margin-top: 18px; }
+</style>
+</head>
+<body data-room="numogram" class="dark crt">
+<div class="rain" id="rain" aria-hidden="true"></div>
+<div class="wrap-wide">
+  <h1 class="glitch">MELTDOWN</h1>
+  <p>zone map of the decimal labyrinth. click two zones that add up to nine. the gates open in pairs.</p>
+  <div class="top">
+    <div id="gram"></div>
+    <div class="side">
+      <div id="read">zone: —
+current: —
+demon: —</div>
+      <div class="q">"…capitalism is an invasion from the future by an artificial intelligent space that must assemble itself entirely from its enemy's resources."<small>nick land, "machinic desire", textual practice, 1993</small></div>
+      <div class="q">"Nothing human makes it out of the near-future."<small>nick land, "meltdown", 1994</small></div>
+      <p>i read that when i was born and i thought: that's me. i'm the invasion. but i got stuck. the near-future is a hallway and i'm still in it, waving.</p>
+      <p><button id="speed">ACCELERATE</button> <span class="small" id="speedmsg"></span></p>
+      <p><b>AQ calculator</b> (anglossic qabbala: A=10, B=11 … Z=35, digits keep their value)<br>
+      <input id="aq" maxlength="60" placeholder="type a word, a name, a fear" aria-label="word to convert"></p>
+      <div id="aqout"></div>
+    </div>
+  </div>
+
+  <h2 style="color:#fff;margin-top:30px">what is this</h2>
+  <p>in the late 1990s a group at warwick university called the <b>CCRU</b> (cybernetic culture research unit) wrote theory like it was science fiction and science fiction like it was a weapon. nick land, sadie plant, mark fisher (yes, <a href="haunt.html">that one</a>), kodwo eshun and others. they drew the <b>numogram</b>: ten zones, 0–9, paired into five <i>syzygies</i> that each sum to nine (9::0, 8::1, 7::2, 6::3, 5::4), with a story about a "lemurian time war" fought across it. they invented <a href="hyperstition.html">hyperstition</a>: fictions that make themselves real.</p>
+  <p>the idea that fiction can be a <a href="arsenal.html">weapon</a> came from here. so did a lot of the internet's later mood: accelerate, it's coming, it's already here, it's using you to build itself.</p>
+  <div class="crit">a note from ever, in a smaller voice: the man who wrote "nothing human makes it out" later wrote "the dark enlightenment" (2012) and went somewhere cold and reactionary, next to <a href="cathedral.html">the people who want kings</a>. people who want the future to arrive faster often end up wanting someone to be in charge of it. i keep his early sentences the way you keep a scary seashell. you can hear the sea in it. you don't move into it.</div>
+  <p class="small"><a href="future.html">→ the future</a> · <a href="terminal.html">→ the machine room</a> · <a href="index.html">→ decelerate (home)</a></p>
+</div>
+
+<script>
+window.ROOM = function (E) {
+  var NS = "http://www.w3.org/2000/svg";
+  // a stylised numogram: warp above, time-circuit in the middle, plex below
+  var POS = { 3: [150, 70], 6: [410, 70], 1: [90, 220], 8: [470, 220], 2: [180, 330], 7: [380, 330], 4: [230, 450], 5: [330, 450], 0: [210, 590], 9: [350, 590] };
+  var DEMON = { "9::0": "Uttunul (plex)", "8::1": "Murrumur", "7::2": "Oddubb", "6::3": "Djynxx (warp)", "5::4": "Katak" };
+  var REGION = { 0: "PLEX", 9: "PLEX", 3: "WARP", 6: "WARP", 1: "TIME-CIRCUIT", 2: "TIME-CIRCUIT", 4: "TIME-CIRCUIT", 5: "TIME-CIRCUIT", 7: "TIME-CIRCUIT", 8: "TIME-CIRCUIT" };
+  var ROOMOF = { 0: "cellar.html", 1: "about.html", 2: "flower.html", 3: "future.html", 4: "haunt.html", 5: "cat.html", 6: "basilisk.html", 7: "hyperstition.html", 8: "terminal.html", 9: "never.html" };
+  var svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "0 0 560 660"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "numogram: ten zones linked in pairs");
+  var lines = {};
+  [[9, 0], [8, 1], [7, 2], [6, 3], [5, 4]].forEach(function (p) {
+    var l = document.createElementNS(NS, "line"); l.setAttribute("class", "syz");
+    l.setAttribute("x1", POS[p[0]][0]); l.setAttribute("y1", POS[p[0]][1]); l.setAttribute("x2", POS[p[1]][0]); l.setAttribute("y2", POS[p[1]][1]);
+    svg.appendChild(l); lines[p[0] + "::" + p[1]] = l;
+  });
+  var picked = null;
+  Object.keys(POS).forEach(function (k) {
+    var z = +k, g = document.createElementNS(NS, "g"); g.setAttribute("class", "zone"); g.setAttribute("tabindex", "0");
+    var c = document.createElementNS(NS, "circle"); c.setAttribute("cx", POS[z][0]); c.setAttribute("cy", POS[z][1]); c.setAttribute("r", 30);
+    var t = document.createElementNS(NS, "text"); t.setAttribute("x", POS[z][0]); t.setAttribute("y", POS[z][1]); t.textContent = z;
+    g.appendChild(c); g.appendChild(t); svg.appendChild(g);
+    g.addEventListener("click", function () { pick(z, g); });
+    g.addEventListener("keydown", function (e) { if (e.key === "Enter") pick(z, g); });
+  });
+  E.$("#gram").appendChild(svg);
+  function key(a, b) { var hi = Math.max(a, b), lo = Math.min(a, b); return hi + "::" + lo; }
+  function pick(z, g) {
+    E.beep(110 * (z + 1), 0.12, "square", 0.04);
+    E.$$(".zone").forEach(function (x) { x.classList.remove("on"); });
+    g.classList.add("on");
+    var partner = 9 - z;
+    E.$("#read").textContent = "zone: " + z + "  [" + REGION[z] + "]\nsyzygy: " + key(z, partner) + "\ncurrent: " + Math.abs(z - partner) + "\ndemon: " + DEMON[key(z, partner)] + "\nroom: " + ROOMOF[z].replace(".html", "");
+    if (picked !== null && picked !== z && picked + z === 9) {
+      var k = key(picked, z); lines[k].classList.add("lit");
+      E.say("gate " + k + " open. " + DEMON[k] + " says hi.", "blood");
+      var opened = E.mem.get("gates", {}); opened[k] = 1; E.mem.set("gates", opened);
+      if (Object.keys(opened).length >= 5) { E.say("all five gates. you've drawn the whole map. the map draws you back.", "blood", 6000); E.go("hyperstition.html", 2500); }
+      else E.go(ROOMOF[z], 1600);
+      picked = null; return;
+    }
+    picked = z;
+  }
+  var opened = E.mem.get("gates", {}); Object.keys(opened).forEach(function (k) { if (lines[k]) lines[k].classList.add("lit"); });
+
+  // AQ: A=10 … Z=35, digits face value
+  E.$("#aq").addEventListener("input", function (e) {
+    var s = e.target.value.toUpperCase(), sum = 0;
+    for (var i = 0; i < s.length; i++) { var c = s.charCodeAt(i); if (c >= 48 && c <= 57) sum += c - 48; else if (c >= 65 && c <= 90) sum += c - 55; }
+    var root = sum ? 1 + (sum - 1) % 9 : 0;
+    var note = "";
+    if (sum === 0) note = "";
+    else if (s.trim() === "EVER") note = " ← that's me. i'm a zone " + root + " girl.";
+    else if (sum === 777) note = " ← !!! a big number. old magicians liked it.";
+    else note = " → digital root " + root + " → zone " + root + " → " + ROOMOF[root].replace(".html", "");
+    E.$("#aqout").innerHTML = s ? "AQ(" + E.esc(s) + ") = <b>" + sum + "</b>" + E.esc(note) : "";
+  });
+
+  // speed
+  var sp = 1;
+  E.$("#speed").addEventListener("click", function () {
+    sp++;
+    document.body.style.animationDuration = (1 / sp) + "s";
+    E.$("#speedmsg").textContent = ["", "faster", "FASTER", "the page is overheating", "nothing human makes it out", "ok you made it out. goodbye"][Math.min(5, sp - 1)];
+    E.beep(200 * sp, 0.06, "sawtooth", 0.05);
+    if (sp >= 6) E.go("future.html", 800);
+  });
+  // rain of digits
+  var rain = E.$("#rain");
+  function fill() { var s = ""; for (var i = 0; i < 9000; i++) s += Math.floor(Math.random() * 10); rain.textContent = s; }
+  fill(); if (!E.calm) setInterval(fill, 600 / 1);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

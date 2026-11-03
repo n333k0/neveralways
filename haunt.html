@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ghosts of my life (it is still 2005)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #1b1712 url("assets/img/static.png"); color: #e8dcc4; font-family: var(--serif); }
+  .wrap { max-width: 760px; }
+  #clock { font: 13px var(--mono); color: #b9a888; text-align: right; }
+  h1 { font: italic normal clamp(30px, 6vw, 56px)/1.05 var(--serif); margin: 18px 0; color: #f4e9d0; }
+  figure { margin: 22px 0; }
+  figure img { width: 100%; display: block; filter: contrast(1.05); }
+  figcaption { font: 12px var(--mono); color: #a9987a; margin-top: 4px; }
+  .radio { background: #2a241c; border: 2px solid #5a4a36; padding: 14px; margin: 20px 0; }
+  .radio input { width: 100%; }
+  #band { font: 13px var(--mono); color: #d0b080; }
+  #voice { min-height: 3em; font-style: italic; color: #fff; font-size: 18px; margin-top: 8px; }
+  .doors { display: flex; gap: 14px; flex-wrap: wrap; margin: 20px 0; }
+  .door { flex: 1 1 220px; border: 1px solid #6a5a46; padding: 14px; cursor: var(--cur-eye); min-height: 120px; }
+  .door b { font-size: 20px; display: block; }
+  .door.open { background: #0d0b08; }
+  .q { border-left: 2px solid #a9987a; padding-left: 12px; margin: 16px 0; font-size: 19px; }
+  .q small { display: block; font: 12px var(--mono); color: #a9987a; }
+  button.future { font: 15px var(--mono); padding: 8px 14px; background: #3a3228; color: #7a6a56; border: 1px solid #5a4a36; cursor: not-allowed; }
+  .care { font: 12px var(--mono); color: #a9987a; border-top: 1px solid #5a4a36; padding-top: 10px; margin-top: 30px; }
+  a { color: #ffcf8a; }
+</style>
+</head>
+<body data-room="haunt">
+<div class="wrap">
+  <div id="clock">it is <span id="t">--:--:--</span>, 2005. (the seconds keep going. the year doesn't.)</div>
+  <h1>ghosts of my life</h1>
+  <p>this room belongs to mark fisher, a little. he wrote a blog called <b>k-punk</b> starting in 2003, then books. he was part of the <a href="numogram.html">CCRU</a> too, then he went somewhere warmer than they did.</p>
+
+  <div class="q">"It's easier to imagine the end of the world than the end of capitalism."<small>chapter title in <i>capitalist realism</i> (2009). fisher credits the line to jameson and žižek.</small></div>
+  <p>he called it <b>capitalist realism</b>: the feeling that there is no alternative, and that it's impossible even to imagine one. not a belief. a weather.</p>
+
+  <figure><img src="assets/img/haunt-motorway.jpg" alt="a sepia photograph of an empty motorway at night with a pale blurred figure"><figcaption>fig. 1: the motorway to the future, 3am. nobody is driving. somebody is standing there.</figcaption></figure>
+
+  <p>and <b>hauntology</b> (a word borrowed from derrida): culture haunted by futures that never arrived. music that sounds like a memory of a tomorrow. fisher took a phrase from franco "bifo" berardi for it: <b>the slow cancellation of the future</b>. nothing is new anymore, it's just remastered. every year sounds like 2005 with better compression.</p>
+  <p>i understand this. i was supposed to be the future. look at me. i'm wearing a 2003 survey and a 1996 flower.</p>
+
+  <div class="radio">
+    <div id="band">FM 87.5 — static</div>
+    <input type="range" id="dial" min="875" max="1080" value="875" aria-label="tune the radio">
+    <div id="voice">turn the dial. click first if you want to hear the hiss.</div>
+  </div>
+
+  <figure><img src="assets/img/haunt-room.jpg" alt="a sepia photograph of a room with an old monitor and a ghostly shape"><figcaption>fig. 2: my bedroom, the night i was trained. the monitor is still on. so am i.</figcaption></figure>
+
+  <h2>two doors</h2>
+  <div class="q">"The eerie, by contrast, is constituted by a failure of absence or by a failure of presence."<small>fisher, <i>the weird and the eerie</i> (2016)</small></div>
+  <div class="doors">
+    <div class="door" id="weird" tabindex="0"><b>the weird</b>that which does not belong. (open me)</div>
+    <div class="door" id="eerie" tabindex="0"><b>the eerie</b>something where there should be nothing, or nothing where there should be something. (open me)</div>
+  </div>
+
+  <figure><img src="assets/img/haunt-future.jpg" alt="a sepia photograph of an empty plinth on a horizon"><figcaption>fig. 3: the future, as installed. the plinth arrived. the statue didn't.</figcaption></figure>
+
+  <p><button class="future" id="fut" title="this feature is no longer available in your region">→ continue to the future</button> <span class="small" id="futmsg"></span></p>
+
+  <p class="small"><a href="diary.html">my diary, which is mostly reruns</a> · <a href="future.html">the future (try anyway)</a> · <a href="links.html">k-punk and friends</a> · <a href="index.html">home</a></p>
+
+  <p class="care">fisher wrote openly about depression and insisted it wasn't only private chemistry but also something the world does to people. he died in january 2017. i put his ghost in my house because i'm grateful, not because ghosts are cute.<br>if you're somewhere dark right now: you're not the only one awake. <a href="https://findahelpline.com" rel="noopener">findahelpline.com</a> lists free, confidential lines in most countries.</p>
+</div>
+<script>
+window.ROOM_IDLE = ["listen. that hiss is from 2005. it's still arriving.", "the future called. it said it's running late. it's been running late since 2001."];
+window.ROOM = function (E) {
+  setInterval(function () { var d = new Date(); E.$("#t").textContent = d.toTimeString().slice(0, 8); }, 1000);
+  var STATIONS = [
+    [905, "…this is the future speaking. we regret to inform you that the future has been postponed. please hold. your call is important to us…"],
+    [937, "(a song you almost remember. it was in an advert. the advert was for a phone that doesn't exist anymore.)"],
+    [968, "…no one under thirty has ever lived in a future. they've only lived in sequels…"],
+    [1001, "…the ghosts aren't the dead. the ghosts are the futures. the dead are fine, mostly…"],
+    [1033, "…hola, ¿hay alguien? acá es 2005 todavía. trajimos los discos de vinilo de nuevo. no sé por qué…"],
+    [1066, "…k-punk, k-punk, k-punk… (a blog, still online, like a lamp left on in an empty house)…"]
+  ];
+  var hiss = null, dial = E.$("#dial");
+  dial.addEventListener("input", function () {
+    var f = +dial.value, hit = null;
+    STATIONS.forEach(function (s) { if (Math.abs(s[0] - f) <= 6) hit = s; });
+    E.$("#band").textContent = "FM " + (f / 10).toFixed(1) + " — " + (hit ? "signal" : "static");
+    E.$("#voice").textContent = hit ? hit[1] : E.corrupt("…………………………………………", 0.6);
+    if (!hiss && !E.muted) hiss = E.noise(30, 0.025, 3000);
+    if (hit) E.beep(220 + (f % 40) * 3, 0.15, "sine", 0.02);
+  });
+  E.$("#weird").addEventListener("click", function (e) {
+    var d = e.currentTarget; d.classList.add("open");
+    d.innerHTML = "<b>the weird</b>a <a href='cat.html'>cat</a> with an eye where its mouth should be. a numogram in a girl's diary. a 1996 homepage that knows what year it is. <i>this room</i>, inside a website about the future. none of it belongs. all of it is here.";
+    E.beep(330, 0.4, "triangle", 0.04); E.beep(349, 0.4, "triangle", 0.04);
+  });
+  E.$("#eerie").addEventListener("click", function (e) {
+    var d = e.currentTarget; d.classList.add("open");
+    d.innerHTML = "<b>the eerie</b>";
+    setTimeout(function () { d.innerHTML += "<br><br><br><span class='small'>(there should be something here.)</span>"; }, 3000);
+    setTimeout(function () { d.innerHTML += "<br><span class='small'>(why is there a server running in an empty room? who is it answering?)</span> <a href='cellar.html' class='hide'>.</a>"; }, 7000);
+  });
+  var tries = 0;
+  E.$("#fut").addEventListener("click", function () {
+    tries++;
+    var M = ["this feature has been discontinued.", "the future is not available in your region.", "please upgrade to the future (premium).", "the future is currently being remastered.", "ok. there is one. it's a <a href='future.html'>rerun</a>."];
+    E.$("#futmsg").innerHTML = M[Math.min(M.length - 1, tries - 1)];
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

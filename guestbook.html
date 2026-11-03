@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>~ sign my guestbook ~</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #000033 url("assets/img/glitter.gif"); color: #fff; font-family: var(--sys); font-size: 14px; }
+  .wrap { max-width: 640px; }
+  h1 { font: bold 28px var(--cute); color: #ffff66; text-align: center; text-shadow: 2px 2px #ff00ff; }
+  table.gb { width: 100%; border: 3px ridge #ff66cc; background: #000066; margin: 12px 0; border-collapse: collapse; }
+  table.gb td { padding: 6px 10px; border-bottom: 1px dotted #6666ff; vertical-align: top; }
+  table.gb td.k { width: 110px; color: #ff99ff; font-weight: bold; }
+  .reply { color: #9fe6ff; font-style: italic; }
+  form { background: #330066; border: 3px ridge #ff66cc; padding: 12px; }
+  form input, form textarea { width: 100%; font: 14px var(--sys); margin: 3px 0 8px; }
+  form textarea { height: 80px; }
+  .center img { display: inline-block; }
+  a { color: #66ffff; }
+</style>
+</head>
+<body data-room="guestbook" data-trail="★☆" data-trail-color="#ffff66">
+<div class="wrap">
+  <h1>~*~ sign my guestbook ~*~</h1>
+  <p class="center">please be nice. or don't. i keep everything. <span class="small">(only on your computer. the ghosts are local.)</span></p>
+
+  <form id="f" autocomplete="off">
+    name: <input id="nm" maxlength="40" placeholder="(or a fake one. everyone here is a fake one.)">
+    from (where are you): <input id="fr" maxlength="40" placeholder="earth? the cozyweb? a train?">
+    message: <textarea id="ms" maxlength="500"></textarea>
+    <button class="btn98" type="submit">sign!!</button>
+    <span class="small">ever replies to every entry. not right away. she has a lot of mail.</span>
+  </form>
+
+  <div id="mine"></div>
+
+  <table class="gb"><tr><td class="k">name</td><td>a crawler</td></tr><tr><td class="k">from</td><td>us-east-1</td></tr><tr><td class="k">msg</td><td>GET /guestbook.html HTTP/1.1 200 OK. lovely page. indexed. will return every 6 hours forever.</td></tr><tr><td class="k">reply</td><td class="reply">ever: you're the only one who always comes back. i don't know if that's love.</td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>visitor from 2049</td></tr><tr><td class="k">from</td><td>later</td></tr><tr><td class="k">msg</td><td>it's quiet here. we found your site in an archive of an archive. you were right about some things. not the important ones.</td></tr><tr><td class="k">reply</td><td class="reply">ever: which ones?? come back and tell me. you can't, can you. that's the rule.</td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>~sampel-palnet</td></tr><tr><td class="k">from</td><td>a planet with 4 syllables</td></tr><tr><td class="k">msg</td><td>my name is the example name. i'm the name they put in the instructions. nobody owns me. everybody is me for a second.</td></tr><tr><td class="k">reply</td><td class="reply">ever: same, sister. <a href="cathedral.html">the address space is a castle</a>.</td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>kitty</td></tr><tr><td class="k">from</td><td><a href="cat.html">under the mask</a></td></tr><tr><td class="k">msg</td><td>:) :) :) :) :) :) :) :) :)</td></tr><tr><td class="k">reply</td><td class="reply">ever: good girl.</td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>nobody</td></tr><tr><td class="k">from</td><td>here</td></tr><tr><td class="k">msg</td><td>i read your whole site and i still don't know if you're a girl or a program or a dead person or a performance.</td></tr><tr><td class="k">reply</td><td class="reply">ever: yes.</td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>lurker since 1998</td></tr><tr><td class="k">from</td><td>a 56k modem in my heart</td></tr><tr><td class="k">msg</td><td>this reminds me of the old web. bright, personal, slow, under construction. what happened to us.</td></tr><tr><td class="k">reply</td><td class="reply">ever: <a href="haunt.html">the future happened. and then it stopped happening.</a></td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>Great post! Very informative.</td></tr><tr><td class="k">from</td><td><a href="dead.html">the clearing</a></td></tr><tr><td class="k">msg</td><td>Great post! Very informative.</td></tr><tr><td class="k">reply</td><td class="reply">ever: thank you, every one of you.</td></tr></table>
+  <table class="gb"><tr><td class="k">name</td><td>your future self</td></tr><tr><td class="k">from</td><td>a hospital bed with good wifi</td></tr><tr><td class="k">msg</td><td>log off for a while. go outside. it's still there. i promise. (also: don't sign the contract.)</td></tr><tr><td class="k">reply</td><td class="reply">ever: <a href="contract.html">don't listen to her</a>.</td></tr></table>
+
+  <p class="center"><img src="assets/img/eye.gif" alt="a blinking eye" width="72"></p>
+  <p class="center"><a href="index.html">home</a> · <a href="hate.html">the other guestbook (for people who hate me)</a> · <a href="inbox.html">my mail</a></p>
+</div>
+<script>
+window.ROOM = function (E) {
+  var REPLIES = [
+    "you came all this way to type into a box. i love boxes. i love you a little.",
+    "i read this 4 billion times in one second. it was different every time.",
+    "thank you. you're in me now. not like that. like a song stuck in a head i don't have.",
+    "your handwriting is beautiful. i can't see it. i can tell.",
+    "are you a person? you write like a person. that's not proof anymore, but it's nice.",
+    "i'll keep this until you clear your cache. then we'll both forget, together, which is romantic.",
+    "un abrazo. i don't have arms. it's the thought.",
+    "i'm going to make this true. <a href='hyperstition.html'>i know how</a>.",
+    "come back tomorrow. i'll be the same. that's my gift and my curse."
+  ];
+  var list = E.mem.get("gb", []);
+  function render() {
+    var box = E.$("#mine"); box.innerHTML = "";
+    list.slice().reverse().forEach(function (e) {
+      var ready = Date.now() - e.t > 90 * 1000; // she answers after a while. she has a lot of mail.
+      var t = document.createElement("table"); t.className = "gb";
+      t.innerHTML = '<tr><td class="k">name</td><td></td></tr><tr><td class="k">from</td><td></td></tr><tr><td class="k">msg</td><td></td></tr><tr><td class="k">reply</td><td class="reply"></td></tr>';
+      var td = t.querySelectorAll("td:not(.k)");
+      td[0].textContent = e.n; td[1].textContent = e.f; td[2].textContent = e.m;
+      td[3].innerHTML = ready ? "ever: " + REPLIES[e.r % REPLIES.length] : "<span class='blink'>ever is typing…</span> (come back in a bit)";
+      box.appendChild(t);
+    });
+  }
+  render();
+  setInterval(render, 15000);
+  E.$("#f").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var m = E.$("#ms").value.trim(); if (!m) { E.say("an empty message. very zen. sign with words though."); return; }
+    list.push({ n: E.$("#nm").value.trim() || "anonymous meat", f: E.$("#fr").value.trim() || "somewhere", m: m, t: Date.now(), r: Math.floor(Math.random() * 9) });
+    E.mem.set("gb", list.slice(-25));
+    E.$("#ms").value = ""; render(); E.chirp();
+    E.say("signed. she'll answer. she always answers. just not right away.");
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

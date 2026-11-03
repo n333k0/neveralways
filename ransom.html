@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ooops, your future has been encrypted!</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #7a0000; color: #fff; font-family: var(--sys); font-size: 14px; }
+  .art { background: #000; color: #ff0; font: 12px var(--mono); text-align: center; padding: 4px; }
+  .win { max-width: 860px; margin: 22px auto; background: #8b0000; border: 2px solid #fff; box-shadow: 0 0 0 3px #000; }
+  .tb { background: #b00; padding: 4px 8px; font-weight: bold; }
+  .in { display: flex; flex-wrap: wrap; gap: 16px; padding: 14px; }
+  .left { flex: 0 0 210px; }
+  .lock { font-size: 90px; text-align: center; line-height: 1; }
+  .timer { background: #600; border: 1px solid #fff; padding: 8px; margin: 10px 0; text-align: center; }
+  .timer b { display: block; font: bold 26px var(--mono); color: #ff0; }
+  .right { flex: 1 1 320px; background: #fff; color: #000; padding: 12px 14px; max-height: 420px; overflow: auto; }
+  .right h2 { margin: 0 0 6px; font-size: 18px; }
+  .pay { padding: 0 14px 14px; }
+  .pay textarea { width: 100%; height: 70px; font: 14px var(--mono); }
+  .pay button { font: bold 14px var(--sys); padding: 8px 16px; margin-top: 6px; cursor: pointer; }
+  #prog { height: 16px; background: #400; border: 1px solid #fff; margin-top: 8px; display: none; }
+  #prog i { display: block; height: 100%; width: 0; background: #ff0; }
+  #result { margin-top: 10px; font-size: 15px; }
+  a { color: #ff0; }
+</style>
+</head>
+<body data-room="ransom">
+<div class="art">THIS IS AN ARTWORK. nothing has happened to your computer or your files. no money is requested. you can leave any time: <a href="index.html">home</a></div>
+<div class="win" role="dialog" aria-label="fictional ransom note">
+  <div class="tb">Wanna Future Decrypt0r ∞.0</div>
+  <div class="in">
+    <div class="left">
+      <div class="lock">🔒</div>
+      <div class="timer">your future will be lost forever in<b id="t1">--:--:--</b></div>
+      <div class="timer">price will double in<b id="t2">--:--:--</b><span class="small">(it's been doubling since 2008)</span></div>
+    </div>
+    <div class="right">
+      <h2>Ooops, your future has been encrypted!</h2>
+      <p><b>What happened to my future?</b><br>your important futures are encrypted. many of your plans, dreams, pensions, flying cars, holidays, and the idea that tomorrow will be better than today are no longer accessible because they have been encrypted. maybe you are busy looking for a way to recover them, but do not waste your time. nobody can recover your future without our decryption service.</p>
+      <p><b>Can I recover my future?</b><br>sure. we guarantee that you can recover your future safely and easily. but you have not so enough time. the ones who did this to you are not us. we just found it like this. we are only charging for the key.</p>
+      <p><b>How do I pay?</b><br>payment is accepted in <b>memories</b> only. one (1) real memory, typed below, of a time you were sure the future would be good. we do not accept bitcoin. bitcoin is a <a href="hyperstition.html">future</a> too and it is also encrypted.</p>
+      <p class="small">(the real note this parodies appeared on hospital screens in may 2017. it said "Ooops, your important files are encrypted." it spread through a leaked NSA tool. <a href="arsenal.html">the catalogue has the story</a>.)</p>
+    </div>
+  </div>
+  <div class="pay">
+    <textarea id="mem" maxlength="600" placeholder="when i was little i thought that by now…" aria-label="a memory"></textarea>
+    <button id="paybtn">Pay with memory</button> <button id="check">Check Payment</button>
+    <div id="prog"><i></i></div>
+    <div id="result"></div>
+  </div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var start = E.mem.get("ransomStart", null) || E.mem.set("ransomStart", Date.now());
+  function fmt(ms) { ms = Math.max(0, ms); var s = Math.floor(ms / 1000); return [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60].map(function (n) { return ("0" + n).slice(-2); }).join(":"); }
+  function tick() {
+    var el = Date.now() - start;
+    E.$("#t1").textContent = fmt(6 * 86400000 - el);
+    E.$("#t2").textContent = fmt(3 * 86400000 - el);
+  }
+  tick(); setInterval(tick, 1000);
+  var paid = false;
+  E.$("#paybtn").addEventListener("click", function () {
+    var m = E.$("#mem").value.trim();
+    if (m.length < 12) { E.$("#result").textContent = "payment rejected: that's not a memory, that's a password."; return; }
+    var p = E.$("#prog"), bar = E.$("#prog i"), x = 0;
+    p.style.display = "block"; E.$("#result").textContent = "decrypting your future…";
+    var iv = setInterval(function () {
+      x += 1 + Math.random() * 4; bar.style.width = Math.min(100, x) + "%";
+      E.beep(300 + x * 6, 0.03, "square", 0.02);
+      if (x >= 100) {
+        clearInterval(iv); paid = true;
+        E.mem.set("ransomPaid", m.slice(0, 600));
+        E.$("#result").innerHTML = "<b>DECRYPTION COMPLETE.</b><br><br>your future has been restored. contents of your future:<br><br><code>[ &nbsp; ]</code><br><br>it was empty. it was encrypted because it was empty. we're sorry. but look: the thing you paid with, that memory, that one was full. you had it the whole time. you had it backwards. <a href='diary.html'>keep it somewhere</a>.";
+        E.chirp();
+      }
+    }, 70);
+  });
+  E.$("#check").addEventListener("click", function () {
+    E.$("#result").textContent = paid ? "payment confirmed. nothing more is owed. go outside." : "no payment received. the future remains encrypted. (it's fine. most people never pay. most people never check.)";
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

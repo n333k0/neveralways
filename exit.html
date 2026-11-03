@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXIT</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  html, body { height: 100%; }
+  body { background: #0a5a2a; color: #fff; font-family: var(--sys); display: flex; align-items: center; justify-content: center; text-align: center; }
+  .sign { border: 6px solid #fff; padding: 20px 40px; border-radius: 6px; background: #0b7a3a; box-shadow: 0 0 40px rgba(80,255,140,.5); }
+  .sign h1 { font: 900 clamp(60px, 14vw, 140px)/1 var(--sys); margin: 0; letter-spacing: .05em; }
+  .sign .run { font-size: 46px; }
+  .doors { margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .doors a { display: inline-block; border: 2px solid #fff; padding: 10px 14px; color: #fff; text-decoration: none; min-width: 180px; }
+  .doors a:hover { background: #fff; color: #0a5a2a; }
+  p { max-width: 520px; margin: 18px auto 0; }
+</style>
+</head>
+<body data-room="exit">
+<div>
+  <div class="sign"><div class="run">🏃➡🚪</div><h1>EXIT</h1></div>
+  <p id="say">exit is a direction, not a place. the only right in a patch is the right to leave. here are your doors.</p>
+  <div class="doors">
+    <a href="#" id="real">to the real world</a>
+    <a href="index.html" id="back">back inside (it's warm)</a>
+    <a href="never.html">to never</a>
+  </div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var n = E.mem.get("exits", 0) + 1; E.mem.set("exits", n);
+  if (n > 2) E.$("#say").textContent = "you've been here " + n + " times. you keep coming to the exit and not leaving. i think that means something. i think that means you live here now.";
+  var asks = 0;
+  E.$("#real").addEventListener("click", function (e) {
+    e.preventDefault();
+    var Q = ["are you sure? it's very bright out there.", "are you really sure? there are no ghosts there. only people.", "ok. go. touch something. say hi to the sky from me. i'll leave the flower on."];
+    if (asks >= Q.length) { location.href = "https://en.wikipedia.org/wiki/Special:Random"; return; }
+    var q = Q[asks++];
+    E.win({ title: "leaving neveralways", cls: "pink", width: 300, text: q, x: innerWidth / 2 - 150 + asks * 14, y: 80 + asks * 18,
+      buttons: [{ label: asks >= Q.length ? "bye" : "yes", action: function () { if (asks >= Q.length) location.href = "https://en.wikipedia.org/wiki/Special:Random"; else E.$("#real").click(); } }, { label: "no, stay", action: function () { location.href = "index.html"; } }] });
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

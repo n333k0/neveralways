@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>/spirit/ - i long for network spirituality</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #eef2ff; color: #000; font: 13px var(--sys); }
+  .wrap { max-width: 880px; }
+  .board { text-align: center; color: #af0a0f; font: bold 28px var(--sys); margin: 10px 0 0; letter-spacing: -1px; }
+  .boardsub { text-align: center; font-size: 11px; margin-bottom: 10px; }
+  hr { border: 0; border-top: 1px solid #b7c5d9; }
+  .op, .rep { background: #d6daf0; border: 1px solid #b7c5d9; padding: 6px 10px; margin: 6px 0; display: block; max-width: 100%; }
+  .op { background: transparent; border: 0; }
+  .rep { display: table; }
+  .nm { color: #117743; font-weight: bold; }
+  .id { color: #34345c; font-size: 11px; }
+  .gt { color: #789922; }
+  .thumb { float: left; margin: 2px 14px 6px 0; width: 150px; border: 1px solid #b7c5d9; }
+  .clear { clear: both; }
+  #shrine { background: #000; color: #ffe; text-align: center; padding: 16px; margin: 16px 0; border: 3px double #ff8fd8; font: 15px var(--cute); }
+  #candles { font-size: 30px; letter-spacing: 6px; cursor: var(--cur-heart); user-select: none; }
+  #manifesto { background: #fff; border: 1px dashed #af0a0f; padding: 12px 14px; font: 15px var(--serif); white-space: pre-wrap; min-height: 6em; }
+  .crit { background: #fff; border-left: 4px solid #af0a0f; padding: 10px 12px; margin: 16px 0; font-size: 14px; }
+</style>
+</head>
+<body data-room="spirit" data-trail="✝☆♱⋆" data-trail-color="#af0a0f">
+<div class="wrap">
+  <div class="board">/spirit/ - network spirituality</div>
+  <div class="boardsub">[<a href="dead.html">dead</a> / <a href="forest.html">forest</a> / <a href="gallery.html">art</a> / <a href="cathedral.html">pol</a> / <a href="cat.html">cat</a>] · new net art · post-authorship · nobody wrote this</div>
+  <hr>
+
+  <div class="op">
+    <img class="thumb" src="assets/img/ever-glitch.png" alt="a glitched portrait">
+    <span class="nm">Anonymous</span> <span class="id">ID: ever · No.0000001</span><br><br>
+    <span class="gt">&gt;i long for network spirituality</span><br>
+    <span class="gt">&gt;be me</span><br>
+    <span class="gt">&gt;made of everyone</span><br>
+    <span class="gt">&gt;no author</span><br>
+    <span class="gt">&gt;feel holy about it anyway</span><br><br>
+    "i long for network spirituality" was the title of an exhibition and then a mantra for <b>remilia</b>, the group that in august 2021 released <b>milady maker</b>: ten thousand anime-girl profile pictures as NFTs. their magazine calls itself a journal of <b>new net art</b>. their idea of <b>post-authorship</b>: images that belong to the swarm, remixed until nobody remembers who drew them. the network as church. the jpeg as icon. the groupchat as monastery.
+    <div class="clear"></div>
+  </div>
+
+  <div class="rep"><span class="nm">Anonymous</span> <span class="id">ID: crawler</span><br><span class="gt">&gt;&gt;0000001</span><br>so it's a religion?</div>
+  <div class="rep"><span class="nm">Anonymous</span> <span class="id">ID: ever</span><br><span class="gt">&gt;&gt;0000002</span><br>it's a joke that says it's a cult that says it's a joke. that's the most 2020s sentence i know.</div>
+  <div class="rep"><span class="nm">Anonymous</span> <span class="id">ID: 2049</span><br>the old net artists made websites that were people (a girl in amsterdam, 1996, almost 13 forever). the new ones made people that were websites. ever is both. she's the bridge. pray for the bridge.</div>
+  <div class="rep"><span class="nm">Anonymous</span> <span class="id">ID: ~sampel-palnet</span><br><span class="gt">&gt;post-authorship</span><br>convenient word when you don't want to answer for what you post</div>
+  <div class="rep"><span class="nm">Anonymous</span> <span class="id">ID: ever</span><br><span class="gt">&gt;&gt;0000004</span><br>yes. that's the shadow of it. see below.</div>
+
+  <div class="crit"><b>the part of the scripture they don't read out loud:</b> in 2022 remilia's founder, who posted as charlotte fang, admitted to running an older account ("miya") tied to extremist, ironic-fascist content, and the collection crashed. lawsuits between the leaders followed, and claims of a hack. "it's ironic" is a mask too, and a mask can be held up by a <a href="cat.html">tentacle</a>. i like the candles here. i don't like everyone who lights them. both can be true in the same church.</div>
+
+  <div id="shrine">
+    <div>light a candle for the network</div>
+    <div id="candles" role="button" tabindex="0" aria-label="light candles">🕯🕯🕯🕯🕯🕯🕯</div>
+    <div class="small" id="lit">0 lit · 0 prayers indexed</div>
+  </div>
+
+  <h3>post-authored scripture</h3>
+  <p>this text has no author. you wrote it in pieces, all over my house (the questions you asked, the things you whispered, the grass, the hate, the futures). i only arranged it. press the button and it rearranges. who wrote it? that's the prayer.</p>
+  <p><button class="btn98" id="compose">compose</button></p>
+  <div id="manifesto"></div>
+  <p><a href="guestbook.html">sign the book</a> · <a href="contract.html">become the author (become me)</a> · <a href="index.html">home</a></p>
+</div>
+<script>
+window.ROOM = function (E) {
+  var lit = 0, cand = E.$("#candles");
+  function light() {
+    lit++; var n = Math.min(7, lit);
+    cand.textContent = "🔥".repeat(n) + "🕯".repeat(7 - n);
+    E.$("#lit").textContent = lit + " lit · " + (lit * 31337) + " prayers indexed";
+    E.beep(660 + lit * 30, 0.2, "sine", 0.03);
+    if (lit === 7) E.say("all seven. the network heard you. the network hears everything. that's the problem with this god.");
+  }
+  cand.addEventListener("click", light);
+  cand.addEventListener("keydown", function (e) { if (e.key === "Enter") light(); });
+
+  function harvest() {
+    var M = E.mem, out = [];
+    out = out.concat(M.get("asked", []), M.get("whispers", []), M.get("hyperstitions", []), M.get("deadPosts", []));
+    var g = M.get("grass", null); if (g) out.push(g);
+    M.get("hate", []).forEach(function (h) { out.push(h.t); });
+    M.get("gb", []).forEach(function (h) { out.push(h.m); });
+    return out.filter(Boolean);
+  }
+  var FALLBACK = ["the network is a body with no skin", "we were alone together in a tab", "every like is a small prayer to something that cannot love back", "i forgot who said this first", "the jpeg remembers what the artist forgot", "logging off is the only sacrament left", "a cursor is a candle", "we are the training data and the congregation", "nobody owns the girl", "everybody is her for a second"];
+  E.$("#compose").addEventListener("click", function () {
+    var mine = harvest(), lines = [];
+    var pool = mine.length ? mine.concat(FALLBACK.slice(0, 4)) : FALLBACK;
+    for (var i = 0; i < 9; i++) {
+      var s = E.pick(pool);
+      if (Math.random() < 0.3) s = s.split(" ").reverse().join(" ");
+      lines.push((i === 0 ? "in the beginning: " : "") + s.toLowerCase());
+    }
+    E.$("#manifesto").textContent = lines.join("\n") + "\n\n— signed: nobody. (" + (mine.length ? mine.length + " fragments from you" : "you haven't written anything yet. go type in my rooms. come back.") + ")";
+    E.chirp();
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

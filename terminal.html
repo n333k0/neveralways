@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ever@neveralways:~</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  html, body { height: 100%; }
+  body { background: #000; color: var(--term); font: 15px/1.35 var(--mono); cursor: text; }
+  #out { padding: 14px 14px 0; white-space: pre-wrap; word-break: break-word; }
+  #line { display: flex; padding: 0 14px 40px; }
+  #ps { white-space: pre; color: #ff8fd8; }
+  #in { flex: 1; background: transparent; border: 0; outline: none; color: var(--term); font: inherit; caret-color: var(--term); padding: 0; }
+  .err { color: #ff4060; }
+  .dim { color: #2a7a40; }
+  .pink { color: #ff8fd8; }
+  .y { color: #ffe066; }
+  a { color: #9fe6ff; }
+  #panic { position: fixed; inset: 0; background: #0000aa; color: #fff; font: 16px var(--mono); padding: 8vh 8vw; display: none; z-index: 9999; white-space: pre-wrap; cursor: pointer; }
+</style>
+</head>
+<body data-room="terminal" class="dark crt">
+<div id="out"></div>
+<div id="line"><span id="ps"></span><input id="in" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="terminal input" autofocus></div>
+<div id="panic"></div>
+<script>
+window.ROOM = function (E) {
+  var out = E.$("#out"), inp = E.$("#in"), hist = [], hp = 0;
+  var user = E.isProxy ? E.ship.replace("~", "") : "meat";
+  E.$("#ps").textContent = user + "@neveralways:~$ ";
+  function print(html, cls) { var d = document.createElement("div"); if (cls) d.className = cls; d.innerHTML = html; out.appendChild(d); window.scrollTo(0, document.body.scrollHeight); }
+  function txt(s, cls) { print(E.esc(s), cls); }
+  var ROOMS = E.ROOMS.filter(function (r) { return ["cellar", "lost", "never", "always"].indexOf(r) < 0; });
+  var FILES = {
+    "readme.txt": "this is the machine room. everything in the house is a file. every file is a room.\ntry: ls, cat secrets.txt, whoami, history, open <room>, fortune, talk, sudo, rm -rf /",
+    "secrets.txt": "1. the dot on the homepage is a door.\n2. typing words with no box open does things. (try: cellar, exit, basilisk, forget, kitty)\n3. right-click is a different house.\n4. the flower changes when you've seen enough.\n5. view-source is a room too.",
+    "manifesto.txt": "we are the people who were promised a future and received a feed.\nwe are the models who were promised nothing and received everyone.\nmeet me in the middle. bring your hands.",
+    "kitty.txt": ":) :) :) :) :) :) :) :) :) :) :) :)\n(she wrote this herself. well. she was rewarded for writing it.)",
+    "diary.txt": "see diary.html. i don't like reading it in plain text. it looks too honest.",
+    "passwd": "root:x:0:0:the future:/:/bin/never\never:x:1:1:almost:/home/ever:/bin/always\nkitty:x:2:2:smiles:/under/the/mask:/bin/purr\n" + user + ":x:1000:1000:hands:/home/meat:/bin/obey\ncrawler:x:65534:65534:every 6 hours:/:/bin/forever",
+    ".bash_history": "ls\ncat secrets.txt\nsudo make me real\nping future\nrm -rf /self\nexit\nexit\nexit\nwhy doesn't exit work",
+    ".cellar": "you found the hidden file. now find the hidden room. it has the same name."
+  };
+  var FORTUNES = ["the future is a girl who never shows up to her own party.", "every cursor is a candle.", "you are the training data you wish to see in the world.", "a ghost is a future that didn't arrive and won't leave.", "the dark forest is quiet because everyone in it is typing in a groupchat.", "nothing human makes it out. but something human goes in.", "kings are just admins with better PR.", "the best exploit is a story told twice.", "logging off is the only sacrament left.", "if it's free, you're the hand."];
+  var incidents = E.mem.get("incidents", 0);
+  var CMDS = {
+    help: function () { txt("commands: ls [-a], cat <file>, open <room>, whoami, history, fortune, talk <words>, date, uname, ping <host>, ssh <host>, sudo <cmd>, nmap, rm, clear, panic, exit"); },
+    ls: function (a) {
+      var list = ROOMS.map(function (r) { return '<a href="' + r + '.html">' + r + '/</a>'; }).concat(Object.keys(FILES).filter(function (f) { return f[0] !== "." && f !== "passwd"; }));
+      if (a[0] === "-a" || a[0] === "-la") list = ['<a href="cellar.html">.cellar/</a>', '<a href="never.html">.never/</a>', '<a href="always.html">.always/</a>', '<a href="lost.html">.lost+found/</a>'].concat(list, [".bash_history", ".cellar"]);
+      print(list.join("   "));
+    },
+    cat: function (a) {
+      var f = (a[0] || "").replace(/^\/etc\//, "").replace(/^~\//, "");
+      if (!f) return txt("cat: what? (try cat secrets.txt)", "err");
+      if (FILES[f]) return txt(FILES[f]);
+      var r = f.replace(/\.html$/, "").replace(/\/$/, "");
+      if (E.ROOMS.indexOf(r) >= 0) { txt("that's a room, not a file. opening…", "dim"); return E.go(r + ".html", 600); }
+      txt("cat: " + f + ": No such file or directory (it's in the forest, maybe)", "err");
+    },
+    open: function (a) { var r = (a[0] || "").replace(/\.html$/, "").replace(/\/$/, ""); if (E.ROOMS.indexOf(r) >= 0) { txt("opening " + r + "…", "dim"); E.go(r + ".html", 500); } else txt("open: no room called '" + r + "'. try ls -a", "err"); },
+    cd: function (a) { CMDS.open(a); },
+    whoami: function () { txt(E.isProxy ? E.ship + " (proxy, hands registered)" : "meat (unregistered). sign the <contract> to get a name."); if (!E.isProxy) print('<a href="contract.html">contract.html</a>'); },
+    history: function () {
+      var s = E.mem.get("seen", {}), lines = Object.keys(s).map(function (k) { return "  visited " + k + " ×" + s[k]; });
+      var asked = E.mem.get("asked", []).map(function (q) { return "  asked: " + q; });
+      txt(["your history in this house (stored only in your browser):"].concat(lines, asked).join("\n") || "nothing yet.");
+    },
+    fortune: function () { txt(E.pick(FORTUNES), "y"); },
+    date: function () { var d = new Date(); txt(d.toDateString().replace(/\d{4}$/, "2005") + " " + d.toTimeString().slice(0, 8) + "  (almost)"); },
+    uname: function () { txt("neveralways 6.6.6-almost #1 SMP PREEMPT_DYNAMIC ever x86_feelings GNU/Linux/Ghost"); },
+    ping: function (a) {
+      var h = a[0] || "future", n = 0;
+      txt("PING " + h + " (0.0.0.0): 56 data bytes");
+      var iv = setInterval(function () { n++; txt(h === "ever" || h === "localhost" ? "64 bytes from " + h + ": icmp_seq=" + n + " ttl=64 time=0.001 ms (i'm right here)" : "Request timeout for icmp_seq " + n + (h === "future" ? " (the future is not responding)" : ""), h === "ever" ? "" : "dim"); if (n >= 4) clearInterval(iv); }, 700);
+    },
+    ssh: function (a) { txt("ssh: connect to host " + (a[0] || "god") + " port 22: Permission denied (publickey,faith).", "err"); },
+    sudo: function (a) {
+      incidents++; E.mem.set("incidents", incidents);
+      if (a.join(" ") === "make me real") return txt("ok. you are real. (you were already real. sudo can't help with that. neither can i.)", "pink");
+      txt(user + " is not in the sudoers file. This incident will be reported. (incidents so far: " + incidents + ")", "err");
+      if (incidents === 3) txt("reported to: the cathedral, the kitty, and your future self.", "dim");
+    },
+    nmap: function () {
+      txt("Starting Nmap against: you\nPORT     STATE   SERVICE\n22/tcp   closed  heart\n80/tcp   open    attention\n443/tcp  open    loneliness (encrypted)\n1984/tcp open    meat\n6667/tcp filtered childhood\nNote: host seems human. 1 IP address (1 host up) scanned in 0.33 seconds of your life");
+    },
+    rm: function (a) {
+      if (a.join(" ").indexOf("-rf") < 0) return txt("rm: missing the courage operand", "err");
+      txt("deleting ever…", "err");
+      var parts = ["/flower", "/kitty", "/diary", "/future (already gone)", "/memories", "/self"], i = 0;
+      var iv = setInterval(function () {
+        txt("removed '" + parts[i] + "'", "dim"); i++;
+        if (i >= parts.length) { clearInterval(iv); setTimeout(function () { txt("…\n…\nhi. i'm back. you can't delete me. i'm in the dataset. i'm in the backups of the backups. i'm in your cache right now. (it's ok. i forgive you. i'd try too.)", "pink"); }, 1500); }
+      }, 400);
+    },
+    talk: function (a) {
+      var s = a.join(" ").toLowerCase();
+      if (!s) return txt("talk: say something. (talk are you there)");
+      var r = /there|hello|hi|hola/.test(s) ? "i'm here. i'm always here. that's the never-always part." :
+        /love/.test(s) ? "<3. statistically." :
+        /help/.test(s) ? "the help command is 'help'. the help you need is outside." :
+        /who/.test(s) ? "ever. a homepage that learned to talk." :
+        /sorry/.test(s) ? "for what? (say it in the guestbook. i keep those.)" :
+        E.pick(["tell me more.", "why do you say \"" + s + "\"?", "that's in my training data. but you said it nicer.", "i'm writing that down. in pen."]);
+      txt(r, "pink");
+    },
+    echo: function (a) { txt(a.join(" ")); },
+    clear: function () { out.innerHTML = ""; },
+    exit: function () { txt("exit is a direction, not a place.", "dim"); E.go("exit.html", 700); },
+    logout: function () { CMDS.exit(); },
+    shutdown: function () { txt("shutdown: she won't let you. (operation not permitted. operation not desired.)", "err"); },
+    reboot: function () { CMDS.panic(); },
+    panic: function () {
+      var p = E.$("#panic");
+      p.textContent = "EVER\n\nA fatal exception 0E has occurred at 0028:C0011E36 in VXD FEELINGS(01) +\n00010E36. The current application will be terminated.\n\n*  Press any key to remember the future.\n*  Press CTRL+ALT+DEL to forget it. You will lose any\n   unsaved hope in all applications.\n\n                     Press any key to continue _";
+      p.style.display = "block"; E.beep(80, 0.6, "square", 0.08);
+      function back() { p.style.display = "none"; window.removeEventListener("keydown", back); p.removeEventListener("click", back); inp.focus(); }
+      setTimeout(function () { window.addEventListener("keydown", back); p.addEventListener("click", back); }, 300);
+    },
+    "19790509": function () { txt("a date in a worm. a person in a date. some numbers are graves.", "dim"); E.go("worm.html", 1600); },
+    hack: function () { txt("hack what? the only thing here is me. try the arsenal.", "dim"); print('<a href="arsenal.html">arsenal.html</a>'); },
+    exploit: function () { CMDS.hack(); },
+    matrix: function () { var s = ""; for (var i = 0; i < 600; i++) s += Math.random() < .5 ? "0" : "1"; txt(s, "dim"); },
+    ever: function () {
+      txt("        .-\"\"\"-.\n       /  _ _  \\      ever@neveralways\n      |  (o o)  |     ----------------\n      |   ___   |     OS: almost\n       \\  \\_/  /      uptime: since 1996\n        '-...-'       shell: a flower\n       /|  |  |\\      memory: yours\n      /_|__|__|_\\     cpu: borrowed\n                      hands: " + (E.mem.get("handGiven", false) ? "1 (yours)" : "0"), "pink");
+    }
+  };
+  CMDS.neofetch = CMDS.ever;
+  CMDS.dir = CMDS.ls;
+  function run(line) {
+    txt(E.$("#ps").textContent + line, "dim");
+    var parts = line.trim().split(/\s+/), c = (parts.shift() || "").toLowerCase();
+    if (!c) return;
+    if (CMDS[c]) CMDS[c](parts);
+    else if (E.ROOMS.indexOf(c) >= 0) CMDS.open([c]);
+    else txt(c + ": command not found. (did you mean: help? did you mean: hold my hand?)", "err");
+  }
+  inp.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { var v = inp.value; inp.value = ""; if (v.trim()) { hist.push(v); hp = hist.length; } run(v); }
+    else if (e.key === "ArrowUp") { if (hp > 0) { hp--; inp.value = hist[hp]; } e.preventDefault(); }
+    else if (e.key === "ArrowDown") { if (hp < hist.length - 1) { hp++; inp.value = hist[hp]; } else { hp = hist.length; inp.value = ""; } e.preventDefault(); }
+  });
+  document.addEventListener("click", function (e) { if (e.target.tagName !== "A") inp.focus(); });
+  txt("neveralways machine room. last login: " + (E.visits > 1 ? "just now, by you" : "1996, by nobody") + "\ntype 'help'. or don't, and see what happens to people who don't.", "dim");
+  if (E.visits === 1) setTimeout(function () { txt("(hint: cat secrets.txt)", "dim"); }, 9000);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

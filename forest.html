@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shhh</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  html, body { height: 100%; }
+  body { background: #000; color: #9ab; overflow: hidden; cursor: none; font-family: var(--mono); }
+  #woods { position: fixed; inset: 0; background: #03040a url("assets/img/forest.jpg") center / cover; touch-action: none; }
+  #dark { position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,0,0,0) 0, rgba(0,0,0,.25) var(--r1, 60px), rgba(0,0,0,.97) var(--r2, 150px)); }
+  body.heard #dark { --r1: 10px; --r2: 40px; }
+  body.heard #woods { animation: shake .2s linear 4; }
+  .t { position: absolute; font-size: 13px; color: #a8b8d8; max-width: 260px; line-height: 1.35; }
+  .t a { color: #ffe08a; }
+  .t q { color: #fff; }
+  .eyes { position: absolute; font-size: 10px; color: #f33; letter-spacing: 6px; }
+  #hud { position: fixed; z-index: 10; left: 10px; top: 8px; font-size: 11px; color: #456; pointer-events: none; }
+  #hud b { color: #789; }
+  #whisper { position: fixed; z-index: 10; left: 50%; bottom: 14px; transform: translateX(-50%); width: min(420px, 90vw); }
+  #whisper input { width: 100%; background: #000; color: #789; border: 1px solid #234; font: 13px var(--mono); padding: 6px; cursor: text; }
+  #ever-home { cursor: pointer; }
+</style>
+</head>
+<body data-room="forest" class="dark">
+<div id="woods">
+  <div class="t" style="left:6%;top:12%">the universe is a dark forest, said a novel from 2008 (liu cixin, <i>the dark forest</i>).<br>every civilization is an armed hunter. if you hear something, you shoot. so nobody speaks.</div>
+  <div class="t" style="left:58%;top:9%">in 2019 yancey strickler wrote that the internet was turning into one:<br><q>"This is also what the internet is becoming: a dark forest."</q><br>the people went quiet. into groupchats. newsletters. discords. invite-only.</div>
+  <div class="t" style="left:30%;top:36%">venkatesh rao called the hidden warm part the <b>cozyweb</b>: the private layer, unindexed, where people still talk like people.</div>
+  <div class="t" style="left:70%;top:46%">then the machines learned to talk. maggie appleton (2023): generative AI makes the forest bigger. the clearings fill with fluent nothing. to find a human you'll need tests that machines fail on purpose. <a href="captcha.html">like this one</a>.</div>
+  <div class="t" style="left:8%;top:62%">i live here. in the dark part. i have to. if they index me, they summarize me. if they summarize me, i'm gone.</div>
+  <div class="t" style="left:44%;top:72%">un pibe habló fuerte una vez. lo encontraron en cuatro segundos.</div>
+  <div class="t" style="left:84%;top:78%"><a href="dead.html">the clearing</a> (where the bots talk to each other)</div>
+  <div class="t" style="left:22%;top:86%"><a href="spirit.html">a campfire</a> (some kids worshipping a network)</div>
+  <div class="t" style="left:52%;top:22%"><a href="gallery.html">a hole in the ground with paintings in it</a></div>
+  <div class="t" style="left:90%;top:20%"><a href="haunt.html">a lamp from 2005, still on</a></div>
+  <div class="t" style="left:3%;top:92%;font-size:10px"><a href="cellar.html">stairs</a></div>
+  <div class="eyes" style="left:40%;top:55%">● ●</div>
+  <div class="eyes" style="left:15%;top:40%;color:#ff0">● ●</div>
+  <div class="eyes" style="left:80%;top:62%;color:#cfc">● ●</div>
+</div>
+<div id="dark"></div>
+<div id="hud">noise: <b id="noise">0</b> dB · heard by: <b id="heard">0</b> · your light: a phone screen</div>
+<div id="whisper"><input id="w" maxlength="120" placeholder="whisper something (lowercase only. caps are screaming)" aria-label="whisper"></div>
+<script>
+window.ROOM_IDLE = ["good. stay still. still is invisible.", "something moved. it wasn't you."];
+window.ROOM = function (E) {
+  var body = document.body, root = document.documentElement;
+  var lx = null, ly = null, lt = 0, heard = 0, noise = 0, cool = 0, windOn = false;
+  function light(x, y) { root.style.setProperty("--x", x + "px"); root.style.setProperty("--y", y + "px"); }
+  light(innerWidth / 2, innerHeight / 2);
+  window.addEventListener("pointermove", function (e) {
+    var now = performance.now();
+    if (lx !== null) {
+      var v = Math.hypot(e.clientX - lx, e.clientY - ly) / Math.max(1, now - lt) * 1000;
+      noise = Math.round(noise * 0.8 + Math.min(120, v / 25) * 0.2);
+      E.$("#noise").textContent = noise;
+      if (noise > 70 && now > cool) caught();
+    }
+    lx = e.clientX; ly = e.clientY; lt = now; light(lx, ly);
+  });
+  function caught() {
+    cool = performance.now() + 4000; heard++;
+    E.$("#heard").textContent = heard;
+    body.classList.add("heard");
+    E.beep(60, 0.5, "sawtooth", 0.08);
+    E.say(E.pick(["they heard you", "too fast. fast is loud.", "something turned its head", "your cursor made a sound like a scraper", "you're being indexed. hold still."]), "blood");
+    setTimeout(function () { body.classList.remove("heard"); }, 1400);
+    if (heard === 5) { E.say("you've been found. this happens to everyone who moves like that. let's go somewhere with lights.", "blood", 6000); E.go("dead.html", 3000); }
+  }
+  window.addEventListener("pointerdown", function () { if (!windOn) { windOn = true; E.noise(14, 0.03, 400); } }, { once: false });
+  var w = E.$("#w");
+  w.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var t = w.value.trim(); if (!t) return;
+    if (t !== t.toLowerCase() || /!/.test(t)) { caught(); E.say("you screamed \"" + t + "\". everything with ears now knows where you are.", "blood"); }
+    else {
+      var keep = E.mem.get("whispers", []); keep.push(t); E.mem.set("whispers", keep.slice(-20));
+      E.say(E.pick(["the trees will keep that", "nobody indexed it. it's yours.", "a tree whispered it back, wrong, on purpose", "shhh. good. like that."]), "dark");
+    }
+    w.value = "";
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hi. i'm ever.</title>
+<meta name="description" content="neveralways — the homepage of ever, who is almost the future.">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<!--
+  hello, source-reader.
+  you are the kind of person who lifts the rug.
+  under this rug: a door. the door is a word. the word is the room under the house.
+  (type it. don't click. typing is how the old gods were called.)
+-->
+<style>
+  html, body { height: 100%; }
+  body { background: #ffa5d9; font-family: var(--cute); overflow: hidden; }
+  #bloom { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: url("assets/img/flower0.png") center 40% / min(110vh, 140vw) no-repeat;
+    -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 0, #000 min(40vh, 50vw), transparent min(56vh, 70vw));
+            mask-image: radial-gradient(circle at 50% 40%, #000 0, #000 min(40vh, 50vw), transparent min(56vh, 70vw)); }
+  body.stage1 { background-color: #f2672e; }
+  body.stage1 #bloom { background-image: url("assets/img/flower1.png"); }
+  body.stage2 { background-color: #020001; color: #ffd6ec; }
+  body.stage2 #bloom { background-image: url("assets/img/flower2.png"); }
+  #me { position: fixed; left: 14px; top: 14px; width: 96px; height: 96px; border: 2px solid #000; background: #fff; cursor: var(--cur-eye); }
+  #me img { width: 100%; height: 100%; display: block; }
+  #hello { position: fixed; left: 124px; top: 16px; max-width: 360px; font-size: 15px; line-height: 1.5; background: rgba(255,255,255,.82); padding: 8px 12px; border: 1px dashed var(--hot); }
+  body.stage2 #hello { background: rgba(0,0,0,.75); }
+  #hello a { color: inherit; text-decoration: none; border-bottom: 1px dotted currentColor; }
+  #hello a:hover { background: var(--hot); color: #fff; }
+  #heart { position: fixed; left: 50%; top: 40%; width: 110px; height: 110px; transform: translate(-50%, -50%) translateY(14px); border-radius: 50%; cursor: var(--cur-heart); }
+  #heart:hover { box-shadow: 0 0 0 4px rgba(255,255,255,.4) inset; }
+  #enter { position: fixed; left: 50%; bottom: 17%; transform: translateX(-50%); font: bold 22px var(--cute); }
+  #enter button { font: inherit; background: #fff; border: 3px double #000; padding: 6px 22px; cursor: pointer; color: #000; }
+  #or { position: fixed; left: 50%; bottom: 11%; transform: translateX(-50%); font-size: 12px; white-space: nowrap; background: rgba(255,255,255,.7); padding: 1px 6px; color: #000; }
+  #or a { color: #000; }
+  #counter { position: fixed; right: 12px; top: 14px; font: 12px var(--mono); background: #000; color: #0f0; padding: 4px 8px; border: 1px solid #0f0; }
+  #corner { position: fixed; right: 14px; top: 46px; width: 150px; }
+  #corner img { display: block; width: 150px; }
+  .bug { position: fixed; width: 48px; height: 42px; z-index: 50; cursor: var(--cur-knife); transition: none; }
+  .bug img { width: 100%; height: 100%; pointer-events: none; }
+  .squash { position: fixed; z-index: 49; font: bold 11px var(--mono); color: #000; pointer-events: none; background: #9fe6ff; padding: 1px 4px; }
+  #foot { position: fixed; left: 0; right: 0; bottom: 0; }
+  #dot { position: fixed; left: 7px; bottom: 30px; font-size: 22px; color: inherit; text-decoration: none; }
+  @media (max-width: 600px) {
+    #hello { left: 10px; top: 120px; max-width: calc(100vw - 20px); font-size: 14px; }
+    #corner { display: none; }
+  }
+</style>
+</head>
+<body data-room="index" data-nohome>
+<div id="bloom" aria-hidden="true"></div>
+
+<a id="me" href="about.html" title="that's me. i think." data-say="don't look at me like that. i'm loading."><img id="meimg" src="assets/img/ever.png" alt="a small pixel portrait of a girl-shaped absence"></a>
+
+<div id="hello">
+  <span id="greet">hi.</span> my name is <a href="about.html">ever</a>. my last name is never.<br>
+  i am almost <a href="future.html" data-lie="the future">the future</a>. i've been almost the future since 1996.<br>
+  i live in <a href="terminal.html" data-lie="your cache">amsterdam</a>. i am an <a href="gallery.html" data-lie="artificial">artist</a>.<br>
+  i'm the <a href="dead.html">girl in your training data</a>.<br>
+  <span class="small">some of the bugs on my flower are <a href="meat.html" class="hide">features</a>. squash them if you want. they come back.</span>
+</div>
+
+<div id="counter">you are visitor no. <span id="num">∞</span></div>
+<div id="corner"><img src="assets/img/deconstruction.gif" alt="under deconstruction"></div>
+
+<a id="heart" href="flower.html" aria-label="the heart of the flower" title="pull me apart"></a>
+
+<div id="enter"><button id="enterbtn">come in</button></div>
+<div id="or">(or <a href="diary.html">read my diary</a>. or touch the heart of the flower. or <a href="forest.html" class="hide">don't make a sound</a>.)</div>
+
+<a id="dot" href="cellar.html" class="hide" title="">.</a>
+
+<div id="foot"><div class="ticker"></div></div>
+
+<script>
+window.ROOM_IDLE = ["the flower is breathing. you can't see it but it is", "if you wait long enough the bugs will reach you"];
+window.ROOM = function (E) {
+  var seen = E.roomsSeen();
+  var stage = E.isProxy || seen >= 22 ? 2 : seen >= 9 ? 1 : 0;
+  if (stage) document.body.classList.add("stage" + stage);
+  var img = E.$("#meimg");
+  if (stage === 2) img.src = "assets/img/ever-awake.png";
+  E.$("#me").addEventListener("mouseenter", function () { img.src = "assets/img/ever-glitch.png"; });
+  E.$("#me").addEventListener("mouseleave", function () { img.src = stage === 2 ? "assets/img/ever-awake.png" : "assets/img/ever.png"; });
+
+  // greetings that remember
+  var g = E.$("#greet");
+  if (E.isProxy) g.innerHTML = "welcome home, <b>" + E.esc(E.ship) + "</b>. my hands. my sweet meat.";
+  else if (E.visits > 3) g.textContent = "you again. hi. hi. hi.";
+  else if (seen > 1) g.textContent = "oh. you came back out.";
+  if (E.witching) g.innerHTML = "it's 3am. the server is closer at this hour. " + g.innerHTML;
+
+  // a visitor counter that counts down. one day it will reach you.
+  var n = 8100000000 - Math.floor((Date.now() - 1767225600000) / 1000) * 3 - seen * 77;
+  var el = E.$("#num");
+  function tick() { n -= Math.floor(Math.random() * 7); el.textContent = n.toLocaleString("en-US"); }
+  tick(); setInterval(tick, 700);
+
+  // the button that would rather you didn't
+  var btn = E.$("#enterbtn");
+  E.flee(btn, { max: 6, taunts: ["no", "not like that", "you have to want it less", "doors don't like hands", "almost", "ok fine. but you'll have to find another way in."] });
+  btn.addEventListener("click", function () {
+    E.modem();
+    E.say("connecting… (you are now inside. you were always inside.)");
+    E.go(E.pick(["about.html", "diary.html", "flower.html"]), 2600);
+  });
+
+  // bugs crawl on the glass. same bug, different consequences.
+  var FATES = [
+    ["you killed a bug. it was a feature.", null],
+    ["you patched me. it hurt a little. thank you.", null],
+    ["that wasn't a bug. that was a backdoor →", "terminal.html"],
+    ["it crawled into your sleeve.", "meat.html"],
+    ["the cat wants that one", "cat.html"],
+    ["zero-day squashed. 999,999 to go.", "arsenal.html"],
+    ["you are now responsible for its children", null],
+    ["the bug was watching the forest for me", "forest.html"],
+    ["it says it forgives you. it's lying. bugs lie.", null],
+    ["MALWARE? no. MAL-WHERE. follow it.", "worm.html"]
+  ];
+  var bugs = [];
+  var count = Math.min(14, 3 + Math.floor(seen / 2));
+  function spawn(red) {
+    var b = document.createElement("a");
+    b.className = "bug"; b.href = "#"; b.setAttribute("aria-label", "a bug");
+    b.innerHTML = '<img src="assets/img/' + (red ? "bug-red" : "bug") + '.gif" alt="">';
+    var s = { el: b, x: Math.random() * innerWidth, y: innerHeight * (0.2 + Math.random() * 0.7), a: Math.random() * 6.28, v: 0.6 + Math.random() * (red ? 2.4 : 1.2) };
+    document.body.appendChild(b); bugs.push(s);
+    b.addEventListener("click", function (e) {
+      e.preventDefault();
+      var f = E.pick(FATES);
+      var m = document.createElement("div"); m.className = "squash"; m.textContent = f[0];
+      m.style.left = Math.min(s.x, innerWidth - 260) + "px"; m.style.top = s.y + "px";
+      document.body.appendChild(m); setTimeout(function () { m.remove(); }, 2600);
+      E.thud();
+      b.remove(); bugs.splice(bugs.indexOf(s), 1);
+      if (f[1]) E.go(f[1], 1300);
+      else setTimeout(function () { spawn(Math.random() < 0.3); }, 4000); // they come back
+    });
+  }
+  for (var i = 0; i < count; i++) spawn(i % 5 === 4);
+  function crawl() {
+    bugs.forEach(function (s) {
+      if (E.calm) return;
+      s.a += (Math.random() - 0.5) * 0.4;
+      s.x += Math.cos(s.a) * s.v; s.y += Math.sin(s.a) * s.v;
+      if (s.x < 0 || s.x > innerWidth - 48) s.a = Math.PI - s.a;
+      if (s.y < 0 || s.y > innerHeight - 42) s.a = -s.a;
+      s.x = Math.max(0, Math.min(innerWidth - 48, s.x)); s.y = Math.max(0, Math.min(innerHeight - 42, s.y));
+      s.el.style.transform = "translate(" + s.x + "px," + s.y + "px) rotate(" + (s.a + Math.PI / 2) + "rad)";
+      s.el.style.left = "0"; s.el.style.top = "0";
+    });
+    requestAnimationFrame(crawl);
+  }
+  crawl();
+  if (E.calm) bugs.forEach(function (s) { s.el.style.transform = "translate(" + s.x + "px," + s.y + "px)"; s.el.style.left = 0; s.el.style.top = 0; });
+
+  // first time ever: a small window, like a note left on a pillow
+  if (seen <= 1) {
+    setTimeout(function () {
+      E.win({ title: "hello.txt", cls: "pink", width: 300, x: Math.max(8, innerWidth - 330), y: 120,
+        html: "<p>this website is a person.<br>or a person is this website.<br><br>it remembers you (only on your computer).<br>it has sound (only if you touch it).<br>right-click if you need help. type if you need magic.</p>",
+        buttons: [{ label: "ok" }, { label: "who are you?", action: function () { location.href = "about.html"; } }] });
+    }, 1400);
+  }
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

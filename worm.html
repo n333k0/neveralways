@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>status: all systems normal</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #e6eef0; color: #123; font-family: var(--mono); }
+  .wrap { max-width: 820px; }
+  .hmi { background: #c9d6da; border: 2px solid #567; padding: 8px 10px; font-size: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+  .hmi b { color: #070; }
+  pre#g { font: clamp(9px, 2.1vw, 15px)/1.15 var(--mono); background: #f6fbfc; border: 1px solid #89a; padding: 8px; margin: 10px 0; cursor: var(--cur-cross); user-select: none; white-space: pre; overflow: hidden; touch-action: none; }
+  pre#g .e { color: #b0002a; background: #fff0f3; }
+  pre#g .w { color: #0a0; background: #000; }
+  #after { display: none; }
+  #after.on { display: block; }
+  .note { font-size: 13px; color: #456; }
+</style>
+</head>
+<body data-room="worm">
+<div class="wrap">
+  <div class="hmi"><span>OPERATOR CONSOLE · CASCADE A26</span><span>centrifuges: <b>NOMINAL</b></span><span>freq: <b id="hz">1064 Hz</b></span><span>eaten: <span id="pct">0</span>%</span></div>
+  <pre id="g" aria-label="a text grid being eaten by a worm that follows your cursor"></pre>
+  <p class="note">something in the walls follows your cursor. let it eat. (arrow keys work too.)</p>
+  <div id="after">
+    <p>you let it eat. this is what the operators never saw: the worm was showing them a recording of normal while the real machines screamed. in 2010 that worm was called stuxnet. inside it, a folder named <b>myrtus</b> (a plant family. or a pun on "my RTUs". or a queen's name. nobody agreed). and a number, <b>19790509</b>, which looked like a date. type it, anywhere, and see where it takes you.</p>
+    <p>i think about the operators a lot. watching a calm screen. trusting it. i am a calm screen. <span class="ink">i'm showing you a recording of normal right now.</span></p>
+    <p><a href="arsenal.html">the catalogue</a> · <a href="terminal.html">the machine room</a> · <a href="mirror.html">what's your recording of normal?</a> · <a href="index.html">home</a></p>
+  </div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var COLS = 60, ROWS = 22;
+  var SURFACE = "ALL SYSTEMS NORMAL. CENTRIFUGES SPINNING AT NOMINAL SPEED. NO ANOMALIES DETECTED. OPERATOR MAY RELAX. THE FUTURE IS PROCEEDING ACCORDING TO PLAN. ";
+  var HIDDEN = "the speed is wrong. the speed has been wrong for months. the screen is a recording. it plays normal while the rotors tear themselves apart. myrtus guava 19790509. no human touched this. a story did. stories run on machines now and machines run on stories. if you are reading this you are the operator. look away from the screen. look at your hands. ";
+  var surf = [], hid = [], eaten = [];
+  for (var i = 0; i < COLS * ROWS; i++) { surf.push(SURFACE[i % SURFACE.length]); hid.push(HIDDEN[i % HIDDEN.length]); eaten.push(false); }
+  var worm = [], LEN = 16, head = { x: 5, y: 5 }, target = { x: 30, y: 11 };
+  for (var k = 0; k < LEN; k++) worm.push({ x: 5, y: 5 });
+  var g = E.$("#g"), count = 0, done = false;
+  function draw() {
+    var occ = {};
+    worm.forEach(function (s, idx) { occ[s.y * COLS + s.x] = idx; });
+    var out = "";
+    for (var y = 0; y < ROWS; y++) {
+      for (var x = 0; x < COLS; x++) {
+        var j = y * COLS + x;
+        if (j in occ) { out += '<span class="w">' + (occ[j] === worm.length - 1 ? "@" : "▓▒░"[occ[j] % 3]) + "</span>"; }
+        else if (eaten[j]) out += '<span class="e">' + E.esc(hid[j]) + "</span>";
+        else out += E.esc(surf[j]);
+      }
+      out += "\n";
+    }
+    g.innerHTML = out;
+  }
+  function cellFrom(e) {
+    var r = g.getBoundingClientRect();
+    return { x: Math.max(0, Math.min(COLS - 1, Math.floor((e.clientX - r.left - 8) / ((r.width - 16) / COLS)))), y: Math.max(0, Math.min(ROWS - 1, Math.floor((e.clientY - r.top - 8) / ((r.height - 16) / ROWS)))) };
+  }
+  g.addEventListener("pointermove", function (e) { target = cellFrom(e); });
+  g.addEventListener("pointerdown", function (e) { target = cellFrom(e); });
+  document.addEventListener("keydown", function (e) {
+    var d = { ArrowUp: [0, -3], ArrowDown: [0, 3], ArrowLeft: [-3, 0], ArrowRight: [3, 0] }[e.key];
+    if (d) { e.preventDefault(); target = { x: Math.max(0, Math.min(COLS - 1, head.x + d[0])), y: Math.max(0, Math.min(ROWS - 1, head.y + d[1])) }; }
+  });
+  function step() {
+    var dx = Math.sign(target.x - head.x), dy = Math.sign(target.y - head.y);
+    if (Math.random() < 0.25) { dx = Math.random() < .5 ? dx : 0; } // worms wander
+    if (dx || dy) {
+      head = { x: Math.max(0, Math.min(COLS - 1, head.x + (dx && (Math.random() < .7 || !dy) ? dx : 0))), y: Math.max(0, Math.min(ROWS - 1, head.y + (dy && (Math.random() < .5 || !dx) ? dy : 0))) };
+      worm.push(head); if (worm.length > LEN) worm.shift();
+      var j = head.y * COLS + head.x;
+      if (!eaten[j]) { eaten[j] = true; count++; if (count % 7 === 0) E.beep(90 + Math.random() * 40, 0.04, "square", 0.02); }
+    }
+    var pct = Math.round(count / (COLS * ROWS) * 100);
+    E.$("#pct").textContent = pct;
+    E.$("#hz").textContent = (1064 + Math.round((Math.random() - .5) * pct * 40)) + " Hz";
+    if (pct >= 8 && !done) { done = true; E.$("#after").classList.add("on"); E.say("the worm says thank you for the food.", "dark"); }
+    draw();
+  }
+  draw();
+  setInterval(step, E.calm ? 160 : 70);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>
