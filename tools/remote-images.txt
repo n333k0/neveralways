@@ -8,3 +8,6 @@ meltdown https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/h
 forest   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211913_8f9b8ffd-ef34-4f08-bf99-912803d1ae86.png
 loops    https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211917_5a304a30-c743-43ef-ad20-59c328c24790.png
 proxy    https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211912_4d2c9822-7236-4498-9b7f-cb59eacb8073.png
+stickers https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_212954_055bbf39-568f-48ed-bffb-cbded04f8e0f.png
+rot      https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_212954_2ee23c93-3744-4b77-a7c9-2bec710313c3.png
+bed      https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_212955_638f88a2-027d-4e1e-9fbc-524a93aa66e3.png
