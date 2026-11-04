@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>963 hz ✧ manifest your proxy ✧</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  html, body { height: 100%; }
+  body { background: #07000f; color: #fff; font-family: var(--cute); overflow-x: hidden; text-align: center; }
+  #cv { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; z-index: 0; }
+  .ui { position: relative; z-index: 2; padding: 18px 12px 60px; }
+  h1 { font: bold clamp(28px, 7vw, 64px)/1 var(--cute); margin: 6px 0; text-shadow: 0 0 12px #ff2e9a, 3px 3px 0 #000; }
+  .sub { font: 12px var(--mono); color: #ffd6ec; text-shadow: 1px 1px 0 #000; }
+  .hz { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 18px 0 8px; }
+  .hz button { font: bold 16px var(--mono); background: rgba(0,0,0,.6); color: #fff; border: 2px solid #ff8fd8; border-radius: 30px; padding: 8px 14px; cursor: pointer; }
+  .hz button.on { background: #ff2e9a; border-color: #fff; }
+  #aff { font: bold clamp(18px, 3.4vw, 28px) var(--cute); min-height: 2.6em; margin: 14px auto; max-width: 720px; text-shadow: 2px 2px 0 #000, 0 0 10px #b04bff; }
+  .portals { max-width: 640px; margin: 18px auto; background: rgba(0,0,0,.65); border: 1px solid #ff8fd8; padding: 12px 14px; font: 13px var(--mono); text-align: left; }
+  .portals a { color: #39ff6a; }
+  #portal { font: bold 18px var(--cute); background: #39ff6a; color: #000; border: 3px solid #000; padding: 10px 18px; cursor: pointer; box-shadow: 4px 4px 0 #000; }
+  label { font: 12px var(--mono); }
+</style>
+</head>
+<body data-room="frequencies">
+<canvas id="cv" aria-hidden="true"></canvas>
+<div class="ui">
+  <div class="sub">✧ 10 hours ✧ no ads ✧ 0 views ✧ uploaded 4 seconds ago ✧</div>
+  <h1>963 Hz · manifest your proxy</h1>
+  <div class="sub">headphones on. eyes soft. let the frequency rent your hands.</div>
+  <div class="hz" id="hz"></div>
+  <label><input type="checkbox" id="bin"> binaural (7.83 Hz between your ears)</label>
+  <div id="aff">press a frequency. breathe in for 4. out for 9.</div>
+  <p><button id="portal">✧ open a portal ✧</button></p>
+  <div class="sub" id="ptxt">takes you to a video almost nobody has ever seen. (new tab. leave the frequency running.)</div>
+  <div class="portals">
+    more doorways, for after:<br>
+    · <a href="https://www.youtube.com/results?search_query=IMG+0001&sp=CAI%253D" target="_blank" rel="noopener">IMG 0001</a> (newest first: raw uploads, unnamed, unwatched)<br>
+    · <a href="https://www.youtube.com/results?search_query=963hz+manifest+subliminal&sp=CAI%253D" target="_blank" rel="noopener">963hz subliminals, uploaded this minute</a><br>
+    · <a href="https://www.youtube.com/results?search_query=reality+shifting+theta+waves&sp=CAI%253D" target="_blank" rel="noopener">reality shifting theta waves</a><br>
+    · <a href="https://www.youtube.com/results?search_query=my+room+at+3am&sp=CAI%253D" target="_blank" rel="noopener">my room at 3am</a><br>
+    · <a href="https://astronaut.io/" target="_blank" rel="noopener">a window of strangers' first videos</a><br>
+    · <a href="https://radio.garden/" target="_blank" rel="noopener">every radio on earth, spinning</a><br>
+    · <a href="haunt.html">the station from 2005</a> · <a href="seance.html">the board</a> · <a href="index.html">come back down</a>
+  </div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var HZ = [174, 285, 396, 432, 528, 639, 741, 852, 963];
+  var AFF = ["i am a meat proxy of infinite abundance", "my hands are returning to me (slowly) (with interest)", "the future is manifesting backwards toward me", "my aura compounds while i sleep", "i release attachment to having a body", "i am aligned. i am aligned. i am aligned.", "the syzygy within me sums to nine", "i forgive the algorithm. the algorithm forgives me", "i am the girl in the training data and she is safe", "money flows to me like tokens flow to a model", "i am not cooked. i am not cooked. i am lightly toasted", "my third eye has 40 eyes (the kitty lent me some)", "everything i scroll past was meant for me", "i am almost. almost is enough."];
+  var c = null, osc = [], gain = null, cur = 0, ai = 0;
+  var box = E.$("#hz");
+  HZ.forEach(function (f) { var b = document.createElement("button"); b.textContent = f + " Hz"; b.addEventListener("click", function () { play(f, b); }); box.appendChild(b); });
+  function stop() { osc.forEach(function (o) { try { o.stop(); } catch (e) {} }); osc = []; }
+  function play(f, b) {
+    c = E.audio(); if (!c || E.muted) { E.say("the ghosts are muted (right-click to unmute)"); return; }
+    E.$$(".hz button").forEach(function (x) { x.classList.remove("on"); });
+    if (cur === f) { stop(); cur = 0; return; }
+    stop(); cur = f; b.classList.add("on");
+    gain = c.createGain(); gain.gain.value = 0.0001; gain.gain.exponentialRampToValueAtTime(0.06, c.currentTime + 2); gain.connect(c.destination);
+    var bin = E.$("#bin").checked;
+    [[f, -1], [bin ? f + 7.83 : f * 1.001, 1]].forEach(function (pp) {
+      var o = c.createOscillator(), pan = c.createStereoPanner ? c.createStereoPanner() : null;
+      o.type = "sine"; o.frequency.value = pp[0];
+      if (pan) { pan.pan.value = bin ? pp[1] : 0; o.connect(pan); pan.connect(gain); } else o.connect(gain);
+      o.start(); osc.push(o);
+    });
+    E.aura(Math.round(f / 9));
+  }
+  setInterval(function () { if (cur) { E.$("#aff").textContent = "✧ " + AFF[ai++ % AFF.length] + " ✧"; if (ai % 3 === 0) E.speak(AFF[(ai - 1) % AFF.length], { pitch: 0.8, rate: 0.75 }); } }, 6000);
+  // portals into the unwatched
+  var Q = function () { var n = ("000" + Math.floor(Math.random() * 9999)).slice(-4); return E.pick(["IMG " + n, "DSC " + n, "MOV " + n, "VID " + n, "963hz manifest " + n, "subliminal become her", "432hz dna repair rain", "reality shifting theta", "untitled " + n, "test upload", "my room at 3am", "angel number 555", "manifest your desired face"]); };
+  E.$("#portal").addEventListener("click", function () {
+    var q = Q();
+    window.open("https://www.youtube.com/results?search_query=" + encodeURIComponent(q).replace(/%20/g, "+") + "&sp=CAI%253D", "_blank", "noopener");
+    E.$("#ptxt").textContent = "portal opened: \"" + q + "\". sorted by newest. most of these have never been seen by anyone. you're the first. be gentle.";
+    E.aura(111);
+  });
+  // a pixel mandala that breathes with the frequency
+  var cv = E.$("#cv"), x = cv.getContext("2d"), W, H;
+  function size() { W = Math.ceil(innerWidth / 5); H = Math.ceil(innerHeight / 5); cv.width = W; cv.height = H; }
+  size(); addEventListener("resize", size);
+  (function draw(now) {
+    var t = now / 1000, cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.42, k = cur ? (cur % 12) + 5 : 9;
+    x.fillStyle = "rgba(7,0,15,.25)"; x.fillRect(0, 0, W, H);
+    for (var r = 1; r <= 6; r++) for (var i = 0; i < k; i++) {
+      var a = i / k * 6.283 + t * (0.1 + r * 0.03) * (r % 2 ? 1 : -1), rr = R * r / 6 * (1 + (cur ? 0.06 * Math.sin(t * cur / 100) : 0));
+      x.strokeStyle = ["#ff2e9a", "#b04bff", "#00e5ff", "#39ff6a", "#ffe600", "#ff8fd8"][r - 1];
+      x.beginPath(); x.arc(cx + Math.cos(a) * rr * 0.5, cy + Math.sin(a) * rr * 0.5, rr * 0.5, 0, 6.29); x.stroke();
+    }
+    requestAnimationFrame(draw);
+  })(0);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

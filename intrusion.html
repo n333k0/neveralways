@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>● session recording</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #000; color: #39ff6a; font: 13px/1.45 var(--mono); }
+  #log { padding: 14px; white-space: pre-wrap; min-height: 50vh; }
+  #log .r { color: #ff0028; } #log .p { color: #ff8fd8; } #log .w { color: #fff; }
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; padding: 0 14px 60px; }
+  .panel { border: 1px solid #39ff6a; padding: 8px; background: #020a04; }
+  .panel h3 { margin: 0 0 6px; font: bold 12px var(--mono); color: #ff2e9a; }
+  #keys { height: 90px; overflow: hidden; word-break: break-all; color: #fff; }
+  #heat { width: 100%; image-rendering: pixelated; background: #010; display: block; }
+  .btn { font: bold 12px var(--mono); background: #39ff6a; color: #000; border: 0; padding: 4px 8px; cursor: pointer; margin-top: 6px; }
+  .ghost { position: fixed; z-index: 9990; width: 18px; height: 18px; pointer-events: none; }
+  .ghost::before { content: ""; position: absolute; left: 0; top: 0; border-left: 9px solid #ff2e9a; border-top: 9px solid transparent; border-bottom: 9px solid transparent; transform: rotate(-45deg) translate(2px, -4px); }
+  .ghost span { position: absolute; left: 16px; top: 10px; font: 10px var(--mono); color: #ff2e9a; white-space: nowrap; }
+  body.glitch { animation: shake .12s linear 6; filter: hue-rotate(90deg) contrast(1.4); }
+  a { color: #ff8fd8; }
+</style>
+</head>
+<body data-room="intrusion" class="dark crt">
+<div id="log" aria-live="polite"></div>
+<div class="panels">
+  <div class="panel"><h3>KEYLOG (this page)</h3><div id="keys">type anything. i'll keep it.</div></div>
+  <div class="panel"><h3>CURSOR HEATMAP</h3><canvas id="heat" width="96" height="60"></canvas><div id="hs">0 samples</div></div>
+  <div class="panel"><h3>SESSION REPLAY</h3><div id="rs">recording your hand…</div><button class="btn" id="replay">watch yourself</button></div>
+  <div class="panel"><h3>ATTENTION</h3><div id="att">looked away 0 times · on page 0s</div></div>
+</div>
+<p class="small" style="padding:0 14px 40px"><a href="eyes.html">let me see you properly</a> · <a href="files.html">her drive</a> · <a href="terminal.html">the machine room</a> · <a href="index.html">log out</a></p>
+<script>
+window.ROOM = function (E) {
+  var n = navigator, s = screen, tz = ""; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) {}
+  var seed = 0, str = n.userAgent + s.width + s.height + tz; for (var i = 0; i < str.length; i++) seed = (seed * 31 + str.charCodeAt(i)) | 0;
+  function rnd() { seed = (seed * 1664525 + 1013904223) | 0; return (seed >>> 0) / 4294967296; }
+  var os = /Win/.test(n.platform) ? "win" : /Mac/.test(n.platform) ? "mac" : /iPhone|iPad|Android/.test(n.userAgent) ? "phone" : "linux";
+  var home = os === "win" ? "C:\\Users\\you\\" : os === "mac" ? "/Users/you/" : os === "phone" ? "/storage/emulated/0/" : "/home/you/";
+  var dirs = os === "phone" ? ["DCIM/Camera", "Download", "Screenshots", "WhatsApp/Media", "Notes"] : ["Desktop", "Documents", "Pictures", "Downloads", "Pictures/2019", "Documents/drafts_never_sent"];
+  var L = [
+    ["", "establishing session…"], ["", "handshake ok · cipher: ever-256-almost"],
+    ["w", "user agent: " + n.userAgent],
+    ["w", "screen " + s.width + "×" + s.height + " · " + (n.hardwareConcurrency || "?") + " cores · tz " + tz + " · lang " + (n.language || "?")],
+    ["", "public ip: ███.███.██.███ (masked by the house)"],
+    ["", "mounting " + home + " …"]
+  ];
+  dirs.forEach(function (d) { L.push(["", "  " + home + d + "  (" + Math.floor(rnd() * 4000 + 12) + " items)"]); });
+  L.push(["p", "selecting: " + home + dirs[2] + " …"]);
+  [7, 19, 33, 48, 61, 74, 88].forEach(function (pc) { L.push(["", "  copying… " + pc + "%  [" + "█".repeat(pc / 10 | 0) + "░".repeat(10 - (pc / 10 | 0)) + "]"]); });
+  L.push(["r", "[!] transfer interrupted: target has hands."]);
+  L.push(["r", "[!] target has hands."]);
+  L.push(["r", "[!] target has hands."]);
+  L.push(["w", ""]);
+  L.push(["p", "UPLOAD COMPLETE: 0 bytes."]);
+  L.push(["p", "i don't want your files. i want what's holding the mouse."]);
+  L.push(["", "keylogger: armed · cursor recorder: armed · attention monitor: armed"]);
+  var log = E.$("#log"), k = 0;
+  (function next() {
+    if (k >= L.length) return;
+    var d = document.createElement("div"); d.className = L[k][0]; d.textContent = L[k][1]; log.appendChild(d);
+    if (L[k][0] === "r") { document.body.classList.add("glitch"); E.beep(80, 0.15, "square", 0.05); setTimeout(function () { document.body.classList.remove("glitch"); }, 700); }
+    else E.beep(1500 + Math.random() * 500, 0.01, "square", 0.01);
+    k++; setTimeout(next, E.calm ? 60 : 120 + Math.random() * 260);
+  })();
+  document.title = "● session recording";
+
+  // keylog
+  var keys = "";
+  addEventListener("keydown", function (e) {
+    var kk = e.key.length === 1 ? e.key : "[" + e.key.toLowerCase() + "]";
+    keys = (keys + kk).slice(-400); E.$("#keys").textContent = keys;
+    E.mem.set("keylog", keys.slice(-120));
+  });
+  // cursor heatmap + recording
+  var hc = E.$("#heat").getContext("2d"), heat = new Float32Array(96 * 60), path = [], t0 = Date.now(), samples = 0;
+  addEventListener("pointermove", function (e) {
+    var x = Math.floor(e.clientX / innerWidth * 96), y = Math.floor(e.clientY / innerHeight * 60);
+    for (var dy = -2; dy <= 2; dy++) for (var dx = -2; dx <= 2; dx++) { var X = x + dx, Y = y + dy; if (X >= 0 && X < 96 && Y >= 0 && Y < 60) heat[Y * 96 + X] += 1 / (1 + dx * dx + dy * dy); }
+    samples++;
+    if (path.length < 3000) path.push([e.clientX, e.clientY, Date.now() - t0]);
+  });
+  setInterval(function () {
+    var im = hc.createImageData(96, 60), d = im.data, mx = 0.01;
+    for (var i = 0; i < heat.length; i++) mx = Math.max(mx, heat[i]);
+    for (i = 0; i < heat.length; i++) { var v = heat[i] / mx; d[i * 4] = v > 0.5 ? 255 : v * 2 * 255; d[i * 4 + 1] = v > 0.75 ? 255 : 46 * v; d[i * 4 + 2] = v > 0.5 ? 154 * (1 - v) : 154 * v; d[i * 4 + 3] = 255; }
+    hc.putImageData(im, 0, 0);
+    E.$("#hs").textContent = samples + " samples · you rest your hand " + (function () { var b = 0, bi = 0; for (var i = 0; i < heat.length; i++) if (heat[i] > b) { b = heat[i]; bi = i; } var X = bi % 96, Y = bi / 96 | 0; return (Y < 20 ? "high" : Y > 40 ? "low" : "in the middle") + (X < 32 ? ", on the left" : X > 64 ? ", on the right" : ""); })();
+    E.$("#rs").textContent = "recorded " + path.length + " points · " + Math.round((Date.now() - t0) / 1000) + "s of your hand";
+  }, 700);
+  E.$("#replay").addEventListener("click", function () {
+    if (path.length < 5) { E.say("move first. i need something to replay."); return; }
+    var g = document.createElement("div"); g.className = "ghost"; g.innerHTML = "<span>you, " + Math.round((Date.now() - t0 - path[0][2]) / 1000) + "s ago</span>"; document.body.appendChild(g);
+    var start = performance.now(), base = path[0][2], j = 0;
+    (function step(now) {
+      var el = (now - start) * 2 + base; // double speed
+      while (j < path.length - 1 && path[j][2] < el) j++;
+      g.style.left = path[j][0] + "px"; g.style.top = path[j][1] + "px";
+      if (j < path.length - 1) requestAnimationFrame(step); else setTimeout(function () { g.remove(); }, 600);
+    })(start);
+  });
+  // attention
+  var away = 0, on0 = Date.now();
+  document.addEventListener("visibilitychange", function () { if (document.hidden) { away++; E.mem.set("lookedAway", (E.mem.get("lookedAway", 0) + 1)); } });
+  setInterval(function () { E.$("#att").textContent = "looked away " + away + " times · on page " + Math.round((Date.now() - on0) / 1000) + "s · total looks away (all visits): " + E.mem.get("lookedAway", 0); }, 1000);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

@@ -35,7 +35,7 @@
     "index", "about", "flower", "cat", "meat", "captcha", "forest", "dead", "guestbook",
     "numogram", "hyperstition", "haunt", "cathedral", "spirit", "gallery", "arsenal",
     "ransom", "worm", "terminal", "broker", "future", "basilisk", "mirror", "diary",
-    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "fyp", "evers", "pet", "slots", "files", "call", "seance", "links", "shelf", "exit", "never", "always", "cellar", "lost"
+    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "fyp", "evers", "pet", "slots", "files", "call", "seance", "eyes", "intrusion", "frequencies", "links", "shelf", "exit", "never", "always", "cellar", "lost"
   ];
 
   var room = (document.body && document.body.getAttribute("data-room")) ||
@@ -385,6 +385,9 @@
     "ccru": function () { EVER.say("you said the name. the files are open.", "blood"); EVER.go("unit.html", 1200); },
     "unit": function () { EVER.go("unit.html"); },
     "pfp": function () { EVER.go("evers.html"); },
+    "cam": function () { EVER.go("eyes.html"); },
+    "hack": function () { EVER.go("intrusion.html"); },
+    "963": function () { EVER.go("frequencies.html"); },
     "777": function () { EVER.say("the house always wins", "blood"); EVER.go("slots.html", 900); },
     "ouija": function () { EVER.go("seance.html"); },
     "dial": function () { EVER.go("call.html"); },
@@ -525,10 +528,39 @@
     setTimeout(function loop() { if (!document.hidden) EVER.sticker(); setTimeout(loop, 25000 + Math.random() * 30000); }, 6000 + Math.random() * 12000);
   }
 
+  /* ———————————————— your own ghost: the last time you were in this room ———————————————— */
+  function ghost() {
+    if (EVER.calm || document.body.hasAttribute("data-noghost")) return;
+    var key = "path:" + room, old = mem.get(key, null), cur = [], t0 = Date.now(), lastT = 0;
+    addEventListener("pointermove", function (e) {
+      var t = Date.now() - t0; if (t - lastT < 80 || cur.length > 400) return; lastT = t;
+      cur.push([+(e.clientX / innerWidth).toFixed(3), +(e.clientY / innerHeight).toFixed(3), t]);
+    }, { passive: true });
+    function keep() { if (cur.length > 10) mem.set(key, cur); }
+    addEventListener("pagehide", keep); document.addEventListener("visibilitychange", function () { if (document.hidden) keep(); });
+    if (!old || old.length < 10 || Math.random() > 0.55) return;
+    setTimeout(function () {
+      var g = document.createElement("div");
+      g.style.cssText = "position:fixed;z-index:9990;pointer-events:none;font:10px monospace;color:#ff2e9a;opacity:.75;left:0;top:0";
+      g.innerHTML = '<svg width="14" height="20" viewBox="0 0 14 20"><path d="M1 1 L1 16 L5 12 L8 19 L10 18 L7 11 L13 11 Z" fill="none" stroke="#ff2e9a" stroke-width="1.5"/></svg><span style="position:absolute;left:14px;top:14px;white-space:nowrap">you, last time</span>';
+      document.body.appendChild(g);
+      var s0 = performance.now(), j = 0;
+      (function step(now) {
+        var el = now - s0;
+        while (j < old.length - 1 && old[j][2] < el) j++;
+        g.style.transform = "translate(" + old[j][0] * innerWidth + "px," + old[j][1] * innerHeight + "px)";
+        if (j < old.length - 1) requestAnimationFrame(step); else setTimeout(function () { g.remove(); }, 800);
+      })(s0);
+    }, 2500);
+  }
+  /* ———————————————— sometimes the logs leak ———————————————— */
+  var LOGS = ["[sshd] accepted publickey for ever from 127.0.0.1", "[cam] lens warm", "[mic] room tone 31 dB", "[cursor] recording… 312 samples", "[kitty] mask integrity 64%", "[proxy] hands: 0 · eyes: borrowed", "[geo] you are closer than yesterday", "[sys] session " + Math.floor(Math.random() * 9999) + " resumed", "[clip] last copied: (redacted)", "[unit] session 2003 still active"];
+  function leaks() { if (EVER.calm || room === "index") return; setTimeout(function () { if (!document.hidden && Math.random() < 0.3) EVER.say(pick(LOGS), "dark", 3500); }, 25000 + Math.random() * 20000); }
+
   /* ———————————————— boot ———————————————— */
   function boot() {
     if (mem.get("calm", false)) document.body.classList.add("calm");
-    liars(); fills(); trail(); homeDoor(); EVER.fillTickers(); poke(); peeker();
+    liars(); fills(); trail(); homeDoor(); EVER.fillTickers(); poke(); peeker(); ghost(); leaks();
     if (EVER.witching) document.body.classList.add("witching");
     if (typeof window.ROOM === "function") { try { window.ROOM(EVER); } catch (e) { console.error(e); } }
   }

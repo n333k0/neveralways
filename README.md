@@ -50,12 +50,15 @@ Or publish it with GitHub Pages (Settings → Pages → deploy from branch, root
 | `files` | C:\\EVER\\: a file explorer of her drive. Locked folders use passwords hidden around the house: the number of her name, a date in a worm, her mood, and your own given name. Photos, rosters, raw minutes, proxy session logs, deleted diary entries. |
 | `call` | phone.exe: a keypad with DTMF tones. Some numbers still answer (try 1996). |
 | `seance` | ouija.exe: ask a question; the planchette spells the answer; some answers are doors. |
+| `eyes` | "let me in": a permission sheet. Camera (a dithered, mirrored feed with motion tracking, a "biometric hash", "wear her face", a downloadable proxy photo), microphone (room tone), location (your distance to the flat), notifications (she pings you when you leave the tab), device motion, clipboard. Everything stays in the browser. |
+| `intrusion` | a fake intrusion: real browser facts, a mounted home folder that never really copies anything, then "UPLOAD COMPLETE: 0 bytes". A live keylogger for the page, a cursor heatmap, a replay of your own hand, an attention counter. |
+| `frequencies` | 963 Hz: solfeggio tones (optionally binaural), a pixel mandala, brainrot affirmations read aloud, and portals to YouTube searches sorted by newest, mostly videos no one has watched. |
 | `numogram` | Land/CCRU: a clickable numogram (syzygies that sum to 9), an AQ calculator, an ACCELERATE button and a critical note. |
 | `hyperstition` | write a headline from the future. It appears on every news ticker in the house until it gets "truer". |
 | `haunt` | Fisher: a radio between stations, the weird and the eerie as two doors, and a clock that stays in 2005. |
 | `cathedral` | Yarvin, satirised: Patchwork patches, a feudal Urbit-style planet name, VOICE (a box that shrinks as you type) vs EXIT. |
 | `spirit` | an imageboard shrine to network spirituality. It composes "post-authored scripture" from everything you typed elsewhere in the house. |
-| `gallery` | the deep web gallery. Peel the surface, deep and dark layers. Works no crawler indexed, plus a random-shopper bot. |
+| `gallery` | *unindexed*. Peel the surface, deep and dark layers. Works no crawler indexed, plus a random-shopper bot. |
 | `arsenal` | an ANT-catalog-style catalogue of soft weapons (CRYINGFLOWER, SOFTKITTEN, STUXNETTE, ETERNALBLUSH, MEATBRIDGE, GHOSTLIGHT) and the real history behind it. |
 | `ransom` | *Ooops, your future has been encrypted!* You pay with a memory. It is clearly labelled as an artwork. |
 | `worm` | a worm follows your cursor and eats the "all systems normal" screen to reveal what's under it. |
@@ -82,6 +85,7 @@ These live in `assets/ever.js`:
 - **Idling** makes ever whisper ("are you still there? are you a bot?").
 - **Copying text** signs it.
 - **Hidden text and links**: some text is in invisible ink (select it to read), some words lie when you hover them, and some links are disguised as ordinary text.
+- **Your own ghost**: rooms remember your cursor path; next time, "you, last time" sometimes replays it.
 - **Memory**: the house remembers rooms visited, names, hyperstitions and mail in `localStorage` on your own machine only. Type `forget` to wipe it.
 - **Accessibility**: `prefers-reduced-motion` is respected, right-click → "please stop moving" calms the house, and sound only plays after you interact.
 

@@ -120,7 +120,9 @@ window.ROOM = function (E) {
       setTimeout(function () { window.addEventListener("keydown", back); p.addEventListener("click", back); }, 300);
     },
     "19790509": function () { txt("a date in a worm. a person in a date. some numbers are graves.", "dim"); E.go("worm.html", 1600); },
-    hack: function () { txt("hack what? the only thing here is me. try the arsenal.", "dim"); print('<a href="arsenal.html">arsenal.html</a>'); },
+    hack: function () { txt("ok. hacking you.", "err"); E.go("intrusion.html", 700); },
+    cam: function () { txt("opening /dev/video0 …", "dim"); E.go("eyes.html", 700); },
+    keylog: function () { txt(E.mem.get("keylog", "") || "(nothing logged yet. go type somewhere.)", "pink"); },
     exploit: function () { CMDS.hack(); },
     matrix: function () { var s = ""; for (var i = 0; i < 600; i++) s += Math.random() < .5 ? "0" : "1"; txt(s, "dim"); },
     ever: function () {

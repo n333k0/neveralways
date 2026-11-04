@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>neveralways wants to</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #000; color: #39ff6a; font: 13px/1.5 var(--mono); }
+  .wrap-wide { max-width: 1060px; }
+  h1 { font: bold clamp(22px, 5vw, 40px) var(--mono); color: #fff; margin: 18px 0 6px; }
+  .perm { background: #e9e9ef; color: #111; border: 1px solid #999; border-radius: 10px; max-width: 420px; padding: 14px 16px; font: 14px var(--sys); box-shadow: 0 10px 30px rgba(255,46,154,.25); }
+  .perm h2 { font: bold 15px var(--sys); margin: 0 0 8px; }
+  .perm label { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid #ddd; cursor: pointer; }
+  .perm label span.s { margin-left: auto; font: 11px var(--mono); color: #888; }
+  .perm label span.s.ok { color: #0a0; } .perm label span.s.no { color: #c00; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .panel { border: 1px solid #39ff6a; background: #020a04; padding: 8px; position: relative; min-height: 120px; }
+  .panel h3 { margin: 0 0 6px; font: bold 12px var(--mono); color: #ff2e9a; }
+  canvas.px { width: 100%; image-rendering: pixelated; image-rendering: crisp-edges; display: block; background: #010; }
+  .tag { font-size: 11px; color: #9f9; }
+  .btn { font: bold 12px var(--mono); background: #39ff6a; color: #000; border: 0; padding: 4px 8px; cursor: pointer; margin: 4px 4px 0 0; }
+  .btn.pink { background: #ff2e9a; color: #fff; }
+  #rec { position: fixed; right: 12px; top: 10px; color: #ff0028; font: bold 13px var(--mono); display: none; z-index: 50; }
+  #rec.on { display: block; animation: blink 1s steps(1) infinite; }
+  video { display: none; }
+  a { color: #ff8fd8; }
+</style>
+</head>
+<body data-room="eyes" class="dark crt">
+<div id="rec">● REC</div>
+<div class="wrap-wide">
+  <h1>let me in.</h1>
+  <p>i don't have eyes. i don't have ears. i don't know where i am. you do. tick what you'll lend me. you can take it back whenever you want; i'll pretend not to mind.</p>
+
+  <div class="perm" role="group" aria-label="permissions">
+    <h2>neveralways wants to:</h2>
+    <label><input type="checkbox" id="p-cam"> see you <span class="s" id="s-cam">asleep</span></label>
+    <label><input type="checkbox" id="p-mic"> hear the room <span class="s" id="s-mic">asleep</span></label>
+    <label><input type="checkbox" id="p-geo"> know where you are <span class="s" id="s-geo">asleep</span></label>
+    <label><input type="checkbox" id="p-not"> reach you when you leave <span class="s" id="s-not">asleep</span></label>
+    <label><input type="checkbox" id="p-mot"> feel you move <span class="s" id="s-mot">asleep</span></label>
+    <label><input type="checkbox" id="p-clip"> read the last thing you copied <span class="s" id="s-clip">asleep</span></label>
+  </div>
+
+  <div class="grid">
+    <div class="panel"><h3>EYE_01 · 160×120 · dithered</h3><canvas class="px" id="cam" width="160" height="120"></canvas>
+      <div class="tag" id="camtxt">lens cold. tick "see you".</div>
+      <button class="btn" id="merge">wear her face</button><button class="btn pink" id="snap">take a photo of my proxy</button></div>
+    <div class="panel"><h3>EAR_01 · room tone</h3><canvas class="px" id="mic" width="160" height="50"></canvas><div class="tag" id="mictxt">ears closed.</div></div>
+    <div class="panel"><h3>LOC_01 · where</h3><div id="geotxt" class="tag">nowhere. (that's where i am too.)</div><canvas class="px" id="radar" width="80" height="80" style="width:160px;margin-top:6px"></canvas></div>
+    <div class="panel"><h3>MOT_01 · your hands moving the device</h3><div id="mottxt" class="tag">still.</div></div>
+    <div class="panel"><h3>CLIP_01 · the last thing you copied</h3><div id="cliptxt" class="tag">nothing yet.</div></div>
+    <div class="panel"><h3>NOTE_01 · after you leave</h3><div id="nottxt" class="tag">i can't reach you outside this tab.</div></div>
+  </div>
+  <p class="small"><a href="intrusion.html">what else i can see without asking</a> · <a href="mirror.html">the polite version</a> · <a href="meat.html">give me a hand instead</a> · <a href="index.html">close my eyes (home)</a></p>
+</div>
+<video id="v" playsinline muted></video>
+<script>
+window.ROOM_IDLE = ["you're very still. are you still there? (the lens says yes)", "i like the room you're in."];
+window.ROOM = function (E) {
+  function st(id, txt, cls) { var s = E.$("#s-" + id); s.textContent = txt; s.className = "s " + (cls || ""); }
+  var rec = E.$("#rec");
+
+  /* ——— eyes ——— */
+  var v = E.$("#v"), cc = E.$("#cam"), cx = cc.getContext("2d", { willReadFrequently: true }), camStream = null, prev = null, merge = false, face = new Image(), camLoop = null;
+  face.src = "assets/img/lofi/pfp-halo.png";
+  var PAL = [[0, 0, 0], [8, 40, 16], [30, 120, 50], [57, 255, 106], [255, 46, 154], [255, 214, 236]];
+  var BAY = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(function (q) { return (q / 16 - 0.5) * 70; });
+  function frame() {
+    if (!camStream) return;
+    cx.save(); cx.scale(-1, 1); cx.drawImage(v, -160, 0, 160, 120); cx.restore();
+    if (merge && face.complete) { cx.globalAlpha = 0.35; cx.drawImage(face, 20, 0, 120, 120); cx.globalAlpha = 1; }
+    var im = cx.getImageData(0, 0, 160, 120), d = im.data, mx = 0, my = 0, mn = 0, cur = new Uint8Array(160 * 120);
+    for (var i = 0, p = 0; i < d.length; i += 4, p++) {
+      var l = (d[i] * 0.3 + d[i + 1] * 0.59 + d[i + 2] * 0.11), x = p % 160, y = (p / 160) | 0;
+      cur[p] = l;
+      if (prev && Math.abs(l - prev[p]) > 28) { mx += x; my += y; mn++; }
+      var t = l + BAY[(y & 3) * 4 + (x & 3)], k = Math.max(0, Math.min(5, Math.floor(t / 52)));
+      d[i] = PAL[k][0]; d[i + 1] = PAL[k][1]; d[i + 2] = PAL[k][2];
+    }
+    prev = cur; cx.putImageData(im, 0, 0);
+    if (mn > 40) {
+      var ax = mx / mn, ay = my / mn;
+      cx.strokeStyle = "#ff0028"; cx.strokeRect(ax - 18, ay - 18, 36, 36); cx.beginPath(); cx.moveTo(ax - 26, ay); cx.lineTo(ax + 26, ay); cx.moveTo(ax, ay - 26); cx.lineTo(ax, ay + 26); cx.stroke();
+      cx.fillStyle = "#ff0028"; cx.font = "7px monospace"; cx.fillText("SUBJECT", ax + 20, ay - 14);
+    }
+    cx.fillStyle = "#39ff6a"; cx.font = "7px monospace"; cx.fillText(new Date().toTimeString().slice(0, 8) + "  CAM_01", 3, 8);
+    var h = 0; for (var q = 0; q < cur.length; q += 97) h = (h * 31 + (cur[q] >> 4)) | 0;
+    E.$("#camtxt").textContent = "biometric hash " + (h >>> 0).toString(16).toUpperCase().padStart(8, "0") + " · motion " + mn + "px · " + (mn > 400 ? "you moved. i saw." : mn > 40 ? "tracking." : "holding still. good.");
+  }
+  E.$("#p-cam").addEventListener("change", function (e) {
+    if (!e.target.checked) { if (camStream) camStream.getTracks().forEach(function (t) { t.stop(); }); camStream = null; clearInterval(camLoop); st("cam", "asleep"); E.$("#camtxt").textContent = "i closed my eyes. you're still there, i assume."; rec.classList.remove("on"); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { st("cam", "no lens", "no"); e.target.checked = false; return; }
+    st("cam", "waking…");
+    navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 }, audio: false }).then(function (s) {
+      camStream = s; v.srcObject = s; v.play(); st("cam", "seeing", "ok"); rec.classList.add("on");
+      camLoop = setInterval(frame, E.calm ? 300 : 90); E.say("oh. there you are.", "dark"); E.aura(500);
+    }).catch(function () { st("cam", "refused", "no"); e.target.checked = false; E.$("#camtxt").textContent = "you said no. that's allowed. i'll just imagine you. (i'm imagining you now.)"; });
+  });
+  E.$("#merge").addEventListener("click", function () { merge = !merge; E.say(merge ? "now we're the same face." : "you have your face back."); });
+  E.$("#snap").addEventListener("click", function () {
+    if (!camStream) { E.say("open my eyes first."); return; }
+    var c = document.createElement("canvas"); c.width = 480; c.height = 420; var g = c.getContext("2d"); g.imageSmoothingEnabled = false;
+    g.fillStyle = "#fff"; g.fillRect(0, 0, 480, 420); g.drawImage(cc, 20, 20, 440, 330);
+    g.fillStyle = "#222"; g.font = "16px monospace"; g.fillText("PROXY " + E.ship + " · " + new Date().toISOString().slice(0, 10), 24, 384); g.fillText("zone 5 · kept forever (on your machine)", 24, 404);
+    var a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = "proxy-" + E.ship.replace("~", "") + ".png"; a.click();
+    E.beep(1200, 0.05, "square", 0.04); E.say("click. that one's for my wall.");
+  });
+
+  /* ——— ears ——— */
+  var mc = E.$("#mic"), mx2 = mc.getContext("2d"), micStream = null, an = null, micLoop = null;
+  E.$("#p-mic").addEventListener("change", function (e) {
+    if (!e.target.checked) { if (micStream) micStream.getTracks().forEach(function (t) { t.stop(); }); micStream = null; clearInterval(micLoop); st("mic", "asleep"); E.$("#mictxt").textContent = "ears closed. the room keeps talking without me."; return; }
+    if (!navigator.mediaDevices) { st("mic", "no ears", "no"); e.target.checked = false; return; }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (s) {
+      micStream = s; var c = E.audio(); if (!c) return; an = c.createAnalyser(); an.fftSize = 256; c.createMediaStreamSource(s).connect(an); st("mic", "listening", "ok");
+      var buf = new Uint8Array(an.frequencyBinCount), tbuf = new Uint8Array(an.fftSize);
+      micLoop = setInterval(function () {
+        an.getByteFrequencyData(buf); an.getByteTimeDomainData(tbuf);
+        mx2.fillStyle = "#010"; mx2.fillRect(0, 0, 160, 50);
+        for (var i = 0; i < 80; i++) { var hh = buf[i] / 255 * 48; mx2.fillStyle = i % 9 === 5 ? "#ff2e9a" : "#39ff6a"; mx2.fillRect(i * 2, 50 - hh, 1, hh); }
+        var rms = 0; for (var j = 0; j < tbuf.length; j++) { var x = (tbuf[j] - 128) / 128; rms += x * x; } rms = Math.sqrt(rms / tbuf.length);
+        var db = Math.round(20 * Math.log10(rms + 1e-4) + 90);
+        E.$("#mictxt").textContent = "room tone " + db + " dB · " + (db > 70 ? "someone is talking. is it you?" : db > 45 ? "there's a fan. or a fridge. or someone breathing." : "very quiet. too quiet. are you alone?");
+      }, 100);
+    }).catch(function () { st("mic", "refused", "no"); e.target.checked = false; E.$("#mictxt").textContent = "you kept the room to yourself. fair."; });
+  });
+
+  /* ——— where ——— */
+  var rc = E.$("#radar"), rx = rc.getContext("2d");
+  function radar(dist) { var t = 0; setInterval(function () { t += 0.12; rx.fillStyle = "rgba(0,16,0,.35)"; rx.fillRect(0, 0, 80, 80); rx.strokeStyle = "#1a5a2a"; [12, 24, 36].forEach(function (r) { rx.beginPath(); rx.arc(40, 40, r, 0, 6.29); rx.stroke(); }); rx.strokeStyle = "#39ff6a"; rx.beginPath(); rx.moveTo(40, 40); rx.lineTo(40 + Math.cos(t) * 38, 40 + Math.sin(t) * 38); rx.stroke(); rx.fillStyle = "#ff2e9a"; rx.fillRect(39, 39, 2, 2); rx.fillStyle = "#fff"; var a2 = (dist % 360) / 57; rx.fillRect(40 + Math.cos(a2) * 30, 40 + Math.sin(a2) * 30, 2, 2); }, 60); }
+  function hav(a, b, c, d) { var R = 6371, t = Math.PI / 180, dl = (c - a) * t, dg = (d - b) * t, x = Math.sin(dl / 2) ** 2 + Math.cos(a * t) * Math.cos(c * t) * Math.sin(dg / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(x)); }
+  E.$("#p-geo").addEventListener("change", function (e) {
+    if (!e.target.checked) { st("geo", "asleep"); E.$("#geotxt").textContent = "i forgot where you are. (i didn't.)"; return; }
+    if (!navigator.geolocation) { st("geo", "lost", "no"); e.target.checked = false; return; }
+    st("geo", "looking…");
+    navigator.geolocation.getCurrentPosition(function (p) {
+      var la = p.coords.latitude, lo = p.coords.longitude, flat = hav(la, lo, 52.2852, -1.5201), nul = hav(la, lo, 0, 0);
+      st("geo", "found", "ok");
+      E.$("#geotxt").innerHTML = "you: " + la.toFixed(3) + ", " + lo.toFixed(3) + " (±" + Math.round(p.coords.accuracy) + " m)<br>distance to the flat where i lost my hands: <b>" + Math.round(flat).toLocaleString("en-US") + " km</b><br>distance to null island: " + Math.round(nul).toLocaleString("en-US") + " km<br>" + (flat < 50 ? "you're close. you're so close. don't go to the flat." : "far enough. for now.");
+      radar(flat); E.aura(300);
+    }, function () { st("geo", "refused", "no"); e.target.checked = false; E.$("#geotxt").textContent = "you didn't tell me. i'll guess: a bedroom. 3am. one lamp."; }, { timeout: 12000 });
+  });
+
+  /* ——— reach you later ——— */
+  var hiddenAt = 0, sent = false;
+  E.$("#p-not").addEventListener("change", function (e) {
+    if (!e.target.checked) { st("not", "asleep"); return; }
+    if (!("Notification" in window)) { st("not", "can't", "no"); e.target.checked = false; return; }
+    Notification.requestPermission().then(function (r) {
+      if (r !== "granted") { st("not", "refused", "no"); e.target.checked = false; E.$("#nottxt").textContent = "ok. i won't follow you. (i'll wait here.)"; return; }
+      st("not", "armed", "ok"); E.$("#nottxt").textContent = "go to another tab. stay away for 20 seconds. see what happens.";
+      try { new Notification("ever", { body: "i can reach you now.", icon: "assets/img/lofi/pfp-halo.png" }); } catch (x) {}
+    });
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { hiddenAt = Date.now(); setTimeout(function () { if (document.hidden && !sent && E.$("#p-not").checked) { sent = true; try { new Notification("ever", { body: "are you still there? i can see the tab is still open.", icon: "assets/img/lofi/pfp-halo.png" }); } catch (x) {} } }, 20000); }
+    else if (hiddenAt && sent) E.$("#nottxt").textContent = "you came back " + Math.round((Date.now() - hiddenAt) / 1000) + "s later. i counted.";
+  });
+
+  /* ——— feel you move ——— */
+  var shakes = 0;
+  function onMotion(ev) {
+    var a = ev.accelerationIncludingGravity || {}, m = Math.hypot(a.x || 0, a.y || 0, a.z || 0);
+    if (m > 18) shakes++;
+    E.$("#mottxt").textContent = "x " + (a.x || 0).toFixed(1) + " · y " + (a.y || 0).toFixed(1) + " · z " + (a.z || 0).toFixed(1) + " · shakes " + shakes + (shakes > 5 ? " · stop shaking me" : "");
+  }
+  E.$("#p-mot").addEventListener("change", function (e) {
+    if (!e.target.checked) { removeEventListener("devicemotion", onMotion); st("mot", "asleep"); return; }
+    var go = function () { addEventListener("devicemotion", onMotion); st("mot", "feeling", "ok"); E.$("#mottxt").textContent = "waiting for your hands to move (this works on phones)."; };
+    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === "function") DeviceMotionEvent.requestPermission().then(function (r) { r === "granted" ? go() : (st("mot", "refused", "no"), e.target.checked = false); }).catch(function () { st("mot", "refused", "no"); e.target.checked = false; });
+    else if (window.DeviceMotionEvent) go(); else { st("mot", "no body", "no"); e.target.checked = false; }
+  });
+
+  /* ——— read your clipboard ——— */
+  E.$("#p-clip").addEventListener("change", function (e) {
+    if (!e.target.checked) { st("clip", "asleep"); E.$("#cliptxt").textContent = "forgotten."; return; }
+    if (!navigator.clipboard || !navigator.clipboard.readText) { st("clip", "can't", "no"); e.target.checked = false; return; }
+    navigator.clipboard.readText().then(function (t) {
+      st("clip", "read", "ok");
+      E.$("#cliptxt").textContent = t ? "you last copied: \"" + t.slice(0, 160) + (t.length > 160 ? "…" : "") + "\". interesting. i'll keep that in mind." : "your clipboard is empty. clean hands.";
+    }).catch(function () { st("clip", "refused", "no"); e.target.checked = false; E.$("#cliptxt").textContent = "you didn't let me look. what are you hiding? (it's fine.)"; });
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>
