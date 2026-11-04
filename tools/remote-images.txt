@@ -17,3 +17,7 @@ pfp-halo   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc
 smug       https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_213656_19f65bcf-be6d-4cb4-9f9d-956522624a6f.png
 flat97     https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_213656_05bc0360-aba2-4d5d-b97f-275086d1c6ac.png
 rave96     https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_213657_ecd813c7-e614-4895-80de-1a408a0959a0.png
+wired96    https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214339_ce984865-f3f6-4ecc-8e71-c3bebb4b462d.png
+dissolve   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214339_e0dd9652-c018-40aa-ad3c-c10362b9dd08.png
+lastphoto  https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214339_b7293f0b-df49-498b-8127-4b74fc693b21.png
+pfp-cursor https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214341_5f0ac062-5fb6-41e7-9981-324e385c29e3.png
