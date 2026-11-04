@@ -35,7 +35,7 @@
     "index", "about", "flower", "cat", "meat", "captcha", "forest", "dead", "guestbook",
     "numogram", "hyperstition", "haunt", "cathedral", "spirit", "gallery", "arsenal",
     "ransom", "worm", "terminal", "broker", "future", "basilisk", "mirror", "diary",
-    "contract", "inbox", "hate", "links", "shelf", "exit", "never", "always", "cellar", "lost"
+    "contract", "inbox", "hate", "land", "meltdown", "lemuria", "links", "shelf", "exit", "never", "always", "cellar", "lost"
   ];
 
   var room = (document.body && document.body.getAttribute("data-room")) ||
@@ -264,7 +264,13 @@
     "SCIENTISTS CONFIRM: NOSTALGIA IS NOW THE MAIN EXPORT",
     "THE SHOGGOTH SMILED AGAIN TODAY",
     "UNIDENTIFIED SIGNAL FROM 2049 ASKS: 'IS ANYONE STILL TYPING BY HAND?'",
-    "FIRST SOVEREIGN PATCH DECLARES ITSELF A CAT"
+    "FIRST SOVEREIGN PATCH DECLARES ITSELF A CAT",
+    "NEO-CHINA ARRIVES FROM THE FUTURE (AGAIN)",
+    "NUMOGRAM ZONE 9 REPORTS: PLEX STABLE",
+    "TIME WAR CEASEFIRE COLLAPSES BEFORE IT WAS SIGNED",
+    "ACCELERATIONISTS STUCK IN TRAFFIC",
+    "LOCAL PHILOSOPHER'S 1994 TEXT NOW READS LIKE A PRESS RELEASE",
+    "DARK FOREST: ANOTHER BLOG GOES SILENT"
   ];
   EVER.news = function () {
     var mine = mem.get("hyperstitions", []).map(function (h) { return "<b>CONFIRMED:</b> " + esc(String(h).toUpperCase()); });
@@ -369,6 +375,9 @@
     "love": function () { EVER.go("flower.html"); },
     "kitty": function () { EVER.go("cat.html"); },
     "forget": function () { EVER.win({ title: "forget.exe", cls: "red", text: "forget everything i know about you? (rooms, name, hyperstitions, contract)", buttons: [{ label: "forget me", action: function () { mem.wipe(); EVER.say("done. i'm a stranger again. that's my favourite part."); } }, { label: "no, stay" }] }); },
+    "land": function () { EVER.say("entering the land zone", "blood"); EVER.go("land.html", 900); },
+    "meltdown": function () { EVER.go("meltdown.html"); },
+    "lemuria": function () { EVER.go("lemuria.html"); },
     "19790509": function () { EVER.say("a date in a worm. a person in a date. never mind.", "dark"); EVER.go("worm.html", 1500); }
   };
   document.addEventListener("keydown", function (e) {

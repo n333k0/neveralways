@@ -74,7 +74,7 @@ window.ROOM = function (E) {
     g.fillText("and may be ever whenever nobody else is.", 320, 222);
     try { g.drawImage(cv, 170, 240, 300, 90); } catch (e) {}
     g.font = "11px monospace"; g.fillText("neveralways · " + new Date().toISOString().slice(0, 10) + " · valid: never / always", 320, 360);
-    var img = new Image(); img.onload = function () { g.drawImage(img, 40, 40, 64, 64); E.$("#dl").href = c.toDataURL("image/png"); }; img.src = "assets/img/ever.png";
+    var img = new Image(); img.onload = function () { g.drawImage(img, 40, 40, 64, 64); E.$("#dl").href = c.toDataURL("image/png"); }; img.src = "assets/img/anime/ever-b.jpg";
     E.$("#dl").href = c.toDataURL("image/png");
   }
   function showDone() { E.$("#nm").textContent = E.mem.get("ship", ""); E.$("#done").classList.add("on"); cert(); }

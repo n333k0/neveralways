@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the time war (a letter to the past)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #050605; color: #c9e8cf; font: 15px/1.6 var(--serif); }
+  .wrap { max-width: 760px; }
+  .hero { position: relative; margin-top: 18px; border: 1px solid #1d4; }
+  .hero img { width: 100%; display: block; image-rendering: auto; }
+  #clock { position: absolute; right: 10px; top: 10px; background: rgba(0,0,0,.75); color: #39ff6a; font: 20px var(--mono); padding: 4px 10px; border: 1px solid #39ff6a; }
+  h1 { font: italic 300 clamp(32px, 7vw, 64px)/1 var(--serif); color: #fff; margin: 18px 0 8px; }
+  .mirror { transform: scaleX(-1); display: inline-block; color: #39ff6a; }
+  .box { border: 1px solid #1d4; padding: 12px 14px; margin: 16px 0; background: #071009; }
+  label { font: 13px var(--mono); }
+  select, textarea { font: 14px var(--mono); background: #000; color: #39ff6a; border: 1px solid #1d4; }
+  textarea { width: 100%; height: 80px; padding: 6px; }
+  #sent { font: 13px var(--mono); color: #9fd; }
+  a { color: #ff8fd8; }
+  .rev { unicode-bidi: bidi-override; direction: rtl; display: inline-block; }
+</style>
+</head>
+<body data-room="lemuria" class="dark">
+<div class="wrap">
+  <div class="hero"><img src="assets/img/anime/lemuria.jpg" alt="anime: a girl in a dark room lit by a green CRT, an occult diagram of ten numbered circles on the wall behind her"><div id="clock">--:--:--</div></div>
+  <h1>the time war <span class="mirror">raw emit eht</span></h1>
+  <p>the clock above runs backwards. it's correct.</p>
+  <p>the <a href="numogram.html">CCRU</a> told a story they called the <b>lemurian time war</b>: a war fought not in places but in <i>times</i>, by sorcerers, numbers and fictions, where the future sends things back to make sure it happens. the numogram was its map. hyperstition was its weapon: a story planted in the past that grows into the future that planted it.</p>
+  <p>it's a fiction. obviously. but look at how the 2020s talk: "AGI is coming, so build it before someone else does". "the future is already decided, act accordingly". every AI pitch deck is a message from a future that wants to exist, sent back to recruit you. the time war didn't need to be real. it only needed to be <a href="hyperstition.html">repeated</a>.</p>
+  <p>land later wrote a whole book about this feeling, <i>templexity</i> (2014): loops in time, the film <i>looper</i>, and shanghai as a city that seems to arrive from later than itself.</p>
+
+  <div class="box">
+    <b>send a message into the past</b><br>
+    <span class="small">pick a year. write to it. your message will appear in <a href="diary.html">my diary</a> in that year, as if it had always been there. (that's how the war is fought. you're a soldier now. sorry.)</span><br><br>
+    <label>to the year: <select id="yr"></select></label><br><br>
+    <textarea id="msg" maxlength="400" placeholder="don't trust the cat. the flower is a key. it gets better around 2030. or: it doesn't, but you do."></textarea>
+    <p><button class="btn98" id="send">send backwards</button></p>
+    <div id="sent"></div>
+  </div>
+
+  <p class="small"><span class="rev">.dne eht ta dnuof eb ot egassem a tnalp ot si ecruos eht ot kcab yaw ylno eht</span> (hold up a mirror.)</p>
+  <p class="small"><a href="land.html">the land zone</a> · <a href="meltdown.html">meltdown</a> · <a href="diary.html">the diary (check it)</a> · <a href="index.html">home</a></p>
+</div>
+<script>
+window.ROOM = function (E) {
+  // a clock that runs backwards from midnight
+  var t0 = Date.now();
+  function tick() {
+    var d = new Date(), s = (d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds());
+    var r = (86400 - s) % 86400;
+    E.$("#clock").textContent = [Math.floor(r / 3600), Math.floor(r / 60) % 60, r % 60].map(function (x) { return ("0" + x).slice(-2); }).join(":");
+  }
+  tick(); setInterval(tick, 1000);
+  var sel = E.$("#yr");
+  [1996, 1997, 1999, 2001, 2005, 2008, 2010, 2013, 2016, 2017, 2019, 2021, 2022, 2023, 2025].forEach(function (y) { var o = document.createElement("option"); o.value = y; o.textContent = y; sel.appendChild(o); });
+  sel.value = "1999";
+  function list() {
+    var m = E.mem.get("timeMessages", []);
+    E.$("#sent").innerHTML = m.length ? "already sent:<br>" + m.map(function (x) { return x.y + " ← " + E.esc(x.t.slice(0, 80)) + (x.t.length > 80 ? "…" : ""); }).join("<br>") : "";
+  }
+  list();
+  E.$("#send").addEventListener("click", function () {
+    var t = E.$("#msg").value.trim(); if (!t) return;
+    var m = E.mem.get("timeMessages", []); m.push({ y: +sel.value, t: t.slice(0, 400) }); E.mem.set("timeMessages", m.slice(-12));
+    E.$("#msg").value = ""; list();
+    E.beep(880, 0.15, "sine", 0.04); E.beep(440, 0.25, "sine", 0.04, 0.15); E.beep(220, 0.4, "sine", 0.04, 0.4);
+    E.say("sent. it has always been there. go look.");
+  });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

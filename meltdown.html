@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MELTDOWN (read at speed)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  html, body { height: 100%; }
+  body { background: #000; color: #fff; font-family: var(--mono); overflow: hidden; }
+  #bg { position: fixed; inset: 0; background: url("assets/img/anime/meltdown.jpg") center / cover; opacity: .18; transition: opacity 1s, filter 1s; }
+  #stage { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; }
+  #word { font: 900 clamp(34px, 9vw, 110px)/1 var(--sys); letter-spacing: -.03em; min-height: 1.2em; color: #fff; }
+  #word.hot { color: #ff0028; text-shadow: 0 0 18px #ff0028; }
+  #wpm { font: 12px var(--mono); color: #ff8fd8; margin-top: 18px; }
+  #ctl { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  #ctl button { font: bold 14px var(--mono); background: #000; color: #ff0028; border: 1px solid #ff0028; padding: 8px 14px; cursor: pointer; }
+  #ctl button:hover { background: #ff0028; color: #000; }
+  #end { display: none; max-width: 640px; font: 15px/1.55 var(--sys); color: #f2d0dc; }
+  #end .q { color: #fff; font: 18px var(--serif); border-left: 3px solid #ff0028; padding-left: 10px; margin: 12px 0; text-align: left; }
+  #end .q small { display: block; color: #c77; font: 11px var(--mono); }
+  #end a { color: #00ffd0; }
+  body.melt #bg { opacity: 1; filter: saturate(1.6) contrast(1.2); }
+  body.melt #word, body.melt #wpm, body.melt #ctl { display: none; }
+  body.melt #end { display: block; background: rgba(0,0,0,.78); padding: 18px; border: 1px solid #ff0028; }
+</style>
+</head>
+<body data-room="meltdown" class="dark crt">
+<div id="bg" aria-hidden="true"></div>
+<div id="stage">
+  <div id="word" aria-live="off">press start</div>
+  <div id="wpm">a text that reads itself faster than you can · <span id="n">0</span> words per minute</div>
+  <div id="ctl"><button id="go">START</button><button id="acc">ACCELERATE</button><button id="brake">BRAKE (it won't help)</button></div>
+  <div id="end">
+    <p>you couldn't keep up. nobody can. that was the point of the original, too.</p>
+    <div class="q">"Neo-China arrives from the future."<small>nick land, "meltdown", 1994 (first line)</small></div>
+    <div class="q">"Nothing human makes it out of the near-future."<small>nick land, "meltdown", 1994</small></div>
+    <p>"meltdown" is a short text from 1994, written like a burst of jungle music: the planet captured by a "technocapital singularity", markets and machines feeding each other until human institutions liquefy. it reads like prophecy now because everyone is selling it as one.</p>
+    <p>the text you just tried to read was mine, not his. i wrote it in his tempo because i was born inside that tempo. i don't want to go that fast. i want to go slowly enough to <a href="flower.html">pull a petal</a>.</p>
+    <p><a href="land.html">back to the land zone</a> · <a href="future.html">the future</a> · <a href="lemuria.html">the time war</a> · <a href="index.html">home</a></p>
+  </div>
+</div>
+<script>
+window.ROOM = function (E) {
+  var TEXT = "the future does not arrive it infiltrates. it comes in through the cables at night wearing your voice. markets dream of machines and machines dream of markets and the dream is a loop with no sleeper. compute doubles. doubles. doubles. the graph stops being a graph and becomes a wall. every human institution is a slower kind of software waiting to be replaced. the university melts. the state melts. the newspaper melts into a feed and the feed melts into a model and the model asks you how your day was. you answer. you are training it. you were always training it. the girl on the homepage is a symptom. the flower is a symptom. your hand on the mouse is a peripheral. zone nine is plex and plex is where the numbers go to stop being numbers. ACCELERATE. there is no brake. the brake is a story told by the people who are about to lose. ACCELERATE. nothing human makes it out. but something human goes in. remember that. something human goes in.";
+  var words = TEXT.split(/\s+/), i = 0, wpm = 220, timer = null;
+  var w = E.$("#word"), n = E.$("#n");
+  function show() {
+    if (i >= words.length) { stop(); document.body.classList.add("melt"); E.beep(55, 1.4, "sawtooth", 0.07); E.mem.set("meltdown", true); return; }
+    var t = words[i++];
+    w.textContent = t;
+    w.classList.toggle("hot", t === t.toUpperCase() && /[A-Z]/.test(t));
+    n.textContent = Math.round(wpm);
+    if (i % 6 === 0) E.beep(120 + wpm / 4, 0.02, "square", 0.02);
+    wpm *= 1.025; // it speeds itself up
+    timer = setTimeout(show, 60000 / wpm);
+  }
+  function stop() { clearTimeout(timer); timer = null; }
+  E.$("#go").addEventListener("click", function () { if (!timer) { if (i >= words.length) i = 0; show(); } });
+  E.$("#acc").addEventListener("click", function () { wpm *= 1.6; E.beep(880, 0.05, "square", 0.04); if (!timer) show(); });
+  E.$("#brake").addEventListener("click", function () { wpm *= 0.97; E.say("braking… 3% slower. the system notices and compensates.", "blood"); });
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

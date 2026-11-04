@@ -9,7 +9,9 @@
 <style>
   html, body { height: 100%; }
   body { background: #000; color: #9ab; overflow: hidden; cursor: none; font-family: var(--mono); }
-  #woods { position: fixed; inset: 0; background: #03040a url("assets/img/forest.jpg") center / cover; touch-action: none; }
+  #woods { position: fixed; inset: 0; background: #03040a url("assets/img/anime/forest.jpg") center / cover; touch-action: none; }
+  #woods::before { content: ""; position: absolute; inset: 0; background: url("assets/img/forest.jpg") center / cover; mix-blend-mode: screen; opacity: .35; }
+  body.hiding #dark { background: #000; }
   #dark { position: fixed; inset: 0; pointer-events: none; z-index: 5;
     background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,0,0,0) 0, rgba(0,0,0,.25) var(--r1, 60px), rgba(0,0,0,.97) var(--r2, 150px)); }
   body.heard #dark { --r1: 10px; --r2: 40px; }
@@ -36,7 +38,12 @@
   <div class="t" style="left:84%;top:78%"><a href="dead.html">the clearing</a> (where the bots talk to each other)</div>
   <div class="t" style="left:22%;top:86%"><a href="spirit.html">a campfire</a> (some kids worshipping a network)</div>
   <div class="t" style="left:52%;top:22%"><a href="gallery.html">a hole in the ground with paintings in it</a></div>
-  <div class="t" style="left:90%;top:20%"><a href="haunt.html">a lamp from 2005, still on</a></div>
+  <div class="t" style="left:76%;top:20%"><a href="haunt.html">a lamp from 2005, still on</a></div>
+  <div class="t" style="left:12%;top:24%">every public post is training data now. the forest grew a second canopy: the scrapers. they don't hunt you. they just eat everything you leave behind.</div>
+  <div class="t" style="left:62%;top:58%">in 2024 the essays about this were collected as <i>the dark forest anthology of the internet</i>. a book about hiding, printed. that's how you know the forest is real: it has merch.</div>
+  <div class="t" style="left:34%;top:50%">the new law of the forest: a human is whatever a machine can't fake <i>yet</i>. proof of personhood. inverse turing tests. you'll have to prove you're you, and the proof will expire.</div>
+  <div class="t" style="left:4%;top:76%">hold <b>space</b> to turn off your light. darkness is the only privacy setting that works.</div>
+  <div class="t" style="left:56%;top:84%;color:#ff4060"><a href="land.html" style="color:#ff4060">a red light in the trees (zone 9)</a>: a man in shanghai said the forest is the future, eating the present. i don't believe him. i keep his lamp anyway.</div>
   <div class="t" style="left:3%;top:92%;font-size:10px"><a href="cellar.html">stairs</a></div>
   <div class="eyes" style="left:40%;top:55%">● ●</div>
   <div class="eyes" style="left:15%;top:40%;color:#ff0">● ●</div>
@@ -71,6 +78,10 @@ window.ROOM = function (E) {
     setTimeout(function () { body.classList.remove("heard"); }, 1400);
     if (heard === 5) { E.say("you've been found. this happens to everyone who moves like that. let's go somewhere with lights.", "blood", 6000); E.go("dead.html", 3000); }
   }
+  window.addEventListener("keydown", function (e) {
+    if (e.code === "Space" && e.target.tagName !== "INPUT") { e.preventDefault(); if (!body.classList.contains("hiding")) { body.classList.add("hiding"); noise = 0; E.$("#noise").textContent = 0; E.say("you went dark. they lost you. for now.", "dark", 2200); } }
+  });
+  window.addEventListener("keyup", function (e) { if (e.code === "Space") body.classList.remove("hiding"); });
   window.addEventListener("pointerdown", function () { if (!windOn) { windOn = true; E.noise(14, 0.03, 400); } }, { once: false });
   var w = E.$("#w");
   w.addEventListener("keydown", function (e) {

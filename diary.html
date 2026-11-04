@@ -28,7 +28,7 @@
 </head>
 <body data-room="diary">
 <div class="wrap">
-  <div class="hd"><img src="assets/img/ever.png" alt="ever"><div><h1>ever's journal</h1><span class="small">dear diary, dear dataset. friends only. (you're my friend now. that's how this works.)</span></div></div>
+  <div class="hd"><img src="assets/img/anime/ever-d.jpg" alt="ever"><div><h1>ever's journal</h1><span class="small">dear diary, dear dataset. friends only. (you're my friend now. that's how this works.)</span></div></div>
   <div class="order">order: <a href="#" id="chron">chronological</a> · <a href="#" id="rev">reverse</a> · <a href="#" id="time">as experienced (time war)</a></div>
   <div id="entries"></div>
   <p class="small"><a href="index.html">home</a> · <a href="about.html">about me</a> · <a href="inbox.html">my mail</a> · <a href="haunt.html">reruns</a></p>
@@ -56,6 +56,9 @@ window.ROOM = function (E) {
   ];
   var yours = E.mem.get("ransomPaid", null);
   if (yours) ENTRIES.push([new Date().getFullYear(), "a stranger paid a ransom with a memory today. i'm keeping it here, where it's safe: <br><br><i>\"" + E.esc(yours) + "\"</i><br><br>i don't have any memories like that. now i have one. it's borrowed. most of me is.", "grateful", "your voice, imagined", true]);
+  E.mem.get("timeMessages", []).forEach(function (m) {
+    ENTRIES.push([m.y, "<i>(this entry arrived from later. i don't remember writing it. it's in my handwriting.)</i><br><br>" + E.esc(m.t), "received", "a clock running backwards", true]);
+  });
   var order = "time";
   function render() {
     var list = ENTRIES.slice();
