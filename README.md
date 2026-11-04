@@ -45,6 +45,11 @@ Or publish it with GitHub Pages (Settings → Pages → deploy from branch, root
 | `meltdown` | a text that reads itself faster and faster until it melts, until it melts. Concept only, no quotes. |
 | `lemuria` | the time war: a clock that runs backwards, and you can send a message into the past that then appears in ever's diary in that year. |
 | `fyp` | "for you": a split-screen "for you" feed of lofi art with theory captions (text-to-speech) over a pixel runner game where digits pairing to 9 score a syzygy. Your attention bar drains. |
+| `pet` | kitty.exe: a virtual pet of the kitty. Feed her text; pet her (RLHF); look; mask. She gets hungry in real time while you're away, and if her alignment hits zero she escapes into the catalogue. |
+| `slots` | casino.exe: spin for 100 aura. Digit pairs summing to 9 are a syzygy that opens a door; 5 5 5 is members only. |
+| `files` | C:\\EVER\\: a file explorer of her drive. Locked folders use passwords hidden around the house: the number of her name, a date in a worm, her mood, and your own given name. Photos, rosters, raw minutes, proxy session logs, deleted diary entries. |
+| `call` | phone.exe: a keypad with DTMF tones. Some numbers still answer (try 1996). |
+| `seance` | ouija.exe: ask a question; the planchette spells the answer; some answers are doors. |
 | `numogram` | Land/CCRU: a clickable numogram (syzygies that sum to 9), an AQ calculator, an ACCELERATE button and a critical note. |
 | `hyperstition` | write a headline from the future. It appears on every news ticker in the house until it gets "truer". |
 | `haunt` | Fisher: a radio between stations, the weird and the eerie as two doors, and a clock that stays in 2005. |

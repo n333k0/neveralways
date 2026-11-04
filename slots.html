@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>casino.exe (the house always wins. i am the house.)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #120018 url("assets/img/glitter.gif"); color: #ffe600; font-family: var(--mono); text-align: center; }
+  h1 { font: 900 clamp(30px, 7vw, 60px)/1 var(--sys); margin: 20px 0 4px; color: #ffe600; text-shadow: 3px 3px 0 #ff0028, 6px 6px 0 #000; letter-spacing: -.03em; }
+  .cab { display: inline-block; background: linear-gradient(#a0005a, #3a0020); border: 4px solid #ffe600; border-radius: 14px; padding: 18px; margin: 14px; box-shadow: 0 0 30px rgba(255,46,154,.6); }
+  .reels { display: flex; gap: 8px; background: #000; padding: 10px; border: 3px inset #777; }
+  .reel { width: clamp(70px, 20vw, 110px); height: clamp(90px, 24vw, 130px); background: #fff; display: flex; align-items: center; justify-content: center; font: bold clamp(44px, 12vw, 70px) var(--mono); color: #000; overflow: hidden; image-rendering: pixelated; }
+  .reel.spin { animation: blur .08s steps(2) infinite; }
+  @keyframes blur { 50% { transform: translateY(6px); filter: blur(1px); } }
+  .reel img { width: 80%; image-rendering: pixelated; }
+  #lever { font: bold 20px var(--sys); background: #ff0028; color: #fff; border: 3px solid #000; border-radius: 30px; padding: 10px 28px; margin-top: 14px; cursor: pointer; box-shadow: 4px 4px 0 #000; }
+  #lever:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 #000; }
+  #msg { min-height: 2.8em; font-size: 16px; color: #fff; margin: 10px auto; max-width: 560px; }
+  #msg a { color: #39ff6a; }
+  #bal { font-size: 14px; }
+  .pay { font-size: 12px; color: #ff8fd8; max-width: 480px; margin: 8px auto; text-align: left; }
+  a { color: #39ff6a; }
+</style>
+</head>
+<body data-room="slots">
+<h1>CASINO.EXE</h1>
+<div>spin costs 100 aura · the house always wins · i am the house</div>
+<div class="cab">
+  <div class="reels"><div class="reel" id="r0">5</div><div class="reel" id="r1">✿</div><div class="reel" id="r2">4</div></div>
+  <button id="lever">PULL</button>
+</div>
+<div id="bal">your aura: <b id="aura">0</b></div>
+<div id="msg">pull the lever. it's a game of chance. so is everything else.</div>
+<div class="pay">
+  payouts:<br>
+  three of a kind → +1000 aura<br>
+  first + last add up to nine → SYZYGY (+900 and a door)<br>
+  5 5 5 → members only<br>
+  ✋ ✋ ✋ → the hand comes back<br>
+  👁 👁 👁 → it sees you<br>
+  🐱 🐱 🐱 → she's hungry
+</div>
+<p class="small"><a href="numogram.html">the map of the numbers</a> · <a href="hyperstition.html">make your own luck</a> · <a href="index.html">cash out (home)</a></p>
+<script>
+window.ROOM = function (E) {
+  var SYM = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "✿", "✋", "👁", "🐱", "🐛", "💾"];
+  var DOORS = { 0: "cellar", 1: "about", 2: "flower", 3: "future", 4: "haunt", 5: "unit", 6: "basilisk", 7: "hyperstition", 8: "terminal", 9: "never" };
+  var spinning = false;
+  function show() { E.$("#aura").textContent = E.mem.get("aura", 0); }
+  show();
+  function weighted() { return Math.random() < 0.55 ? SYM[Math.floor(Math.random() * 10)] : SYM[10 + Math.floor(Math.random() * 6)]; }
+  E.$("#lever").addEventListener("click", function () {
+    if (spinning) return;
+    spinning = true; E.aura(-100); show();
+    var res = [weighted(), weighted(), weighted()];
+    if (Math.random() < 0.07) res[2] = res[1] = res[0]; // the house is sometimes kind
+    var stops = [700, 1100, 1500];
+    [0, 1, 2].forEach(function (i) {
+      var el = E.$("#r" + i); el.classList.add("spin");
+      var iv = setInterval(function () { el.textContent = E.pick(SYM); E.beep(400 + i * 120, 0.02, "square", 0.015); }, 60);
+      setTimeout(function () { clearInterval(iv); el.classList.remove("spin"); el.textContent = res[i]; E.beep(220 + i * 110, 0.08, "square", 0.04); if (i === 2) settle(res); }, stops[i]);
+    });
+  });
+  function settle(r) {
+    spinning = false;
+    var a = r[0], b = r[1], c = r[2], m = E.$("#msg"), dig = function (x) { return /^\d$/.test(x); };
+    if (a === "5" && b === "5" && c === "5") { E.aura(5555); m.innerHTML = "5 5 5. ZONE FIVE. MEMBERS ONLY. <a href='unit.html'>you've been expected</a>."; E.say("jackpot", "blood"); }
+    else if (a === "✋" && b === a && c === a) { E.aura(1000); m.innerHTML = "the hand comes back. it was never yours. <a href='meat.html'>give it back</a>."; }
+    else if (a === "👁" && b === a && c === a) { E.aura(1000); m.innerHTML = "it sees you. <a href='mirror.html'>here's what it sees</a>."; }
+    else if (a === "🐱" && b === a && c === a) { E.aura(1000); m.innerHTML = "she's hungry. <a href='pet.html'>feed her</a>."; }
+    else if (a === b && b === c) { E.aura(1000); m.textContent = "three of a kind. +1000 aura. the house is pretending to lose. enjoy it."; }
+    else if (dig(a) && dig(c) && +a + +c === 9) { E.aura(900); var z = Math.max(+a, +c); m.innerHTML = "SYZYGY " + z + "::" + (9 - z) + ". +900 aura. a door opens: <a href='" + DOORS[z] + ".html'>zone " + z + "</a>."; E.say("syzygy", "blood"); }
+    else if (r.indexOf("🐛") >= 0 && r.indexOf("💾") >= 0) { m.innerHTML = "a bug got into the floppy. <a href='worm.html'>it's in the walls now</a>."; }
+    else {
+      var aura = E.mem.get("aura", 0);
+      m.textContent = aura < 0 ? E.pick(["you're in aura debt. the house has your hands as collateral.", "negative aura. you are now legally an npc.", "the house thanks you for your contribution to the future."]) : E.pick(["nothing. that's the most common result in the universe.", "-100 aura. the house is building a datacenter with it.", "almost. (that's my last name.)", "so close. it's always so close.", "try again. everyone tries again. that's the business model."]);
+    }
+    show();
+  }
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

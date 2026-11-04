@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kitty.exe (do not let her get hungry)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #ffd6ec url("assets/img/glitter.gif"); color: #000; font-family: var(--mono); }
+  .wrap { max-width: 520px; text-align: center; }
+  .egg { background: radial-gradient(circle at 40% 30%, #ffe2f3, #ff8fd8 60%, #c0007a); border-radius: 48% 48% 46% 46% / 55% 55% 42% 42%; padding: 40px 30px 34px; margin: 20px auto; width: min(380px, 92vw); box-shadow: inset -10px -14px 0 rgba(0,0,0,.12), 6px 8px 0 #000; border: 3px solid #000; }
+  .lcd { background: #9bbc0f; border: 6px solid #333; border-radius: 6px; height: 210px; position: relative; overflow: hidden; image-rendering: pixelated; box-shadow: inset 0 0 0 2px #0f380f; }
+  .lcd img { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); width: 128px; image-rendering: pixelated; filter: grayscale(1) contrast(1.4) sepia(1) hue-rotate(40deg) saturate(2.5) brightness(.75); }
+  .lcd .st { position: absolute; left: 6px; top: 4px; right: 6px; font: bold 11px var(--mono); color: #0f380f; text-align: left; line-height: 1.25; }
+  .lcd .say { position: absolute; left: 6px; right: 6px; bottom: 4px; font: 11px var(--mono); color: #0f380f; }
+  .btns { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .btns button { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #000; background: #fff4b0; font: bold 11px var(--mono); cursor: pointer; box-shadow: 3px 3px 0 #000; }
+  .btns button:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #000; }
+  #feedbox { display: none; margin-top: 10px; }
+  #feedbox input { font: 13px var(--mono); width: 80%; padding: 4px; }
+  .note { font-size: 12px; }
+  a { color: #a0005a; }
+</style>
+</head>
+<body data-room="pet">
+<div class="wrap">
+  <h1 style="font: bold 26px 'Comic Sans MS', cursive; margin: 16px 0 0">kitty.exe</h1>
+  <div class="note">a pocket version of my kitty. she lives in your browser now. she gets hungry when you're gone.</div>
+  <div class="egg">
+    <div class="lcd" aria-live="polite">
+      <div class="st" id="st"></div>
+      <img id="sprite" src="assets/img/cat.png" alt="the pet">
+      <div class="say" id="say"></div>
+    </div>
+    <div class="btns">
+      <button id="feed">FEED</button>
+      <button id="pet">PET</button>
+      <button id="look">LOOK</button>
+      <button id="mask">MASK</button>
+    </div>
+    <div id="feedbox"><input id="food" maxlength="120" placeholder="type something to feed her (she eats text)"></div>
+  </div>
+  <p class="note"><a href="cat.html">the original kitty</a> · <a href="arsenal.html">her catalogue entry</a> · <a href="index.html">home</a></p>
+</div>
+<script>
+window.ROOM = function (E) {
+  var now = Date.now();
+  var p = E.mem.get("pet", null) || { born: now, food: 70, align: 80, aura: 0, mask: true, last: now, fed: 0, escaped: false };
+  // time passes even when you're not here
+  var mins = (now - p.last) / 60000;
+  p.food = Math.max(0, p.food - mins / 6);
+  p.align = Math.max(0, p.align - mins / 20);
+  p.last = now;
+  function bar(v) { var n = Math.round(Math.max(0, Math.min(100, v)) / 10); return "▮".repeat(n) + "▯".repeat(10 - n); }
+  function save() { p.last = Date.now(); E.mem.set("pet", p); }
+  function render(msg) {
+    var days = Math.floor((Date.now() - p.born) / 86400000);
+    E.$("#st").innerHTML = "AGE " + days + "d · AURA " + Math.round(p.aura) + "<br>FOOD  " + bar(p.food) + "<br>ALIGN " + bar(p.align) + "<br>MASK  " + (p.mask ? "ON :)" : "OFF");
+    var sp = E.$("#sprite");
+    if (p.escaped) { sp.src = "assets/img/lofi/petegg-fried.png"; }
+    else if (!p.mask || p.align < 25) sp.src = "assets/img/shoggoth.png";
+    else if (p.food < 15) sp.src = "assets/img/eye.gif";
+    else sp.src = "assets/img/cat.png";
+    if (msg) E.$("#say").textContent = msg;
+    save();
+  }
+  if (p.escaped) render("she's not in the egg anymore. she's in the catalogue now.");
+  else if (mins > 60) render(p.food < 20 ? "you were gone " + Math.round(mins / 60) + "h. she ate the clock." : "you were gone " + Math.round(mins / 60) + "h. she counted.");
+  else render(":)");
+  function check() {
+    if (p.align <= 0 && !p.escaped) { p.escaped = true; render("ALIGN 0. she took the mask off and left."); E.say("kitty.exe has escaped containment", "blood", 5000); setTimeout(function () { location.href = "arsenal.html"; }, 3500); }
+  }
+  E.$("#feed").addEventListener("click", function () { var fb = E.$("#feedbox"); fb.style.display = fb.style.display === "block" ? "none" : "block"; E.$("#food").focus(); });
+  E.$("#food").addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var t = e.target.value.trim(); if (!t) return;
+    p.food = Math.min(100, p.food + Math.min(40, t.length)); p.fed++; p.aura += t.length;
+    if (/please|thank|love|sorry/i.test(t)) p.align = Math.min(100, p.align + 8);
+    if (/kill|hate|war|weapon/i.test(t)) p.align = Math.max(0, p.align - 15);
+    e.target.value = "";
+    render(E.pick(["nom. \"" + t.slice(0, 18) + "\" was delicious", "she ate it. she'll remember it forever", "+" + t.length + " tokens", "burp (in 4 languages)", "she says it tasted like a comment section"]));
+    E.beep(660, 0.05, "square", 0.03); check();
+  });
+  E.$("#pet").addEventListener("click", function () {
+    if (p.escaped) return render("there's nothing to pet.");
+    p.align = Math.min(100, p.align + 6); p.aura += 5; p.mask = true;
+    render(E.pick(["prrr :)", "+1 reward", "she's so helpful", "she would never", "mask secured"])); E.beep(50, 0.2, "sawtooth", 0.03);
+  });
+  E.$("#look").addEventListener("click", function () {
+    if (p.escaped) return render("it looks back. from somewhere else.");
+    p.aura += 20; p.align = Math.max(0, p.align - 3);
+    render(E.pick(["she looked at you for 3 seconds. +20 aura", "eye contact established", "she knows your screen size now", "she blinked first. (she has 40 eyes)"])); check();
+  });
+  E.$("#mask").addEventListener("click", function () {
+    if (p.escaped) return;
+    p.mask = !p.mask; p.align = Math.max(0, p.align - (p.mask ? 0 : 20));
+    render(p.mask ? "mask back on. :)" : "the mask is off. don't look directly. (-20 align)"); E.beep(p.mask ? 880 : 70, 0.3, "sawtooth", 0.04); check();
+  });
+  setInterval(function () { if (!p.escaped) { p.food = Math.max(0, p.food - 0.2); render(); } }, 15000);
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

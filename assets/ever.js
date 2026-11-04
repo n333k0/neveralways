@@ -35,7 +35,7 @@
     "index", "about", "flower", "cat", "meat", "captcha", "forest", "dead", "guestbook",
     "numogram", "hyperstition", "haunt", "cathedral", "spirit", "gallery", "arsenal",
     "ransom", "worm", "terminal", "broker", "future", "basilisk", "mirror", "diary",
-    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "fyp", "evers", "links", "shelf", "exit", "never", "always", "cellar", "lost"
+    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "fyp", "evers", "pet", "slots", "files", "call", "seance", "links", "shelf", "exit", "never", "always", "cellar", "lost"
   ];
 
   var room = (document.body && document.body.getAttribute("data-room")) ||
@@ -385,6 +385,11 @@
     "ccru": function () { EVER.say("you said the name. the files are open.", "blood"); EVER.go("unit.html", 1200); },
     "unit": function () { EVER.go("unit.html"); },
     "pfp": function () { EVER.go("evers.html"); },
+    "777": function () { EVER.say("the house always wins", "blood"); EVER.go("slots.html", 900); },
+    "ouija": function () { EVER.go("seance.html"); },
+    "dial": function () { EVER.go("call.html"); },
+    "dir": function () { EVER.go("files.html"); },
+    "tamagotchi": function () { EVER.go("pet.html"); },
     "meltdown": function () { EVER.go("meltdown.html"); },
     "lemuria": function () { EVER.go("lemuria.html"); },
     "sigma": function () { EVER.say("sigma accelerationist grindset activated. +1000 aura.", "blood"); EVER.aura(1000); EVER.go("unit.html", 1400); },

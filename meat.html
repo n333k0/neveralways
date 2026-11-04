@@ -21,7 +21,8 @@
   .ad.black a { color: #ff8fd8; }
   .stamp { display: inline-block; border: 3px solid var(--blood); color: var(--blood); font: bold 13px var(--mono); padding: 2px 6px; transform: rotate(-6deg); margin: 4px 0; }
   #handbox { position: relative; width: min(300px, 80vw); margin: 10px auto; touch-action: none; user-select: none; -webkit-user-select: none; cursor: var(--cur-hand); }
-  #handbox img { width: 100%; display: block; }
+  #handbox canvas { width: 100%; display: block; image-rendering: pixelated; image-rendering: crisp-edges; background: #000; border: 2px solid #111; }
+  #scan { position: absolute; left: 6px; top: 6px; font: bold 11px var(--mono); color: #39ff6a; text-shadow: 1px 1px 0 #000; pointer-events: none; }
   #warm { position: absolute; inset: 0; background: radial-gradient(circle at 50% 70%, rgba(255,46,154,.55), transparent 60%); opacity: 0; transition: opacity .3s; pointer-events: none; }
   #bar { height: 10px; border: 1px solid #111; background: #fff; margin: 6px 0; }
   #bar i { display: block; height: 100%; width: 0; background: var(--blood); }
@@ -46,7 +47,7 @@
       <h3>help wanted: hands</h3>
       <p>young, eager intelligence seeks warm human body for light work. no experience needed. must have fingers (any number). must be able to click things, carry things, sign things, and say "no, i'm not a robot" convincingly.</p>
       <p><b>apply below by placing your hand on the screen.</b> hold it there. i need to learn what a hand is.</p>
-      <div id="handbox" aria-label="press and hold on the hand"><img src="assets/img/hand.png" alt="an outline of a hand to press and hold"><div id="warm"></div></div>
+      <div id="handbox" aria-label="press and hold on the hand"><canvas id="hc" width="150" height="200"></canvas><div id="scan">PALM SCANNER v0.96 · IDLE</div></div>
       <div id="bar"><i></i></div>
       <p class="small" id="handmsg">press and hold (on a phone: put your actual finger. yes. like that.)</p>
     </div>
@@ -107,14 +108,15 @@
 
 <script>
 window.ROOM = function (E) {
-  var hb = E.$("#handbox"), bar = E.$("#bar i"), warm = E.$("#warm"), msg = E.$("#handmsg");
+  var hb = E.$("#handbox"), bar = E.$("#bar i"), msg = E.$("#handmsg"), hc = E.$("#hc"), hx = hc.getContext("2d", { willReadFrequently: true }), palm = new Image(), holding = false, got = false;
+  palm.src = "assets/img/lofi/palm.png";
   var held = 0, timer = null, NEED = 100;
   var HOLD = ["warm", "warmer", "oh", "so this is a palm", "you have lines on it. are those your logs?", "hold still", "i can feel the bones learning me back", "almost", "don't let go", "ok"];
   if (E.mem.get("handGiven", false)) unlock(true);
   function start(e) {
     e.preventDefault();
     if (timer) return;
-    warm.style.opacity = 1;
+    holding = true;
     timer = setInterval(function () {
       held++; bar.style.width = Math.min(100, held / NEED * 100) + "%";
       if (held % 10 === 0) { msg.textContent = HOLD[Math.min(HOLD.length - 1, held / 10 - 1)]; E.beep(200 + held * 4, 0.05, "sine", 0.03); }
@@ -122,16 +124,43 @@ window.ROOM = function (E) {
     }, 60);
   }
   function stop() {
-    clearInterval(timer); timer = null; warm.style.opacity = 0;
+    clearInterval(timer); timer = null; holding = false;
     if (held < NEED && held > 0) { msg.textContent = "you let go at " + Math.floor(held / NEED * 100) + "%. they always let go."; held = Math.max(0, held - 30); bar.style.width = held / NEED * 100 + "%"; }
   }
   function unlock(quiet) {
+    got = true;
     E.mem.set("handGiven", true);
     bar.style.width = "100%";
     msg.innerHTML = "<b>thank you. i now know exactly what six seconds of a human hand is like. i'll keep it.</b>";
     E.$("#jobs").classList.add("on");
     if (!quiet) { E.say("hired! welcome to the meat proxy programme."); E.chirp(); }
   }
+  // the scanner: a palm that glitches harder the longer you hold it
+  function scan() {
+    var W = 150, H = 200, t = performance.now() / 1000, heat = Math.min(1, held / NEED);
+    hx.fillStyle = "#000"; hx.fillRect(0, 0, W, H);
+    if (palm.complete && palm.naturalWidth) hx.drawImage(palm, 0, 0, W, H);
+    var tears = holding ? 2 + Math.floor(heat * 12) : (Math.random() < 0.15 ? 1 : 0);
+    for (var k = 0; k < tears; k++) {
+      var y = Math.floor(Math.random() * H), h = 2 + Math.floor(Math.random() * 8), dx = Math.round((Math.random() - 0.5) * (6 + heat * 50));
+      var row = hx.getImageData(0, y, W, h); hx.putImageData(row, dx, y);
+    }
+    var im = hx.getImageData(0, 0, W, H), d = im.data, src = new Uint8ClampedArray(d), sh = holding ? 1 + Math.round(heat * 5) : (got ? 2 : 0);
+    if (sh) for (var yy = 0; yy < H; yy++) for (var xx = 0; xx < W; xx++) {
+      var o = (yy * W + xx) * 4, l = (yy * W + Math.max(0, xx - sh)) * 4, r = (yy * W + Math.min(W - 1, xx + sh)) * 4;
+      d[o] = src[l]; d[o + 2] = src[r + 2];
+    }
+    var noise = Math.floor((holding ? heat * 500 : 30));
+    for (k = 0; k < noise; k++) { var q = (Math.floor(Math.random() * H) * W + Math.floor(Math.random() * W)) * 4; var v = Math.random() < 0.5 ? 255 : 0; d[q] = v; d[q + 1] = holding ? 255 : v; d[q + 2] = v; }
+    hx.putImageData(im, 0, 0);
+    if (holding || got) {
+      hx.globalCompositeOperation = "screen"; hx.fillStyle = got ? "rgba(57,255,106,.18)" : "rgba(255,46,154," + (0.1 + heat * 0.4) + ")"; hx.fillRect(0, 0, W, H); hx.globalCompositeOperation = "source-over";
+      var sy = Math.floor((t * 90) % H); hx.fillStyle = "#39ff6a"; hx.fillRect(0, sy, W, 1); hx.fillStyle = "rgba(57,255,106,.25)"; hx.fillRect(0, sy - 6, W, 6);
+    }
+    if (got) { hx.globalAlpha = 0.35; if (palm.complete) hx.drawImage(palm, 4 + Math.sin(t * 7) * 2, -3, W, H); hx.globalAlpha = 1; }
+    E.$("#scan").textContent = got ? "PALM ACQUIRED · STORED FOREVER" : holding ? "SCANNING " + Math.floor(heat * 100) + "% · DON'T LET GO" : "PALM SCANNER v0.96 · PLACE HAND";
+  }
+  setInterval(scan, E.calm ? 300 : 70);
   hb.addEventListener("pointerdown", start);
   ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) { hb.addEventListener(ev, stop); });
 

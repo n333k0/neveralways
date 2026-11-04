@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>phone.exe</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #1a0a20; color: #ffd6ec; font-family: var(--mono); }
+  .phone { width: min(300px, 90vw); margin: 26px auto; background: linear-gradient(#ff8fd8, #a0005a); border: 3px solid #000; border-radius: 28px; padding: 18px 16px 22px; box-shadow: 6px 8px 0 #000; }
+  .scr { background: #9bbc0f; color: #0f380f; border: 4px solid #333; border-radius: 6px; height: 96px; padding: 6px 8px; font: bold 13px/1.35 var(--mono); overflow: hidden; }
+  #num { font-size: 22px; letter-spacing: 2px; min-height: 28px; }
+  .pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .pad button { height: 46px; border-radius: 12px; border: 2px solid #000; background: #fff0f8; font: bold 18px var(--mono); cursor: pointer; box-shadow: 2px 2px 0 #000; }
+  .pad button:active { transform: translate(2px,2px); box-shadow: none; }
+  .row { display: flex; gap: 8px; margin-top: 10px; }
+  .row button { flex: 1; height: 42px; border-radius: 20px; border: 2px solid #000; font: bold 14px var(--mono); cursor: pointer; }
+  #callb { background: #39ff6a; } #hang { background: #ff0028; color: #fff; }
+  #log { max-width: 300px; margin: 0 auto; font-size: 11px; color: #c9a; }
+  a { color: #39ff6a; }
+</style>
+</head>
+<body data-room="call">
+<div class="phone">
+  <div class="scr"><div id="num"></div><div id="disp">dial a number.<br>some of them still answer.</div></div>
+  <div class="pad" id="pad"></div>
+  <div class="row"><button id="callb">CALL</button><button id="hang">END</button></div>
+</div>
+<div id="log"></div>
+<p class="small" style="text-align:center"><a href="inbox.html">voicemail is in the inbox</a> · <a href="index.html">home</a></p>
+<script>
+window.ROOM = function (E) {
+  var KEYS = "123456789*0#", FREQ = { "1": [697, 1209], "2": [697, 1336], "3": [697, 1477], "4": [770, 1209], "5": [770, 1336], "6": [770, 1477], "7": [852, 1209], "8": [852, 1336], "9": [852, 1477], "*": [941, 1209], "0": [941, 1336], "#": [941, 1477] };
+  var num = "", busy = false;
+  var pad = E.$("#pad");
+  KEYS.split("").forEach(function (k) {
+    var b = document.createElement("button"); b.textContent = k;
+    b.addEventListener("click", function () { if (busy) return; num = (num + k).slice(0, 12); E.$("#num").textContent = num; FREQ[k].forEach(function (f) { E.beep(f, 0.12, "sine", 0.04); }); });
+    pad.appendChild(b);
+  });
+  addEventListener("keydown", function (e) { if (FREQ[e.key]) pad.children[KEYS.indexOf(e.key)].click(); if (e.key === "Enter") E.$("#callb").click(); if (e.key === "Backspace") { num = num.slice(0, -1); E.$("#num").textContent = num; } });
+  var LINES = {
+    "1996": ["hello? who is this? … i can't feel my hands. is that normal? they said it was normal.", "unit.html"],
+    "86": ["you've reached zone five. all of our proxies are busy. please hold.", "numogram.html"],
+    "19790509": ["this number is not in service. this date is.", "worm.html"],
+    "5": ["it's me. i'm almost there. don't hang up. please don't—", null],
+    "2049": ["(hold music. it's a song from 2005. it never ends. nobody picks up.)", "future.html"],
+    "777": ["congratulations, you've won one free spin.", "slots.html"],
+    "1998": ["(breakbeat. 170 bpm. someone laughing in another room.)", "unit.html#tape"],
+    "2003": ["the person you are calling is no longer human. please leave a message after the tone.", "guestbook.html"],
+    "9": ["(a sound like a modem breathing)", "never.html"],
+    "0": ["you've reached the cellar. mind the stairs.", "cellar.html"]
+  };
+  var EMERGENCY = ["911", "112", "999", "000", "110", "119"];
+  function ring(n, cb) { var k = 0; var iv = setInterval(function () { E.beep(440, 0.4, "sine", 0.04); E.beep(480, 0.4, "sine", 0.04); if (++k >= n) { clearInterval(iv); cb(); } }, 1100); return iv; }
+  var iv = null;
+  E.$("#callb").addEventListener("click", function () {
+    if (busy || !num) return;
+    busy = true; var n = num, d = E.$("#disp");
+    var log = E.mem.get("calls", []); log.push(n); E.mem.set("calls", log.slice(-20));
+    E.$("#log").textContent = "recent: " + log.slice(-6).reverse().join(" · ");
+    if (EMERGENCY.indexOf(n) >= 0) { d.innerHTML = "this phone can't reach anyone real.<br>if you need help now, use a real one."; busy = false; return; }
+    d.textContent = "calling " + n + "…";
+    iv = ring(LINES[n] ? 2 + Math.floor(Math.random() * 2) : 3, function () {
+      var L = LINES[n];
+      var text = L ? L[0] : E.pick(["the number you have dialed is not human. please try again later.", "(someone picks up. breathes. hangs up.)", "hello? hello? oh. it's you. i'll call you back. (she won't.)", "the operator says the line is being used to train something."]);
+      d.textContent = text;
+      E.speak(text.replace(/[()]/g, ""), { pitch: 1.5, rate: 0.9 });
+      if (L && L[1]) setTimeout(function () { d.innerHTML += "<br><a href='" + L[1] + "'>(call transferred)</a>"; }, 2500);
+      busy = false;
+    });
+  });
+  E.$("#hang").addEventListener("click", function () { clearInterval(iv); busy = false; num = ""; E.$("#num").textContent = ""; E.$("#disp").textContent = "call ended. the line stays warm for a while."; if ("speechSynthesis" in window) speechSynthesis.cancel(); });
+  var log = E.mem.get("calls", []); if (log.length) E.$("#log").textContent = "recent: " + log.slice(-6).reverse().join(" · ");
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

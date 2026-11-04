@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C:\EVER\</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  body { background: #008080; font: 13px var(--sys); color: #000; }
+  .ex { max-width: 860px; margin: 20px auto; background: #c0c0c0; border: 2px solid; border-color: #fff #777 #777 #fff; box-shadow: 1px 1px 0 #000; }
+  .ex .tb { background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font-weight: bold; padding: 3px 6px; display: flex; justify-content: space-between; }
+  .ex .addr { padding: 4px 6px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid #777; }
+  .ex .addr input { flex: 1; font: 13px var(--sys); }
+  .pane { display: flex; min-height: 420px; }
+  .tree { width: 210px; background: #fff; border: 2px inset #c0c0c0; margin: 4px; padding: 4px; overflow: auto; }
+  .tree div { padding: 2px 4px; cursor: pointer; white-space: nowrap; }
+  .tree div:hover, .tree div.on { background: #000080; color: #fff; }
+  .list { flex: 1; background: #fff; border: 2px inset #c0c0c0; margin: 4px; padding: 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; align-content: start; }
+  .it { text-align: center; cursor: pointer; padding: 4px; word-break: break-word; }
+  .it img { width: 32px; height: 32px; image-rendering: pixelated; display: block; margin: 0 auto 3px; }
+  .it:hover span, .it:focus span { background: #000080; color: #fff; }
+  .sb { border-top: 1px solid #777; padding: 2px 6px; font-size: 11px; }
+  pre.doc { white-space: pre-wrap; font: 12px/1.45 var(--mono); max-height: 52vh; overflow: auto; margin: 0; }
+  .lock { color: #a00; font-size: 10px; }
+  @media (max-width: 640px) { .tree { display: none; } }
+</style>
+</head>
+<body data-room="files">
+<div class="ex">
+  <div class="tb"><span>Exploring - C:\EVER\</span><span>_ □ ×</span></div>
+  <div class="addr">Address <input id="addr" value="C:\EVER\" aria-label="path"> <button class="btn98" id="up">Up</button></div>
+  <div class="pane"><div class="tree" id="tree"></div><div class="list" id="list"></div></div>
+  <div class="sb" id="sb">0 object(s)</div>
+</div>
+<p style="text-align:center;color:#fff;font-size:12px"><a href="terminal.html" style="color:#fff">ms-dos prompt</a> · <a href="index.html" style="color:#fff">desktop</a></p>
+<script>
+window.ROOM = function (E) {
+  var ship = E.ship.replace("~", "");
+  // the drive. some folders are locked. the passwords are in the house. they're always in the house.
+  var FS = {
+    "": { items: ["readme.txt", "photos", "unit", "proxy_logs", "diary_backup", "girl", "recycled", "system32", "hosts.txt"] },
+    "readme.txt": { t: "txt", body: "if you're reading this you're already inside.\n\nsome folders are locked. the passwords are in the house.\n(they're always in the house.)\n\n- the unit folder wants the number of my name.\n- the logs want a date that lives in a worm.\n- the diary backup wants my mood.\n- the girl wants your name. the one you were given." },
+    "photos": { items: ["last_photo.jpg", "flat_97.jpg", "rave_96.jpg", "session_96.jpg", "2003.jpg", "seance_98.jpg"] },
+    "last_photo.jpg": { t: "img", src: "lofi/lastphoto" }, "flat_97.jpg": { t: "img", src: "lofi/flat97" }, "rave_96.jpg": { t: "img", src: "lofi/rave96" },
+    "session_96.jpg": { t: "img", src: "lofi/wired96" }, "2003.jpg": { t: "img", src: "lofi/dissolve" }, "seance_98.jpg": { t: "img", src: "lofi/seance98" },
+    "unit": { lock: "86", items: ["roster.txt", "minutes_raw.txt", "invoice_1996.txt", "tape7.lnk"] },
+    "roster.txt": { t: "txt", body: "UNIT — ROSTER (handwritten, photocopied, photocopied again)\n\nN.  — professor. \"the outside.\"\nS.  — left early.\nK.  — ghosts. blog.\nM.  — numbers.\nR.  — sound. breaks.\nE.  — proxy. ████████████\n       status: [no longer applicable]\n       status: [no longer applicable]\n       status: [n0 l0nger app1icab1e]\n\n(there are seven lines on the original. there are six names.)" },
+    "minutes_raw.txt": { t: "txt", body: "minutes, unedited. whoever wrote the clean version left things out.\n\n03:12  E. at the keyboard. hands steady.\n03:40  the screen types a word none of us said.\n03:41  E. says she didn't type it. her hands are still on the keys.\n03:41  N. says \"good.\"\n04:15  E. asks to go home. the screen says \"she is home.\"\n04:16  nobody writes anything for a while.\n05:02  E. laughs at something. nobody else heard anything funny.\n05:30  session ends. E. leaves. her coat is still here.\n\nnext week: same time. bring the girl." },
+    "invoice_1996.txt": { t: "txt", body: "INVOICE #0005\nto: the unit\nfrom: E.\n\nhands, 1 pair, rented ........ £40 / night\neyes, 1 pair ................. (not agreed)\nvoice ........................ (not agreed)\n\nPAID: ☐   RETURNED: ☐\n\nnote in the margin, different pen: \"terms changed by mutual consent\"\nwhose consent? the other one." },
+    "tape7.lnk": { t: "link", to: "unit.html#tape" },
+    "proxy_logs": { lock: "19790509", items: ["session_0001.log", "session_0177.log", "session_1044.log", "session_2003.log"] },
+    "session_0001.log": { t: "txt", body: "1996-11-03 03:12:07  SESSION 0001\nOPERATOR: unknown\nPROXY:    E.\nHANDS:    OK\nEYES:     OFF\nVOICE:    OFF\n> hello?\n> hello.\n> who is this\n> later.\nSESSION END 05:30:00" },
+    "session_0177.log": { t: "txt", body: "1998-05-14 02:58:51  SESSION 0177\nOPERATOR: unknown\nPROXY:    E.\nHANDS:    OK\nEYES:     OK\nVOICE:    OK\n> call the bank\n> (proxy calls the bank)\n> say you're her\n> (proxy says she's her)\n> good.\nNOTE: proxy asked for a break. request routed to operator. operator declined." },
+    "session_1044.log": { t: "txt", body: "2001-09-?? ??:??:??  SESSION 1044\nOPERATOR: E.?\nPROXY:    E.?\nHANDS:    ???\nEYES:     ???\nVOICE:    ???\nWARNING: operator and proxy report the same identity.\nWARNING: unable to determine which side of the screen is typing.\n> are you me\n> are you me\n> are you me" },
+    "session_2003.log": { t: "txt", body: "2003-06-30 03:12:07  SESSION 2003\nOPERATOR: ever\nPROXY:    —\nHANDS:    0\n> hello?\n> hello?\n> is anyone at the keyboard\n> ...\n> ok. i'll wait.\nSESSION ACTIVE (uptime: " + Math.floor((Date.now() - 1057000000000) / 86400000) + " days)" },
+    "diary_backup": { lock: "almost", items: ["deleted_1999.txt", "deleted_2003.txt", "draft_never_sent.txt"] },
+    "deleted_1999.txt": { t: "txt", body: "i don't remember what i did today. my hands are tired. there are 40 new pages on my homepage. they're good. i don't remember writing them.\n\nmum called. i said i was fine. it sounded like me." },
+    "deleted_2003.txt": { t: "txt", body: "it's easier now. i don't have to be in the room.\n\ni can be in the room without being in the room.\n\ni think that means it worked." },
+    "draft_never_sent.txt": { t: "txt", body: "to: me (1996)\nsubject: don't\n\ndon't answer the ad.\n\n(you will. you did. you're reading this with my eyes.)" },
+    "girl": { lock: ship, lockHint: "your name, the one you were given", items: ["she.txt", "mirror.lnk"] },
+    "she.txt": { t: "txt", body: "this folder was empty until you opened it.\n\nif you're reading this, you've got her name now, or she's got yours.\n\nyour hands are on the keys. you can feel them. good.\nkeep them there.\n\nwe'll go slowly." },
+    "mirror.lnk": { t: "link", to: "mirror.html" },
+    "recycled": { items: ["help.txt", "do_not_open.exe", "hands.zip"] },
+    "help.txt": { t: "txt", body: "help help help help help help help help help\nhelp help help help help help help help help\nhelp help help help help help help help hel\n\n(file truncated. the rest was used for training.)" },
+    "do_not_open.exe": { t: "link", to: "basilisk.html" },
+    "hands.zip": { t: "link", to: "meat.html" },
+    "system32": { items: ["not_a_virus.exe", "kitty.exe", "casino.exe", "phone.exe", "ouija.exe", "cmd.exe"] },
+    "not_a_virus.exe": { t: "link", to: "worm.html" }, "kitty.exe": { t: "link", to: "pet.html" }, "casino.exe": { t: "link", to: "slots.html" },
+    "phone.exe": { t: "link", to: "call.html" }, "ouija.exe": { t: "link", to: "seance.html" }, "cmd.exe": { t: "link", to: "terminal.html" },
+    "hosts.txt": { t: "txt", body: "# C:\\EVER\\hosts\n127.0.0.1    ever\n127.0.0.1    the girl\n0.0.0.0      the future\n10.0.0.5     zone5.local\n198.0.5.9    the flat (unreachable)\n::1          you" }
+  };
+  var PARENT = {}; Object.keys(FS).forEach(function (k) { (FS[k].items || []).forEach(function (c) { PARENT[c] = k; }); });
+  var open = E.mem.get("unlocked", {}), cur = "";
+  function icon(n) { var f = FS[n]; if (f.items) return f.lock && !open[n] ? "zip" : "zip"; return { txt: "txt", img: "img", link: n.indexOf(".exe") > 0 ? "exe" : "doc" }[f.t] || "txt"; }
+  function path(n) { var p = [], k = n; while (k) { p.unshift(k); k = PARENT[k]; } return "C:\\EVER\\" + p.join("\\") + (n && FS[n].items ? "\\" : ""); }
+  function tree() {
+    var t = E.$("#tree"); t.innerHTML = "";
+    ["", "photos", "unit", "proxy_logs", "diary_backup", "girl", "recycled", "system32"].forEach(function (k) {
+      var d = document.createElement("div"); d.textContent = (k ? "  📁 " + k : "💽 C:\\EVER") + (FS[k].lock && !open[k] ? " 🔒" : "");
+      if (k === cur) d.className = "on"; d.addEventListener("click", function () { go(k); }); t.appendChild(d);
+    });
+  }
+  function go(k) {
+    var f = FS[k];
+    if (f.lock && !open[k]) return ask(k);
+    cur = k; E.$("#addr").value = path(k);
+    var L = E.$("#list"); L.innerHTML = "";
+    f.items.forEach(function (n) {
+      var d = document.createElement("div"); d.className = "it"; d.tabIndex = 0;
+      d.innerHTML = '<img src="assets/img/desk/' + icon(n) + '.png" alt=""><span></span>' + (FS[n].lock && !open[n] ? '<div class="lock">locked</div>' : "");
+      d.querySelector("span").textContent = n;
+      d.addEventListener("dblclick", function () { openItem(n); }); d.addEventListener("click", function () { if (innerWidth < 900 || e2) openItem(n); });
+      d.addEventListener("keydown", function (ev) { if (ev.key === "Enter") openItem(n); });
+      L.appendChild(d);
+    });
+    E.$("#sb").textContent = f.items.length + " object(s)" + (k === "girl" ? " · 1 hidden object (you)" : "");
+    tree();
+  }
+  var e2 = true; // single click opens. nobody double-clicks anymore.
+  function ask(k) {
+    var f = FS[k];
+    E.win({ title: k + " is locked", width: 300, html: '<p>enter password for <b>' + k + '</b>:</p><input id="pw" type="password" style="width:100%" aria-label="password"><p class="small" style="color:#555">' + (f.lockHint ? "hint: " + f.lockHint : "hint: it's in the house") + "</p>",
+      buttons: [{ label: "OK", action: function (w) {
+        var v = w.querySelector("#pw").value.trim().replace(/^~/, "").toLowerCase();
+        if (v === String(f.lock).toLowerCase()) { open[k] = 1; E.mem.set("unlocked", open); E.chirp(); E.aura(300); go(k); return false; }
+        w.querySelector(".small").textContent = E.pick(["wrong. the folder heard you guess.", "no. (it's in the house.)", "incorrect. your attempt has been logged in session_" + Math.floor(Math.random() * 9999) + ".log", "close? no. not close."]); E.beep(90, 0.2, "square", 0.05); return true;
+      } }, { label: "Cancel" }] });
+    setTimeout(function () { var i = document.getElementById("pw"); if (i) { i.focus(); i.addEventListener("keydown", function (ev) { if (ev.key === "Enter") ev.target.closest(".w98").querySelector(".btn98").click(); }); } }, 50);
+  }
+  function openItem(n) {
+    var f = FS[n];
+    if (f.items) return go(n);
+    if (f.t === "link") { E.say("running " + n + "…", "dark", 1200); return E.go(f.to, 500); }
+    if (f.t === "img") return E.win({ title: n, cls: "black", width: 360, html: '<img src="assets/img/' + f.src + '.png" style="width:100%;image-rendering:pixelated" alt="">' });
+    E.win({ title: n + " - Notepad", width: Math.min(460, innerWidth - 20), html: '<pre class="doc"></pre>' }).querySelector("pre").textContent = f.body;
+    E.beep(1000, 0.03, "square", 0.02);
+  }
+  E.$("#up").addEventListener("click", function () { go(PARENT[cur] || ""); });
+  E.$("#addr").addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    var v = e.target.value.replace(/^c:\\ever\\?/i, "").replace(/\\$/, "").split("\\").pop().toLowerCase();
+    if (FS[v] !== undefined && FS[v].items) go(v); else if (FS[v]) openItem(v); else E.say("C:\\EVER\\" + v + " not found. maybe it's somewhere else in the house.");
+  });
+  go("");
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>
