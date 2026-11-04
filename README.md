@@ -3,7 +3,7 @@
 > hi. my name is ever. my last name is never.
 > i am almost the future. i've been almost the future since 1996.
 
-**neveralways** is a net-art website in the tradition of [mouchette.org](https://www.mouchette.org/) (Martine Neddam, 1996). It is the homepage of **ever**, a girl-shaped persona who may be a teenager's homepage, an AI, a ghost or a hyperstition. The site is a labyrinth of 34 rooms connected by hidden links, crawling bugs, lying words, right-click menus and typed spells. It is about the internet at the end of the human internet:
+**neveralways** is a net-art website. It is the homepage of **ever**, a girl-shaped persona who may be a teenager's homepage, an AI, a ghost or a hyperstition. The site is a labyrinth of 34 rooms connected by hidden links, crawling bugs, lying words, right-click menus and typed spells. It is about the internet at the end of the human internet:
 
 - AI and the future of humanity
 - meat proxies (humans as the hands of machines)
@@ -97,4 +97,4 @@ python3 tools/gen_images.py
 
 The full bibliography is in [`shelf.html`](shelf.html). Research notes, with the facts and quotations the rooms rely on, are in [`docs/research.md`](docs/research.md). Quotations are short and attributed. Some of the authors quoted (Land's later work, Yarvin, parts of the Remilia scene) hold views this work treats critically. They are quoted to be looked at, not followed.
 
-Made in 2026 by a human and a machine, talking. Inspired by, and with love for, mouchette.org.
+Made in 2026 by a human and a machine, talking.

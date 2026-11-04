@@ -2,22 +2,6 @@
 
 These are the facts and quotations the rooms rely on, with where each was checked. Quotations are kept short.
 
-## Mouchette (the model)
-
-- mouchette.org, Martine Neddam, 1996–. A fictional girl in Amsterdam, "nearly 13", forever. Neddam's authorship was kept secret until 2010.
-- How it works:
-  - links hidden in images (flies, ants, body parts);
-  - the same click leads to different results;
-  - the front page changes after you explore (pink and water, then orange and blood);
-  - forms that answer back, sometimes later by email;
-  - sound as shock;
-  - "Kill That Cat" (1999) makes you complicit: the button that stops the noise is the violence;
-  - mouchette.net (2003) let visitors become Mouchette.
-- Controversies: Bresson's widow (via SACD) had the film quiz removed in 2002, and the "Suicide Kit" was reported to French police in 2006. The takedown became part of the work.
-- Sources: https://anthology.rhizome.org/mouchette · https://rhizome.org/editorial/2016/dec/12/a-girl-made-of-language-martine-neddams-mouchette/ · https://en.wikipedia.org/wiki/Mouchette.org · https://artbase.rhizome.org/wiki/Q4203
-- Design lessons kept: a sweet surface over darkness, navigation by touching, a site that remembers, clicks with moral weight, answers that come back later, visitors writing the persona.
-- Design lessons deliberately not kept: no sexualised framing of a minor (ever is ageless, "almost"), and no soliciting of self-harm content. A help-line pointer sits on the Fisher page.
-
 ## Nick Land / CCRU
 
 - CCRU: Warwick, roughly 1995–2003. Members included Sadie Plant, Land, Mark Fisher, Kodwo Eshun, Steve Goodman, Iain Hamilton Grant and others.
