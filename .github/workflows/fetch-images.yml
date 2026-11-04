@@ -1,0 +1,41 @@
+# Downloads the AI-generated artwork listed in tools/remote-images.txt,
+# compresses it to JPEG and commits it into assets/img/anime/.
+# (The build sandbox can't reach the image CDN; GitHub's runners can.)
+name: fetch images
+on:
+  workflow_dispatch:
+  push:
+    paths: ["tools/remote-images.txt"]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: download and compress
+        run: |
+          python3 -m pip install --quiet pillow
+          mkdir -p assets/img/anime /tmp/raw
+          grep -v '^#' tools/remote-images.txt | while read -r name url; do
+            [ -z "$name" ] && continue
+            curl -fsSL "$url" -o "/tmp/raw/$name.png"
+          done
+          python3 - <<'PY'
+          import glob, os
+          from PIL import Image
+          for p in glob.glob("/tmp/raw/*.png"):
+              name = os.path.splitext(os.path.basename(p))[0]
+              im = Image.open(p).convert("RGB")
+              im.thumbnail((1344, 1344))
+              im.save(f"assets/img/anime/{name}.jpg", quality=86, optimize=True, progressive=True)
+              print(name, im.size)
+          PY
+      - name: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/img/anime
+          git diff --cached --quiet && exit 0
+          git commit -m "Fetch generated anime artwork into assets/img/anime"
+          git push

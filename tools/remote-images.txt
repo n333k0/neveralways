@@ -1,0 +1,10 @@
+# name  url   (fetched by .github/workflows/fetch-images.yml into assets/img/anime/<name>.jpg)
+ever-a   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211849_7c138230-07f4-4633-b130-65c532c5ec63.png
+ever-b   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211849_32f12181-7dcf-4c16-a4eb-86fea902f6cd.png
+ever-c   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211849_b27e48f0-a431-4b1b-aede-dfcffe3ee5f3.png
+ever-d   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211850_60a85199-0c98-4c8c-a936-d8a9546f2e46.png
+lemuria  https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211916_88c61aee-0f1a-4c1e-9697-a26af52e6a03.png
+meltdown https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211916_8de2b6ae-2d56-4484-8a50-17b76bf5bdf8.png
+forest   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211913_8f9b8ffd-ef34-4f08-bf99-912803d1ae86.png
+loops    https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211917_5a304a30-c743-43ef-ad20-59c328c24790.png
+proxy    https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_211912_4d2c9822-7236-4498-9b7f-cb59eacb8073.png
