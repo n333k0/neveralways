@@ -43,6 +43,7 @@ Or publish it with GitHub Pages (Settings → Pages → deploy from branch, root
 | `land` | **the land zone**: an unofficial Nick Land fan shrine (90s style). Timeline, a clickable glossary (accelerationism, hyperstition, syzygy, teleoplexy, templexity…), orthogonality vs "the will to think" (choose a side), and a critical shrine-keeper's warning. |
 | `meltdown` | a text that reads itself faster and faster until it melts, ending on the verified lines from "Meltdown" (1994). |
 | `lemuria` | the time war: a clock that runs backwards, and you can send a message into the past that then appears in ever's diary in that year. |
+| `rot` | brainrot.exe: a split-screen "for you" feed of lofi art with theory captions (text-to-speech) over a pixel runner game where digits pairing to 9 score a syzygy. Your attention bar drains. |
 | `numogram` | Land/CCRU: a clickable numogram (syzygies that sum to 9), an AQ calculator, an ACCELERATE button and a critical note. |
 | `hyperstition` | write a headline from the future. It appears on every news ticker in the house until it gets "truer". |
 | `haunt` | Fisher: a radio between stations, the weird and the eerie as two doors, and a clock that stays in 2005. |
@@ -79,6 +80,8 @@ These live in `assets/ever.js`:
 - **Accessibility**: `prefers-reduced-motion` is respected, right-click → "please stop moving" calms the house, and sound only plays after you interact.
 
 ## Images
+
+Everything is deliberately low-res: `tools/lofi.py` shrinks, palette-crushes, dithers and "deep-fries" the art into `assets/img/lofi/`, and the browser blows it back up with `image-rendering: pixelated`. Clicks spawn brainrot stickers, there is an aura counter, and chibi stickers of ever peek in from the edges.
 
 The anime portraits of ever and the scenes in the land zone, meltdown, the time war, the forest, the gallery's "model wing" and the meat gazette were made with an image model (via Higgsfield) from prompts written for the site. They live in `assets/img/anime/`. Because the build sandbox can't reach the image CDN, `.github/workflows/fetch-images.yml` downloads the files listed in `tools/remote-images.txt` and commits them.
 

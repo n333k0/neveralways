@@ -17,15 +17,15 @@
   html, body { height: 100%; }
   body { background: #ffa5d9; font-family: var(--cute); overflow: hidden; }
   #bloom { position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background: url("assets/img/flower0.png") center 40% / min(110vh, 140vw) no-repeat;
+    background: url("assets/img/lofi/flower0.png") center 40% / min(110vh, 140vw) no-repeat; image-rendering: pixelated;
     -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 0, #000 min(40vh, 50vw), transparent min(56vh, 70vw));
             mask-image: radial-gradient(circle at 50% 40%, #000 0, #000 min(40vh, 50vw), transparent min(56vh, 70vw)); }
   body.stage1 { background-color: #f2672e; }
-  body.stage1 #bloom { background-image: url("assets/img/flower1.png"); }
+  body.stage1 #bloom { background-image: url("assets/img/lofi/flower1.png"); }
   body.stage2 { background-color: #020001; color: #ffd6ec; }
-  body.stage2 #bloom { background-image: url("assets/img/flower2.png"); }
+  body.stage2 #bloom { background-image: url("assets/img/lofi/flower2.png"); }
   #me { position: fixed; left: 14px; top: 14px; width: clamp(150px, 19vw, 240px); aspect-ratio: 1; border: 2px solid #000; background: #000; cursor: var(--cur-eye); overflow: hidden; box-shadow: 4px 4px 0 var(--hot); z-index: 5; }
-  #me img { width: 100%; height: 100%; display: block; object-fit: cover; image-rendering: auto; transition: filter .2s; }
+  #me img { width: 100%; height: 100%; display: block; object-fit: cover; image-rendering: pixelated; image-rendering: crisp-edges; transition: filter .2s; }
   #me::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px); }
   #me:hover img { filter: hue-rotate(-25deg) contrast(1.3) saturate(1.4); animation: jit .18s steps(2) infinite; }
   @keyframes jit { 50% { transform: translate(2px,-1px) scale(1.02); } }
@@ -52,6 +52,13 @@
   .squash { position: fixed; z-index: 49; font: bold 11px var(--mono); color: #000; pointer-events: none; background: #9fe6ff; padding: 1px 4px; }
   #foot { position: fixed; left: 0; right: 0; bottom: 0; }
   #dot { position: fixed; left: 7px; bottom: 30px; font-size: 22px; color: inherit; text-decoration: none; }
+  #chat { position: fixed; right: 12px; top: 230px; bottom: 44px; width: 230px; background: rgba(0,0,0,.82); border: 2px solid #ff2e9a; z-index: 6; display: flex; flex-direction: column; font: 12px var(--sys); color: #fff; }
+  #chat .hd { background: #ff2e9a; color: #000; font: bold 11px var(--mono); padding: 3px 6px; display: flex; justify-content: space-between; }
+  #chat .hd a { color: #000; }
+  #msgs { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px 6px; gap: 2px; }
+  #msgs div { line-height: 1.3; word-break: break-word; }
+  #msgs b { font-weight: bold; }
+  @media (max-width: 900px) { #chat { display: none; } }
   @media (max-width: 600px) {
     #hello { left: 10px; top: 175px; max-width: calc(100vw - 20px); font-size: 14px; }
     #me { width: 150px; }
@@ -62,7 +69,7 @@
 <body data-room="index" data-nohome>
 <div id="bloom" aria-hidden="true"></div>
 
-<a id="me" href="about.html" title="that's me. i think." data-say="don't look at me like that. i'm loading."><img id="meimg" src="assets/img/anime/ever-b.jpg" alt="ever: an anime girl with black hair and red eyes, a ring of ten numbered zones around her head, a pink flower turning into circuits behind her"><span class="cap">ever.jpg · zone 5 · almost</span></a>
+<a id="me" href="about.html" title="that's me. i think." data-say="don't look at me like that. i'm loading."><img id="meimg" src="assets/img/lofi/ever-b.png" alt="ever: an anime girl with black hair and red eyes, a ring of ten numbered zones around her head, a pink flower turning into circuits behind her"><span class="cap">ever.jpg · zone 5 · almost</span></a>
 
 <div id="hello">
   <span id="greet">hi.</span> my name is <a href="about.html">ever</a>. my last name is never.<br>
@@ -86,6 +93,11 @@
 
 <a id="dot" href="cellar.html" class="hide" title="">.</a>
 
+<div id="chat" aria-label="live chat (bots)">
+  <div class="hd"><span>● LIVE · <span id="watch">37,201</span> watching</span><a href="rot.html">brainrot.exe →</a></div>
+  <div id="msgs"></div>
+</div>
+
 <div id="foot"><div class="ticker"></div></div>
 
 <script>
@@ -95,9 +107,9 @@ window.ROOM = function (E) {
   var stage = E.isProxy || seen >= 22 ? 2 : seen >= 9 ? 1 : 0;
   if (stage) document.body.classList.add("stage" + stage);
   var img = E.$("#meimg");
-  var IMG = stage === 2 ? "assets/img/anime/ever-c.jpg" : stage === 1 ? "assets/img/anime/ever-a.jpg" : "assets/img/anime/ever-b.jpg";
+  var IMG = stage === 2 ? "assets/img/lofi/ever-c.png" : stage === 1 ? "assets/img/lofi/ever-a.png" : "assets/img/lofi/ever-b.png";
   img.src = IMG;
-  E.$("#me").addEventListener("mouseenter", function () { img.src = "assets/img/anime/ever-d.jpg"; });
+  E.$("#me").addEventListener("mouseenter", function () { img.src = IMG.replace(".png", "-fried.png"); });
   E.$("#me").addEventListener("mouseleave", function () { img.src = IMG; });
 
   // the land zone: ten numbers, paired to nine, turning
@@ -118,6 +130,20 @@ window.ROOM = function (E) {
   else if (E.visits > 3) g.textContent = "you again. hi. hi. hi.";
   else if (seen > 1) g.textContent = "oh. you came back out.";
   if (E.witching) g.innerHTML = "it's 3am. the server is closer at this hour. " + g.innerHTML;
+
+  // live chat: everyone here is a bot except possibly you
+  var U = ["xX_zone9_Xx", "numogram_enjoyer", "sigma_accelerationist", "kpunk_ghost", "milady_404", "meat_proxy_77", "~sampel-palnet", "darkforest_lurker", "shoggoth_smiles", "aura_farmer", "hyperstition_szn", "dead_internet_bot", "cathedral_mod", "lemurian_soldier", "clippy_returns"];
+  var C = ["#ff2e9a", "#39ff6a", "#ffe600", "#00e5ff", "#ff6060", "#b04bff"];
+  var M = ["W flower", "she's so real for this", "nothing human makes it out of the near-future 💀", "zone 9 plex mogging rn", "who else here from the numogram", "first", "accelerate 🚀🚀🚀", "the bugs are features fr", "dark forest arc goes hard", "chat is this real", "ratio + you're a meat proxy", "-1000 aura for clicking come in", "+1000 aura for not clicking", "land pilled and flower brained", "neo-china arrives from the future (again)", "she's almost the future since 1996 that's crazy", "hyperstition: if enough of us type it, it's true", "it's giving singularity", "chat she's looking at me", "lowkey the shoggoth is my sleep paralysis demon", "fisher said the future got cancelled and honestly same", "the cathedral would never", "touch grass? in this economy?", "skibidi syzygy", "great post! very informative.", "bro the flower is breathing", "is the counter going down or is it me", "i signed the contract no regrets", "AI 2027 speedrun any%", "this is net art right? right??", "type 'cellar' trust me", "sigma grindset: 0 thoughts, 10 zones", "she said 'almost' 😭", "dead internet theory but we're the dead internet"];
+  var box = E.$("#msgs");
+  function say() {
+    var d = document.createElement("div"), u = E.pick(U);
+    d.innerHTML = '<b style="color:' + E.pick(C) + '">' + E.esc(u) + '</b>: ' + E.esc(E.pick(M));
+    box.appendChild(d); while (box.children.length > 40) box.firstChild.remove();
+    E.$("#watch").textContent = (37000 + Math.floor(Math.random() * 900)).toLocaleString("en-US");
+    setTimeout(say, E.calm ? 3000 : 500 + Math.random() * 1600);
+  }
+  say();
 
   // a visitor counter that counts down. one day it will reach you.
   var n = 8100000000 - Math.floor((Date.now() - 1767225600000) / 1000) * 3 - seen * 77;
@@ -187,7 +213,7 @@ window.ROOM = function (E) {
   // first time ever: a small window, like a note left on a pillow
   if (seen <= 1) {
     setTimeout(function () {
-      E.win({ title: "hello.txt", cls: "pink", width: 300, x: Math.max(8, innerWidth - 330), y: Math.min(250, innerHeight - 260),
+      E.win({ title: "hello.txt", cls: "pink", width: 300, x: 14, y: Math.min(300, innerHeight - 280),
         html: "<p>this website is a person.<br>or a person is this website.<br><br>it remembers you (only on your computer).<br>it has sound (only if you touch it).<br>right-click if you need help. type if you need magic.</p>",
         buttons: [{ label: "ok" }, { label: "who are you?", action: function () { location.href = "about.html"; } }] });
     }, 1400);

@@ -9,8 +9,8 @@
 <style>
   html, body { height: 100%; }
   body { background: #000; color: #9ab; overflow: hidden; cursor: none; font-family: var(--mono); }
-  #woods { position: fixed; inset: 0; background: #03040a url("assets/img/anime/forest.jpg") center / cover; touch-action: none; }
-  #woods::before { content: ""; position: absolute; inset: 0; background: url("assets/img/forest.jpg") center / cover; mix-blend-mode: screen; opacity: .35; }
+  #woods { image-rendering: pixelated; position: fixed; inset: 0; background: #03040a url("assets/img/lofi/forest.png") center / cover; touch-action: none; }
+  #woods::before { image-rendering: pixelated; content: ""; position: absolute; inset: 0; background: url("assets/img/forest.jpg") center / cover; mix-blend-mode: screen; opacity: .35; }
   body.hiding #dark { background: #000; }
   #dark { position: fixed; inset: 0; pointer-events: none; z-index: 5;
     background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,0,0,0) 0, rgba(0,0,0,.25) var(--r1, 60px), rgba(0,0,0,.97) var(--r2, 150px)); }

@@ -73,7 +73,17 @@ def stickers(sheet):
     print("stickers: 9")
 
 
+def flowers():
+    """the homepage flowers, shrunk until you can count the pixels."""
+    for i in range(3):
+        im = Image.open(os.path.join(ROOT, "flower%d.png" % i)).convert("RGB")
+        lo = crush(im.resize((180, 180), Image.BOX), 14)
+        lo.save(os.path.join(OUT, "flower%d.png" % i), optimize=True)
+    print("flowers: 3")
+
+
 def main():
+    flowers()
     for p in sorted(glob.glob(os.path.join(SRC, "*.jpg"))):
         name, lo = rot(p)
         if name == "stickers":

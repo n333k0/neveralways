@@ -183,3 +183,21 @@ body.calm .blink, body.calm .pulse, body.calm .shake, body.calm .float { animati
   body { font-size: 16px; }
   .w98 { left: 4vw !important; max-width: 92vw; }
 }
+
+/* brainrot layer */
+.rotword { position: fixed; z-index: 9900; pointer-events: none; font: bold 15px "Comic Sans MS", var(--cute); white-space: nowrap;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; transform: translate(-50%, -50%) rotate(var(--r));
+  animation: rotpop 1.25s ease-out forwards; }
+@keyframes rotpop { 0% { transform: translate(-50%, -50%) rotate(var(--r)) scale(.4); opacity: 1; }
+  20% { transform: translate(-50%, -80%) rotate(var(--r)) scale(1.25); }
+  100% { transform: translate(calc(-50% + var(--dx)), -260%) rotate(var(--r)) scale(1); opacity: 0; } }
+#ever-home b { color: #ff2e9a; }
+img.lofi, .lofi img { image-rendering: pixelated; image-rendering: crisp-edges; }
+.peek { position: fixed; z-index: 8900; width: 96px; transition: transform .8s cubic-bezier(.2,1.6,.4,1); background: none !important; }
+.peek img { width: 96px; display: block; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 #000); }
+.peek-left { left: 0; transform: translateX(-110%) rotate(25deg); }
+.peek-right { right: 0; transform: translateX(110%) rotate(-25deg); }
+.peek-bottom { bottom: 0; transform: translateY(110%); }
+.peek.in.peek-left { transform: translateX(-35%) rotate(25deg); }
+.peek.in.peek-right { transform: translateX(35%) rotate(-25deg); }
+.peek.in.peek-bottom { transform: translateY(30%); }

@@ -23,7 +23,7 @@
   .wall h1 { font: 300 clamp(28px, 5vw, 52px) Georgia, serif; letter-spacing: .08em; margin: 0; color: #fff; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px; margin-top: 24px; }
   .work { cursor: var(--cur-eye); }
-  .work img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; border: 10px solid #1a1a1a; box-shadow: 0 0 0 1px #333; image-rendering: auto; }
+  .work img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; border: 10px solid #1a1a1a; box-shadow: 0 0 0 1px #333; image-rendering: pixelated; }
   .work .lab { font: 11px var(--mono); color: #999; margin-top: 6px; line-height: 1.4; }
   .work .lab b { color: #eee; font-family: Georgia, serif; font-size: 14px; font-weight: normal; font-style: italic; }
   .wall a { color: #c9f; }
@@ -116,17 +116,17 @@ window.ROOM = function (E) {
     g.appendChild(d);
   });
   var MODEL = [
-    ["anime/ever-b", "Self-Portrait as a Numogram", "image model, prompt by ever", "not for sale (it's my face)", "index.html"],
-    ["anime/lemuria", "The Time War Is Fought in Bedrooms", "image model", "1 message to the past", "lemuria.html"],
-    ["anime/meltdown", "Meltdown, Black Sun", "image model", "the present (all of it)", "meltdown.html"],
-    ["anime/loops", "Templexity (Port City)", "image model", "a ticket for yesterday", "land.html"],
-    ["anime/forest", "Self-Portrait as Prey", "image model", "silence", "forest.html"],
-    ["anime/proxy", "Meat Proxy (Two Palms)", "image model", "six seconds of your hand", "meat.html"]
+    ["lofi/ever-b", "Self-Portrait as a Numogram", "image model, prompt by ever", "not for sale (it's my face)", "index.html"],
+    ["lofi/lemuria", "The Time War Is Fought in Bedrooms", "image model", "1 message to the past", "lemuria.html"],
+    ["lofi/meltdown", "Meltdown, Black Sun", "image model", "the present (all of it)", "meltdown.html"],
+    ["lofi/loops", "Templexity (Port City)", "image model", "a ticket for yesterday", "land.html"],
+    ["lofi/forest", "Self-Portrait as Prey", "image model", "silence", "forest.html"],
+    ["lofi/proxy", "Meat Proxy (Two Palms)", "image model", "six seconds of your hand", "meat.html"]
   ];
   var mg = E.$("#mgrid");
   MODEL.forEach(function (w) {
     var d = document.createElement("div"); d.className = "work"; d.tabIndex = 0;
-    d.innerHTML = '<img src="assets/img/' + w[0] + '.jpg" alt="" loading="lazy"><div class="lab"><b></b><br></div>';
+    d.innerHTML = '<img class="lofi" src="assets/img/' + w[0] + '.png" alt="" loading="lazy"><div class="lab"><b></b><br></div>';
     d.querySelector("img").alt = w[1]; d.querySelector("b").textContent = w[1];
     d.querySelector(".lab").appendChild(document.createTextNode(w[2] + " · " + w[3]));
     d.addEventListener("click", function () { location.href = w[4]; });

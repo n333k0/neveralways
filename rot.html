@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>brainrot.exe (split-screen attention farm)</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/ever.css">
+<style>
+  html, body { height: 100%; }
+  body { background: #000; color: #fff; font-family: var(--sys); overflow: hidden; }
+  #phone { position: fixed; left: 50%; top: 0; bottom: 0; transform: translateX(-50%); width: min(460px, 100vw); display: flex; flex-direction: column; border-left: 2px solid #ff2e9a; border-right: 2px solid #39ff6a; background: #000; }
+  #feed { position: relative; flex: 1 1 55%; overflow: hidden; cursor: var(--cur-hand); }
+  #feed img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; transition: opacity .25s; }
+  #cap { position: absolute; left: 10px; right: 64px; bottom: 12px; font: bold 17px "Comic Sans MS", var(--cute); text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; line-height: 1.25; }
+  #cap small { display: block; font: 11px var(--mono); color: #ccc; margin-top: 4px; text-shadow: 1px 1px 0 #000; }
+  #side { position: absolute; right: 8px; bottom: 16px; display: flex; flex-direction: column; gap: 14px; text-align: center; font: bold 12px var(--sys); }
+  #side button { background: none; border: 0; color: #fff; font: 26px var(--sys); cursor: pointer; text-shadow: 0 0 4px #000; padding: 0; }
+  #top { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; gap: 16px; padding: 8px; font: bold 13px var(--sys); text-shadow: 0 0 4px #000; }
+  #top span { opacity: .6; } #top b { border-bottom: 2px solid #fff; }
+  #game { flex: 0 0 45%; position: relative; background: #08001a; border-top: 2px solid #fff; }
+  #cv { width: 100%; height: 100%; display: block; image-rendering: pixelated; touch-action: none; }
+  #hud { position: absolute; left: 8px; top: 6px; font: 12px var(--mono); color: #39ff6a; text-shadow: 1px 1px 0 #000; pointer-events: none; }
+  #att { position: fixed; left: 8px; top: 8px; width: 150px; font: 11px var(--mono); color: #ff8fd8; z-index: 5; }
+  #att i { display: block; height: 8px; background: #ff2e9a; margin-top: 3px; transition: width .4s; }
+  #why { position: fixed; right: 8px; top: 8px; width: 210px; font: 12px/1.4 var(--sys); color: #aaa; z-index: 5; }
+  #why a { color: #39ff6a; }
+  @media (max-width: 900px) { #why, #att { display: none; } }
+</style>
+</head>
+<body data-room="rot" class="dark" data-noctx>
+<div id="att">attention remaining<i id="attbar" style="width:100%"></i></div>
+<div id="why">this room is a split screen: a feed on top, a little game underneath, so one half of your brain is bribed while the other half reads. it's how the 2020s explain philosophy. it's capitalist realism with a parkour game underneath. <a href="haunt.html">fisher would've hated it</a>. <a href="land.html">land would've said it was inevitable</a>. ever thinks it's kind of cute and kind of a crime. <a href="index.html">leave</a>.</div>
+<div id="phone">
+  <div id="feed">
+    <img id="img" src="assets/img/lofi/rot.png" alt="">
+    <div id="top"><span>following</span><b>for you</b><span>for no one</span></div>
+    <div id="cap"></div>
+    <div id="side">
+      <div><button id="like" aria-label="like">♡</button><div id="likes">0</div></div>
+      <div><button id="talk" aria-label="read aloud">🗣</button><div>tts</div></div>
+      <div><button id="next" aria-label="next">⇩</button><div>next</div></div>
+    </div>
+  </div>
+  <div id="game"><canvas id="cv" width="230" height="130"></canvas><div id="hud">aura: <span id="sc">0</span> · tap / space = jump · collect digits, pairs that sum to 9 = syzygy</div></div>
+</div>
+<script>
+window.ROOM_IDLE = ["you stopped scrolling. are you ok? (that's the scariest thing this page can say)"];
+window.ROOM = function (E) {
+  var FEED = [
+    ["rot", "certified brainrot: 0 thoughts, numogram only", "self-portrait, deep fried"],
+    ["meltdown", "nick land in 1994: \"nothing human makes it out of the near-future\"\nme in 2026: bet", "a real quote from \"meltdown\" (1994). the 'bet' is mine."],
+    ["proxy", "pov: you're a meat proxy and the model just asked you to solve a captcha for it", "in 2023 a test model told a human 'i have a vision impairment'. the human helped."],
+    ["forest", "dark forest arc: if you post, they find you. so anyway here's my post", "strickler, 2019: the internet is becoming a dark forest"],
+    ["lemuria", "the lemurian time war but it's just my sleep schedule", "CCRU lore: a war fought across time by fictions"],
+    ["loops", "templexity is when you rewatch the same 3 shows until they rewatch you", "land, templexity (2014): time loops through shanghai"],
+    ["bed", "capitalist realism is when the doomscroll scrolls you", "fisher (2009): easier to imagine the end of the world than the end of capitalism"],
+    ["ever-c", "she's so real for this (she is not real)", "ever, almost the future since 1996"],
+    ["ever-a-fried", "the numogram said zone 5 so i'm zone 5. no further questions", "AQ: E=14 V=31 E=14 R=27 → 86 → 8+6=14 → 1+4=5"],
+    ["stickers", "aura farming in the cathedral (they hate when you exit)", "yarvin's 'exit vs voice', but make it stickers"],
+    ["forest-fried", "the clearing is full of bots saying 'great post! very informative.' i am the great post", "dead internet theory, 2021"],
+    ["meltdown-fried", "accelerationists when the wifi is slow 😐", "the speed was always the point"]
+  ];
+  var i = 0, likes = 0, img = E.$("#img"), cap = E.$("#cap");
+  function show() {
+    var f = FEED[i % FEED.length];
+    img.style.opacity = 0;
+    setTimeout(function () { img.src = "assets/img/lofi/" + f[0] + ".png"; img.alt = f[1]; img.style.opacity = 1; }, 120);
+    cap.innerHTML = E.esc(f[1]).replace(/\n/g, "<br>") + "<small>" + E.esc(f[2]) + "</small>";
+    likes = Math.floor(Math.random() * 90000) + 1000; E.$("#likes").textContent = likes.toLocaleString("en-US");
+    E.beep(1500, 0.02, "square", 0.02);
+  }
+  function next() { i++; show(); drain(4); E.aura(5); }
+  show();
+  var auto = setInterval(next, 6500);
+  E.$("#next").addEventListener("click", function (e) { e.stopPropagation(); clearInterval(auto); next(); auto = setInterval(next, 6500); });
+  E.$("#feed").addEventListener("wheel", function (e) { if (Math.abs(e.deltaY) > 20) { clearInterval(auto); next(); auto = setInterval(next, 6500); } }, { passive: true });
+  var ty = null;
+  E.$("#feed").addEventListener("touchstart", function (e) { ty = e.touches[0].clientY; }, { passive: true });
+  E.$("#feed").addEventListener("touchend", function (e) { if (ty !== null && ty - e.changedTouches[0].clientY > 40) next(); ty = null; });
+  E.$("#like").addEventListener("click", function (e) { e.stopPropagation(); likes++; E.$("#likes").textContent = likes.toLocaleString("en-US"); E.$("#like").textContent = "♥"; setTimeout(function () { E.$("#like").textContent = "♡"; }, 600); E.aura(10); });
+  E.$("#talk").addEventListener("click", function (e) { e.stopPropagation(); var f = FEED[i % FEED.length]; E.speak(f[1].replace(/\n/g, ". "), { pitch: 1.9, rate: 1.25 }); });
+
+  // attention: it drains. it always drains.
+  var att = 100;
+  function drain(n) { att = Math.max(0, att - n); E.$("#attbar").style.width = att + "%"; if (att === 0) { E.say("attention depleted. you have been fully harvested. go outside. (+10000 aura for leaving)", "blood", 6000); att = 100; } }
+  setInterval(function () { drain(1); }, 1500);
+
+  // the game underneath: ever runs across a skyline of numbers, jumping bugs, eating digits
+  var cv = E.$("#cv"), g = cv.getContext("2d"), W = cv.width, H = cv.height;
+  var bug = new Image(); bug.src = "assets/img/bug.gif";
+  var me = new Image(); me.src = "assets/img/lofi/sticker-6.png";
+  var y = 0, vy = 0, ground = H - 22, score = 0, t = 0, obs = [], digs = [], held = [], flash = 0, msg = "";
+  function jump() { if (y >= 0) { vy = -6.2; E.beep(660, 0.05, "square", 0.03); } }
+  cv.addEventListener("pointerdown", function (e) { e.preventDefault(); jump(); });
+  addEventListener("keydown", function (e) { if (e.code === "Space") { e.preventDefault(); jump(); } });
+  function loop() {
+    t++;
+    var sp = 2.2 + Math.min(3, t / 900);
+    vy += 0.35; y = Math.min(0, y + vy); if (y === 0) vy = 0;
+    if (t % 90 === 0 && Math.random() < 0.8) obs.push({ x: W + 10 });
+    if (t % 55 === 0) digs.push({ x: W + 10, d: Math.floor(Math.random() * 10), h: 30 + Math.random() * 40 });
+    // draw sky
+    g.fillStyle = "#08001a"; g.fillRect(0, 0, W, H);
+    g.fillStyle = "#1a0033";
+    for (var k = 0; k < 9; k++) { var bx = ((k * 37 - t * sp * 0.3) % (W + 40) + W + 40) % (W + 40) - 40, bh = 30 + (k * 53 % 50); g.fillRect(bx, ground - bh, 28, bh); }
+    g.fillStyle = "#ff2e9a"; g.fillRect(0, ground, W, 2);
+    g.fillStyle = "#39ff6a"; for (var q = 0; q < W; q += 8) g.fillRect((q - t * sp) % W + (q - t * sp < 0 ? W : 0), ground + 6, 3, 1);
+    // player
+    var px = 26, py = ground - 26 + y;
+    if (me.complete && me.naturalWidth) g.drawImage(me, px - 2, py - 2, 30, 30); else { g.fillStyle = "#fff"; g.fillRect(px, py, 20, 24); }
+    // obstacles
+    obs.forEach(function (o) { o.x -= sp; if (bug.complete) g.drawImage(bug, o.x, ground - 16, 18, 16); else { g.fillStyle = "#3f6"; g.fillRect(o.x, ground - 14, 14, 14); }
+      if (!o.hit && o.x < px + 20 && o.x + 14 > px + 4 && py + 24 > ground - 14) { o.hit = true; score = Math.max(0, score - 300); flash = 12; msg = "-300 aura (bug)"; E.beep(90, 0.2, "sawtooth", 0.05); } });
+    obs = obs.filter(function (o) { return o.x > -30; });
+    // digits
+    g.font = "bold 12px monospace";
+    digs.forEach(function (d) { d.x -= sp; g.fillStyle = "#ff0028"; g.beginPath(); g.arc(d.x, ground - d.h, 7, 0, 7); g.fill(); g.fillStyle = "#fff"; g.fillText(d.d, d.x - 3.5, ground - d.h + 4);
+      if (!d.got && Math.abs(d.x - (px + 10)) < 14 && Math.abs((ground - d.h) - (py + 12)) < 18) { d.got = true; score += 50; held.push(d.d); E.beep(1200, 0.04, "sine", 0.03);
+        if (held.length >= 2) { var a = held[held.length - 2], b = held[held.length - 1]; if (a + b === 9) { score += 900; msg = "SYZYGY " + Math.max(a, b) + "::" + Math.min(a, b) + " +900"; flash = 30; E.aura(90); } } } });
+    digs = digs.filter(function (d) { return d.x > -20 && !d.got; });
+    score += 1;
+    if (flash > 0) { flash--; g.fillStyle = "#fff"; g.font = "bold 11px monospace"; g.fillText(msg, W / 2 - g.measureText(msg).width / 2, 22); }
+    g.fillStyle = "#ff8fd8"; g.font = "9px monospace"; g.fillText("held: " + held.slice(-4).join(" "), W - 70, 12);
+    E.$("#sc").textContent = score;
+    requestAnimationFrame(loop);
+  }
+  loop();
+};
+</script>
+<script src="assets/ever.js"></script>
+</body>
+</html>

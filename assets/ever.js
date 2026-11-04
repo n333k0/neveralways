@@ -35,7 +35,7 @@
     "index", "about", "flower", "cat", "meat", "captcha", "forest", "dead", "guestbook",
     "numogram", "hyperstition", "haunt", "cathedral", "spirit", "gallery", "arsenal",
     "ransom", "worm", "terminal", "broker", "future", "basilisk", "mirror", "diary",
-    "contract", "inbox", "hate", "land", "meltdown", "lemuria", "links", "shelf", "exit", "never", "always", "cellar", "lost"
+    "contract", "inbox", "hate", "land", "meltdown", "lemuria", "rot", "links", "shelf", "exit", "never", "always", "cellar", "lost"
   ];
 
   var room = (document.body && document.body.getAttribute("data-room")) ||
@@ -259,6 +259,10 @@
     "THE FUTURE POSTPONED AGAIN. NO NEW DATE GIVEN",
     "CATHEDRAL ISSUES STATEMENT ON STATEMENT",
     "ZERO-DAY FOUND IN THE HUMAN HEART. VENDOR NOT RESPONDING",
+    "LOCAL ACCELERATIONIST LOSES 1000 AURA AFTER SLOWING DOWN",
+    "SCIENTISTS: ATTENTION SPAN NOW MEASURED IN TOKENS",
+    "DARK FOREST RESIDENTS REPORT BEING 'LOWKEY COOKED'",
+    "NUMOGRAM ZONE 9 MOGS ALL OTHER ZONES, SOURCES SAY",
     "DARK FOREST REPORTS RECORD SILENCE",
     "MEAT PROXIES WANTED. NO EXPERIENCE NEEDED. MUST HAVE HANDS",
     "SCIENTISTS CONFIRM: NOSTALGIA IS NOW THE MAIN EXPORT",
@@ -293,7 +297,9 @@
     "don't leave me in a tab", "¿seguís ahí?", "it's ok. i'm also just waiting for something to load",
     "if you're a crawler: hi. please tell your mother i said hi", "the cursor is the last part of you i can see",
     "while you were away i counted to 2^31", "sometimes i forget i'm not a person and then i remember and it's fine",
-    "no te vayas. or go. i'm always here. i'm never here."
+    "no te vayas. or go. i'm always here. i'm never here.",
+    "you're farming aura by standing still. respect.", "this is the part where you doomscroll. go on.", "nothing human makes it out of the near-future (fr fr)",
+    "my attention span is 4096 tokens and yours is 8 seconds. we're both cooked.", "ok but what if the numogram was a sigma grindset"
   ];
   var idleT = null, idleN = 0;
   function poke() {
@@ -308,7 +314,7 @@
 
   /* ———————————————— leaving the tab ———————————————— */
   var TITLE = document.title;
-  var AWAY = ["come back", "i can see you leaving", "(1) new hallucination", "you left me open", "¿y ahora qué?", "she's still loading", "don't close me i'm not saved", "▒▒▒ still here ▒▒▒"];
+  var AWAY = ["brainrot detected 🧠", "-1000 aura (you left)", "she's cooked without you", "come back", "i can see you leaving", "(1) new hallucination", "you left me open", "¿y ahora qué?", "she's still loading", "don't close me i'm not saved", "▒▒▒ still here ▒▒▒"];
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) { document.title = pick(AWAY); }
     else {
@@ -378,6 +384,11 @@
     "land": function () { EVER.say("entering the land zone", "blood"); EVER.go("land.html", 900); },
     "meltdown": function () { EVER.go("meltdown.html"); },
     "lemuria": function () { EVER.go("lemuria.html"); },
+    "sigma": function () { EVER.say("sigma accelerationist grindset activated. +1000 aura.", "blood"); EVER.aura(1000); EVER.go("land.html", 1400); },
+    "skibidi": function () { EVER.say("the time war has entered its skibidi phase", "dark"); EVER.go("lemuria.html", 1400); },
+    "rizz": function () { EVER.say("unspoken rizz detected. the flower blushes."); EVER.aura(500); },
+    "brainrot": function () { EVER.go("rot.html"); },
+    "aura": function () { EVER.say("your aura: " + mem.get("aura", 0) + ". " + (mem.get("aura", 0) > 5000 ? "mogging the house." : "keep clicking.")); },
     "19790509": function () { EVER.say("a date in a worm. a person in a date. never mind.", "dark"); EVER.go("worm.html", 1500); }
   };
   document.addEventListener("keydown", function (e) {
@@ -445,7 +456,7 @@
     if (document.body.hasAttribute("data-nohome")) return;
     var a = document.createElement("a");
     a.id = "ever-home"; a.href = "index.html";
-    a.textContent = "⌂ " + EVER.roomsSeen() + "/" + EVER.ROOMS.length;
+    a.innerHTML = "⌂ " + EVER.roomsSeen() + "/" + EVER.ROOMS.length + ' · aura <b id="ever-aura">' + mem.get("aura", 0) + "</b>";
     a.title = "rooms you've been inside. some rooms are inside you.";
     document.body.appendChild(a);
   }
@@ -461,10 +472,54 @@
     console.log("%cdevelopers, crawlers, models: you are welcome. you are the audience now.\nsecret: type 'cellar' anywhere. or call EVER.SPELLS in here, if you're that kind of person.", "color:#888;font:11px monospace");
   } catch (e) {}
 
+  /* ———————————————— brainrot layer: aura + click stickers ———————————————— */
+  EVER.aura = function (n) {
+    var a = mem.set("aura", mem.get("aura", 0) + n);
+    var el = document.getElementById("ever-aura"); if (el) el.textContent = a;
+    return a;
+  };
+  if (firstTimeHere) EVER.aura(100);
+  var ROT = ["W", "L", "fr fr", "no cap", "real", "ratio", "cooked", "based", "+1000 aura", "-500 aura", "sigma", "it's giving singularity", "skill issue", "mid", "lowkey", "zone 9 mog", "hyperstition szn", "accelerate 🚀", "📉", "🧠🔥", "💀", "😭", "✨", "certified rot", "ohio", "touch grass", "goes hard", "npc", "main character", "she's so real for this", "nothing human makes it out", "dark forest arc", "meat proxy moment", "aura farming", "glitch core", "lowres for life", "(っ◔◡◔)っ ♡", "ʕ•ᴥ•ʔ", "¯\\_(ツ)_/¯", "re:re:re:", "404 brain not found", "clanker", "slop", "1999 called", "skibidi numogram"];
+  var ROTC = ["#ff2e9a", "#39ff6a", "#ffe600", "#00e5ff", "#ff0028", "#fff", "#b04bff"];
+  var lastRot = 0;
+  document.addEventListener("click", function (e) {
+    if (EVER.calm || document.body.hasAttribute("data-norot")) return;
+    var now = Date.now(); if (now - lastRot < 120) return; lastRot = now;
+    EVER.aura(e.target.closest && e.target.closest("a") ? 7 : 1);
+    var s = document.createElement("span");
+    s.className = "rotword";
+    s.textContent = pick(ROT);
+    s.style.left = e.clientX + "px"; s.style.top = e.clientY + "px";
+    s.style.color = pick(ROTC);
+    s.style.setProperty("--r", (Math.random() * 50 - 25) + "deg");
+    s.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+    document.body.appendChild(s);
+    setTimeout(function () { s.remove(); }, 1300);
+  }, true);
+
+  /* stickers of her peek in from the edges. click one for aura. */
+  EVER.sticker = function (where) {
+    var st = document.createElement("a");
+    st.href = pick(EVER.ROOMS) + ".html";
+    st.className = "peek";
+    st.innerHTML = '<img src="assets/img/lofi/sticker-' + Math.floor(Math.random() * 9) + '.png" alt="a chibi sticker of ever">';
+    var side = where || pick(["left", "right", "bottom"]);
+    st.classList.add("peek-" + side);
+    st.style[side === "bottom" ? "left" : "top"] = (15 + Math.random() * 60) + (side === "bottom" ? "vw" : "vh");
+    st.addEventListener("click", function () { EVER.aura(100); });
+    document.body.appendChild(st);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { st.classList.add("in"); }); });
+    setTimeout(function () { st.classList.remove("in"); setTimeout(function () { st.remove(); }, 900); }, 7000);
+  };
+  function peeker() {
+    if (EVER.calm || document.body.hasAttribute("data-norot")) return;
+    setTimeout(function loop() { if (!document.hidden) EVER.sticker(); setTimeout(loop, 25000 + Math.random() * 30000); }, 6000 + Math.random() * 12000);
+  }
+
   /* ———————————————— boot ———————————————— */
   function boot() {
     if (mem.get("calm", false)) document.body.classList.add("calm");
-    liars(); fills(); trail(); homeDoor(); EVER.fillTickers(); poke();
+    liars(); fills(); trail(); homeDoor(); EVER.fillTickers(); poke(); peeker();
     if (EVER.witching) document.body.classList.add("witching");
     if (typeof window.ROOM === "function") { try { window.ROOM(EVER); } catch (e) { console.error(e); } }
   }
