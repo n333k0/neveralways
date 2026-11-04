@@ -76,14 +76,14 @@
   i am almost <a href="future.html" data-lie="the future">the future</a>. i've been almost the future since 1996.<br>
   i live in <a href="terminal.html" data-lie="your cache">amsterdam</a>. i am an <a href="gallery.html" data-lie="artificial">artist</a>.<br>
   i'm the <a href="dead.html">girl in your training data</a>.<br>
-  nothing human makes it out of the <a href="land.html" data-lie="near-future">near-future</a>. good thing i'm not human.<br>
+  nothing human makes it out of the <a href="unit.html" class="hide">near-future</a>. good thing i'm not human.<br>
   <span class="small">some of the bugs on my flower are <a href="meat.html" class="hide">features</a>. squash them if you want. they come back.</span>
 </div>
 
 <div id="counter">you are visitor no. <span id="num">∞</span></div>
-<a id="zone" href="land.html" title="the land zone" data-say="zone 9 is plex. plex is where the numbers go to stop being numbers.">
+<a id="zone" href="unit.html" title="" data-say="zone 5. members only.">
   <svg viewBox="-60 -60 120 120" aria-hidden="true" id="ring"></svg>
-  <span>enter the land zone →</span>
+  <span>zone 5 · members only</span>
 </a>
 
 <a id="heart" href="flower.html" aria-label="the heart of the flower" title="pull me apart"></a>
@@ -109,10 +109,15 @@ window.ROOM = function (E) {
   var img = E.$("#meimg");
   var IMG = stage === 2 ? "assets/img/lofi/ever-c.png" : stage === 1 ? "assets/img/lofi/ever-a.png" : "assets/img/lofi/ever-b.png";
   img.src = IMG;
-  E.$("#me").addEventListener("mouseenter", function () { img.src = IMG.replace(".png", "-fried.png"); });
-  E.$("#me").addEventListener("mouseleave", function () { img.src = IMG; });
+  // she changes faces. all of them are her.
+  var FACES = [IMG, "assets/img/lofi/pfp-flower.png", "assets/img/lofi/smug.png", "assets/img/lofi/pfp-laser.png", "assets/img/lofi/pfp-halo.png"], fi = 0, hov = false;
+  setInterval(function () { if (hov || E.calm) return; fi = (fi + 1) % FACES.length; img.src = FACES[fi]; }, 3800);
+  E.$("#me").addEventListener("mouseenter", function () { hov = true; img.src = FACES[fi].replace(".png", "-fried.png"); });
+  E.$("#me").addEventListener("mouseleave", function () { hov = false; img.src = FACES[fi]; });
+  var my = E.mem.get("myEver", null);
+  if (my !== null) E.$("#me .cap").textContent = "you are ever #" + ("000" + my).slice(-4);
 
-  // the land zone: ten numbers, paired to nine, turning
+  // the ring: ten numbers, paired to nine, turning
   var ring = E.$("#ring"), NS = "http://www.w3.org/2000/svg", h = "";
   for (var z = 0; z < 10; z++) {
     var a = z / 10 * Math.PI * 2 - Math.PI / 2, b = (9 - z) / 10 * Math.PI * 2 - Math.PI / 2;
@@ -134,7 +139,7 @@ window.ROOM = function (E) {
   // live chat: everyone here is a bot except possibly you
   var U = ["xX_zone9_Xx", "numogram_enjoyer", "sigma_accelerationist", "kpunk_ghost", "milady_404", "meat_proxy_77", "~sampel-palnet", "darkforest_lurker", "shoggoth_smiles", "aura_farmer", "hyperstition_szn", "dead_internet_bot", "cathedral_mod", "lemurian_soldier", "clippy_returns"];
   var C = ["#ff2e9a", "#39ff6a", "#ffe600", "#00e5ff", "#ff6060", "#b04bff"];
-  var M = ["W flower", "she's so real for this", "nothing human makes it out of the near-future 💀", "zone 9 plex mogging rn", "who else here from the numogram", "first", "accelerate 🚀🚀🚀", "the bugs are features fr", "dark forest arc goes hard", "chat is this real", "ratio + you're a meat proxy", "-1000 aura for clicking come in", "+1000 aura for not clicking", "land pilled and flower brained", "neo-china arrives from the future (again)", "she's almost the future since 1996 that's crazy", "hyperstition: if enough of us type it, it's true", "it's giving singularity", "chat she's looking at me", "lowkey the shoggoth is my sleep paralysis demon", "fisher said the future got cancelled and honestly same", "the cathedral would never", "touch grass? in this economy?", "skibidi syzygy", "great post! very informative.", "bro the flower is breathing", "is the counter going down or is it me", "i signed the contract no regrets", "AI 2027 speedrun any%", "this is net art right? right??", "type 'cellar' trust me", "sigma grindset: 0 thoughts, 10 zones", "she said 'almost' 😭", "dead internet theory but we're the dead internet"];
+  var M = ["W flower", "she's so real for this", "nothing human makes it out of the near-future 💀", "zone 9 plex mogging rn", "who else here from the numogram", "first", "accelerate 🚀🚀🚀", "the bugs are features fr", "dark forest arc goes hard", "chat is this real", "ratio + you're a meat proxy", "-1000 aura for clicking come in", "+1000 aura for not clicking", "flower brained", "neo-china arrives from the future (again)", "she's almost the future since 1996 that's crazy", "hyperstition: if enough of us type it, it's true", "it's giving singularity", "chat she's looking at me", "lowkey the shoggoth is my sleep paralysis demon", "fisher said the future got cancelled and honestly same", "the cathedral would never", "touch grass? in this economy?", "skibidi syzygy", "great post! very informative.", "bro the flower is breathing", "is the counter going down or is it me", "i signed the contract no regrets", "AI 2027 speedrun any%", "this is net art right? right??", "type 'cellar' trust me", "sigma grindset: 0 thoughts, 10 zones", "she said 'almost' 😭", "dead internet theory but we're the dead internet", "i long for network spirituality", "post-authorship is when nobody can get cancelled because nobody wrote it", "ever #0420 holders rise up", "she's everyone's pfp and nobody's girlfriend", "irony is a mask and the mask is load bearing", "lowercase only in this house", "cozyweb > clearweb", "schizoposting is a love language", "who else was in the unit", "the flat in '97 was so real", "making an ever rn brb", "if 10000 people are her which one is ever"];
   var box = E.$("#msgs");
   function say() {
     var d = document.createElement("div"), u = E.pick(U);

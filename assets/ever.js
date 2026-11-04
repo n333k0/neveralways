@@ -35,7 +35,7 @@
     "index", "about", "flower", "cat", "meat", "captcha", "forest", "dead", "guestbook",
     "numogram", "hyperstition", "haunt", "cathedral", "spirit", "gallery", "arsenal",
     "ransom", "worm", "terminal", "broker", "future", "basilisk", "mirror", "diary",
-    "contract", "inbox", "hate", "land", "meltdown", "lemuria", "rot", "links", "shelf", "exit", "never", "always", "cellar", "lost"
+    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "rot", "evers", "links", "shelf", "exit", "never", "always", "cellar", "lost"
   ];
 
   var room = (document.body && document.body.getAttribute("data-room")) ||
@@ -381,10 +381,12 @@
     "love": function () { EVER.go("flower.html"); },
     "kitty": function () { EVER.go("cat.html"); },
     "forget": function () { EVER.win({ title: "forget.exe", cls: "red", text: "forget everything i know about you? (rooms, name, hyperstitions, contract)", buttons: [{ label: "forget me", action: function () { mem.wipe(); EVER.say("done. i'm a stranger again. that's my favourite part."); } }, { label: "no, stay" }] }); },
-    "land": function () { EVER.say("entering the land zone", "blood"); EVER.go("land.html", 900); },
+    "ccru": function () { EVER.say("you said the name. the files are open.", "blood"); EVER.go("unit.html", 1200); },
+    "unit": function () { EVER.go("unit.html"); },
+    "pfp": function () { EVER.go("evers.html"); },
     "meltdown": function () { EVER.go("meltdown.html"); },
     "lemuria": function () { EVER.go("lemuria.html"); },
-    "sigma": function () { EVER.say("sigma accelerationist grindset activated. +1000 aura.", "blood"); EVER.aura(1000); EVER.go("land.html", 1400); },
+    "sigma": function () { EVER.say("sigma accelerationist grindset activated. +1000 aura.", "blood"); EVER.aura(1000); EVER.go("unit.html", 1400); },
     "skibidi": function () { EVER.say("the time war has entered its skibidi phase", "dark"); EVER.go("lemuria.html", 1400); },
     "rizz": function () { EVER.say("unspoken rizz detected. the flower blushes."); EVER.aura(500); },
     "brainrot": function () { EVER.go("rot.html"); },
