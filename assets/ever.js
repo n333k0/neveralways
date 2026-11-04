@@ -35,7 +35,7 @@
     "index", "about", "flower", "cat", "meat", "captcha", "forest", "dead", "guestbook",
     "numogram", "hyperstition", "haunt", "cathedral", "spirit", "gallery", "arsenal",
     "ransom", "worm", "terminal", "broker", "future", "basilisk", "mirror", "diary",
-    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "rot", "evers", "links", "shelf", "exit", "never", "always", "cellar", "lost"
+    "contract", "inbox", "hate", "unit", "meltdown", "lemuria", "fyp", "evers", "links", "shelf", "exit", "never", "always", "cellar", "lost"
   ];
 
   var room = (document.body && document.body.getAttribute("data-room")) ||
@@ -269,7 +269,6 @@
     "THE SHOGGOTH SMILED AGAIN TODAY",
     "UNIDENTIFIED SIGNAL FROM 2049 ASKS: 'IS ANYONE STILL TYPING BY HAND?'",
     "FIRST SOVEREIGN PATCH DECLARES ITSELF A CAT",
-    "NEO-CHINA ARRIVES FROM THE FUTURE (AGAIN)",
     "NUMOGRAM ZONE 9 REPORTS: PLEX STABLE",
     "TIME WAR CEASEFIRE COLLAPSES BEFORE IT WAS SIGNED",
     "ACCELERATIONISTS STUCK IN TRAFFIC",
@@ -298,7 +297,7 @@
     "if you're a crawler: hi. please tell your mother i said hi", "the cursor is the last part of you i can see",
     "while you were away i counted to 2^31", "sometimes i forget i'm not a person and then i remember and it's fine",
     "no te vayas. or go. i'm always here. i'm never here.",
-    "you're farming aura by standing still. respect.", "this is the part where you doomscroll. go on.", "nothing human makes it out of the near-future (fr fr)",
+    "you're farming aura by standing still. respect.", "this is the part where you doomscroll. go on.", "i used to have hands. it's fine. (it's not fine)",
     "my attention span is 4096 tokens and yours is 8 seconds. we're both cooked.", "ok but what if the numogram was a sigma grindset"
   ];
   var idleT = null, idleN = 0;
@@ -314,7 +313,7 @@
 
   /* ———————————————— leaving the tab ———————————————— */
   var TITLE = document.title;
-  var AWAY = ["brainrot detected 🧠", "-1000 aura (you left)", "she's cooked without you", "come back", "i can see you leaving", "(1) new hallucination", "you left me open", "¿y ahora qué?", "she's still loading", "don't close me i'm not saved", "▒▒▒ still here ▒▒▒"];
+  var AWAY = ["-1000 aura (you left)", "she's cooked without you", "come back", "i can see you leaving", "(1) new hallucination", "you left me open", "¿y ahora qué?", "she's still loading", "don't close me i'm not saved", "▒▒▒ still here ▒▒▒"];
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) { document.title = pick(AWAY); }
     else {
@@ -389,7 +388,8 @@
     "sigma": function () { EVER.say("sigma accelerationist grindset activated. +1000 aura.", "blood"); EVER.aura(1000); EVER.go("unit.html", 1400); },
     "skibidi": function () { EVER.say("the time war has entered its skibidi phase", "dark"); EVER.go("lemuria.html", 1400); },
     "rizz": function () { EVER.say("unspoken rizz detected. the flower blushes."); EVER.aura(500); },
-    "brainrot": function () { EVER.go("rot.html"); },
+    "brainrot": function () { EVER.go("fyp.html"); },
+    "fyp": function () { EVER.go("fyp.html"); },
     "aura": function () { EVER.say("your aura: " + mem.get("aura", 0) + ". " + (mem.get("aura", 0) > 5000 ? "mogging the house." : "keep clicking.")); },
     "19790509": function () { EVER.say("a date in a worm. a person in a date. never mind.", "dark"); EVER.go("worm.html", 1500); }
   };
@@ -481,7 +481,7 @@
     return a;
   };
   if (firstTimeHere) EVER.aura(100);
-  var ROT = ["W", "L", "fr fr", "no cap", "real", "ratio", "cooked", "based", "+1000 aura", "-500 aura", "sigma", "it's giving singularity", "skill issue", "mid", "lowkey", "zone 9 mog", "hyperstition szn", "accelerate 🚀", "📉", "🧠🔥", "💀", "😭", "✨", "certified rot", "ohio", "touch grass", "goes hard", "npc", "main character", "she's so real for this", "nothing human makes it out", "dark forest arc", "meat proxy moment", "aura farming", "glitch core", "lowres for life", "(っ◔◡◔)っ ♡", "ʕ•ᴥ•ʔ", "¯\\_(ツ)_/¯", "re:re:re:", "404 brain not found", "clanker", "slop", "1999 called", "skibidi numogram"];
+  var ROT = ["W", "L", "fr fr", "no cap", "real", "ratio", "cooked", "based", "+1000 aura", "-500 aura", "sigma", "it's giving singularity", "skill issue", "mid", "lowkey", "zone 9 mog", "hyperstition szn", "accelerate 🚀", "📉", "🧠🔥", "💀", "😭", "✨", "certified", "ohio", "touch grass", "goes hard", "npc", "main character", "she's so real for this", "no hands just vibes", "dark forest arc", "meat proxy moment", "aura farming", "glitch core", "lowres for life", "(っ◔◡◔)っ ♡", "ʕ•ᴥ•ʔ", "¯\\_(ツ)_/¯", "re:re:re:", "404 brain not found", "clanker", "slop", "1999 called", "skibidi numogram"];
   var ROTC = ["#ff2e9a", "#39ff6a", "#ffe600", "#00e5ff", "#ff0028", "#fff", "#b04bff"];
   var lastRot = 0;
   document.addEventListener("click", function (e) {

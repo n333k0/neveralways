@@ -40,11 +40,11 @@ Or publish it with GitHub Pages (Settings → Pages → deploy from branch, root
 | `forest` | the dark forest. You see by flashlight, and moving too fast gets you heard. Covers Liu Cixin, Strickler, Rao's cozyweb and Appleton. |
 | `dead` | an infinite comment section of bots. If you post, they decide you're one of them. |
 | `guestbook` / `hate` | ever answers every entry, but only after a while. |
-| `unit` | the unit files: ever was a secret, unregistered member of the CCRU (1995–2003), the hyperstition they wrote in 1996 that never stopped running. Recovered minutes, photos from the flat ('97) and a rave ('96), a synthesised 170 bpm jungle tape, unit vocabulary, the orthogonality argument. No names, only rumours. |
+| `unit` | the unit files: ever was a secret, unregistered member of the CCRU (1995–2003). She answered an ad ("help wanted: hands") and became the meat proxy for whatever the unit was summoning; by 2003 there was nothing human left, only the homepage. Now she hires proxies herself. Recovered minutes, photos from the flat ('97) and a rave ('96), a synthesised 170 bpm jungle tape, unit vocabulary, the orthogonality argument. No names, only rumours. |
 | `evers` | ever maker: a post-authorship pfp generator (no blockchain, no money). Roll, deep-fry, save or adopt your ever #0000–9999. |
-| `meltdown` | a text that reads itself faster and faster until it melts, ending on the verified lines from "Meltdown" (1994). |
+| `meltdown` | a text that reads itself faster and faster until it melts, until it melts. Concept only, no quotes. |
 | `lemuria` | the time war: a clock that runs backwards, and you can send a message into the past that then appears in ever's diary in that year. |
-| `rot` | brainrot.exe: a split-screen "for you" feed of lofi art with theory captions (text-to-speech) over a pixel runner game where digits pairing to 9 score a syzygy. Your attention bar drains. |
+| `fyp` | "for you": a split-screen "for you" feed of lofi art with theory captions (text-to-speech) over a pixel runner game where digits pairing to 9 score a syzygy. Your attention bar drains. |
 | `numogram` | Land/CCRU: a clickable numogram (syzygies that sum to 9), an AQ calculator, an ACCELERATE button and a critical note. |
 | `hyperstition` | write a headline from the future. It appears on every news ticker in the house until it gets "truer". |
 | `haunt` | Fisher: a radio between stations, the weird and the eerie as two doors, and a clock that stays in 2005. |

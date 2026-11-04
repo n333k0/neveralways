@@ -18,7 +18,7 @@ OUT = os.path.join(ROOT, "lofi")
 os.makedirs(OUT, exist_ok=True)
 
 # width in real pixels after the rot. css blows them back up with image-rendering: pixelated.
-WIDTH = {"ever": 96, "pfp": 96, "smug": 128, "stickers": 240, "rot": 200, "bed": 120, "flat97": 220, "rave96": 220}
+WIDTH = {"ever": 96, "pfp": 96, "smug": 128, "stickers": 240, "rot": 200, "bed": 120, "flat97": 220, "rave96": 220, "wired96": 220, "dissolve": 160, "lastphoto": 128}
 DEFAULT = 192
 
 

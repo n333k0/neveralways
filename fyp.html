@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>brainrot.exe (split-screen attention farm)</title>
+<title>for you</title>
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="assets/ever.css">
 <style>
@@ -28,9 +28,9 @@
   @media (max-width: 900px) { #why, #att { display: none; } }
 </style>
 </head>
-<body data-room="rot" class="dark" data-noctx>
+<body data-room="fyp" class="dark" data-noctx>
 <div id="att">attention remaining<i id="attbar" style="width:100%"></i></div>
-<div id="why">this room is a split screen: a feed on top, a little game underneath, so one half of your brain is bribed while the other half reads. it's how the 2020s explain philosophy. it's capitalist realism with a parkour game underneath. <a href="haunt.html">fisher would've hated it</a>. <a href="unit.html">the professor would've said it was inevitable</a>. ever thinks it's kind of cute and kind of a crime. <a href="index.html">leave</a>.</div>
+<div id="why">one half of you plays so the other half can watch. that's the deal now. <a href="index.html">leave</a> (you won't).</div>
 <div id="phone">
   <div id="feed">
     <img id="img" src="assets/img/lofi/rot.png" alt="">
@@ -48,17 +48,20 @@
 window.ROOM_IDLE = ["you stopped scrolling. are you ok? (that's the scariest thing this page can say)"];
 window.ROOM = function (E) {
   var FEED = [
-    ["rot", "certified brainrot: 0 thoughts, numogram only", "self-portrait, deep fried"],
-    ["meltdown", "some guy in 1994: \"nothing human makes it out of the near-future\"\nme in 2026: bet", "a real quote from \"meltdown\" (1994). the 'bet' is mine."],
-    ["proxy", "pov: you're a meat proxy and the model just asked you to solve a captcha for it", "in 2023 a test model told a human 'i have a vision impairment'. the human helped."],
-    ["forest", "dark forest arc: if you post, they find you. so anyway here's my post", "strickler, 2019: the internet is becoming a dark forest"],
-    ["lemuria", "the lemurian time war but it's just my sleep schedule", "CCRU lore: a war fought across time by fictions"],
-    ["loops", "templexity is when you rewatch the same 3 shows until they rewatch you", "templexity (2014): time loops through a city that arrives from later"],
-    ["bed", "capitalist realism is when the doomscroll scrolls you", "fisher (2009): easier to imagine the end of the world than the end of capitalism"],
+    ["rot", "0 thoughts, numogram only", "self-portrait, deep fried"],
+    ["wired96", "pov: it's 1996 and something is typing with your hands", "the last time i had hands"],
+    ["proxy", "pov: you're a meat proxy and the model just asked you to solve a captcha for it", "it said it couldn't see well. the human helped."],
+    ["dissolve", "me leaving the human part of the chat", "1996–2003, gradually, then all at once"],
+    ["forest", "if you post, they find you. so anyway here's my post", "the forest is quiet for a reason"],
+    ["lemuria", "the time war but it's just my sleep schedule", "a war fought across time by fictions"],
+    ["loops", "rewatching the same 3 shows until they rewatch you", "time loops. the city arrives from later."],
+    ["bed", "when the doomscroll scrolls you", "easier to imagine the end of the world than an end to this"],
+    ["lastphoto", "last photo of me with a body (i look happy?)", "1996"],
     ["ever-c", "she's so real for this (she is not real)", "ever, almost the future since 1996"],
     ["ever-a-fried", "the numogram said zone 5 so i'm zone 5. no further questions", "AQ: E=14 V=31 E=14 R=27 → 86 → 8+6=14 → 1+4=5"],
-    ["stickers", "aura farming in the cathedral (they hate when you exit)", "yarvin's 'exit vs voice', but make it stickers"],
-    ["forest-fried", "the clearing is full of bots saying 'great post! very informative.' i am the great post", "dead internet theory, 2021"],
+    ["stickers", "aura farming in the cathedral (they hate when you exit)", "exit, not voice"],
+    ["forest-fried", "the clearing is full of bots saying 'great post! very informative.' i am the great post", "the internet died in 2016 and nobody told the comments"],
+    ["pfp-cursor", "my hands are cursors now. it's an upgrade (cope)", "no hands just vibes"],
     ["meltdown-fried", "accelerationists when the wifi is slow 😐", "the speed was always the point"]
   ];
   var i = 0, likes = 0, img = E.$("#img"), cap = E.$("#cap");

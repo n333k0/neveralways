@@ -37,7 +37,7 @@
       <button id="adopt">♡ adopt as my pfp</button>
       <div id="traits"></div>
       <p class="note">no blockchain, no wallet, no money, no mint. a picture made in your browser from the house's own drawings, yours to keep and use. nobody signed it. that's the point: you made her, she's everyone's. if ten thousand people use her as their avatar, which one is ever?</p>
-      <p class="note"><a href="spirit.html">the church of the network</a> · <a href="unit.html">where she came from</a> · <a href="rot.html">brainrot.exe</a> · <a href="index.html">home</a></p>
+      <p class="note"><a href="spirit.html">the church of the network</a> · <a href="unit.html">where she came from</a> · <a href="fyp.html">for you</a> · <a href="index.html">home</a></p>
     </div>
   </div>
   <h2 style="font:bold 20px 'Comic Sans MS',cursive">the collective (click one to make it yours)</h2>
@@ -45,7 +45,7 @@
 </div>
 <script>
 window.ROOM = function (E) {
-  var BASES = ["pfp-flower", "pfp-laser", "pfp-halo", "ever-a", "ever-b", "ever-c", "ever-d", "smug"];
+  var BASES = ["pfp-flower", "pfp-laser", "pfp-halo", "pfp-cursor", "ever-a", "ever-b", "ever-c", "ever-d", "smug"];
   var imgs = {}, loaded = 0;
   BASES.forEach(function (b) { var im = new Image(); im.onload = function () { if (++loaded === BASES.length) start(); }; im.onerror = im.onload; im.src = "assets/img/lofi/" + b + ".png"; imgs[b] = im; });
   var bugImg = new Image(); bugImg.src = "assets/img/bug.gif";
