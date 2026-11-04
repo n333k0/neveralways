@@ -7,68 +7,160 @@
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="assets/ever.css">
 <style>
-  body { background: #fff; color: #000; font-family: var(--sys); }
-  #sticky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  #cv { position: absolute; inset: 0; width: 100%; height: 100%; }
-  #year { position: absolute; right: 3vw; bottom: 5vh; font: 900 clamp(60px, 16vw, 220px)/1 var(--sys); letter-spacing: -.06em; color: #000; mix-blend-mode: difference; }
-  #status { position: absolute; left: 12px; top: 12px; font: 12px var(--mono); background: #fff; border: 1px solid #000; padding: 6px 8px; max-width: 280px; }
-  #track { position: relative; z-index: 1; height: 3000vh; }
-  .m { position: absolute; left: 6vw; width: min(520px, 86vw); background: rgba(255,255,255,.92); border: 1px solid #000; padding: 12px 14px; font-size: 16px; line-height: 1.45; }
-  .m small { display: block; font: 11px var(--mono); color: #555; margin-top: 6px; }
-  .m.dark { background: #000; color: #fff; border-color: #fff; }
-  .m.dark a { color: #ff8fd8; }
-  body.late { background: #000; }
-  body.late #status { background: #000; color: #fff; border-color: #fff; }
-  #top { position: relative; z-index: 2; padding: 64px 6vw 0; max-width: 640px; }
-  #top h1 { font: 900 44px var(--sys); margin: 0; letter-spacing: -.03em; }
+  body { background: #000; color: #000; font-family: var(--sys); }
+  #cv { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; z-index: 0; pointer-events: none; }
+  #hud { position: fixed; left: 10px; top: 10px; z-index: 40; font: 12px var(--mono); background: #000; color: #39ff6a; border: 2px solid #39ff6a; padding: 6px 8px; width: 230px; line-height: 1.5; }
+  #hud .bar { letter-spacing: -1px; }
+  #track { position: relative; z-index: 2; height: 3600vh; }
+  #top { position: relative; z-index: 3; padding: 70px 6vw 0 270px; max-width: 760px; color: #000; }
+  #top h1 { font: 900 clamp(34px, 6vw, 60px)/.95 var(--sys); margin: 0; letter-spacing: -.04em; text-shadow: 3px 3px 0 #ff2e9a; }
+  .m { position: absolute; width: min(400px, 86vw); background: #c0c0c0; border: 2px solid; border-color: #fff #777 #777 #fff; box-shadow: 5px 5px 0 rgba(0,0,0,.6); font: 14px/1.4 var(--sys); color: #000; }
+  .m .bar { background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font: bold 12px var(--sys); padding: 2px 6px; display: flex; justify-content: space-between; }
+  .m .body { padding: 8px 10px; }
+  .m img { width: 100%; display: block; image-rendering: pixelated; border: 1px solid #000; margin-bottom: 6px; background: #000; }
+  .m b { color: #a0005a; }
+  .m a { color: #0000ee; }
+  .m.dark { background: #111; color: #eee; border-color: #444 #000 #000 #444; }
+  .m.dark .bar { background: linear-gradient(90deg, #600, #ff0028); }
+  .m.dark b { color: #ff8fd8; } .m.dark a { color: #39ff6a; }
+  .sticker { position: absolute; width: 96px; image-rendering: pixelated; filter: drop-shadow(3px 3px 0 #000); z-index: 3; pointer-events: none; }
+  .word { position: absolute; font: bold 22px "Comic Sans MS", var(--cute); color: #fff; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; transform: rotate(var(--r)); z-index: 3; pointer-events: none; white-space: nowrap; }
+  #toast { position: fixed; right: 12px; bottom: 40px; z-index: 50; width: 250px; display: none; }
+  .tile { position: absolute; display: grid; grid-template-columns: repeat(5, 48px); gap: 3px; z-index: 3; }
+  .tile img { width: 48px; height: 48px; image-rendering: pixelated; border: 1px solid #000; }
+  @media (max-width: 700px) { #top { padding-left: 6vw; padding-top: 120px; } .m { left: 4vw !important; } .word, .sticker { display: none; } }
 </style>
 </head>
-<body data-room="future">
-<div id="sticky"><canvas id="cv"></canvas><div id="year">2026</div><div id="status">humanity: <b id="hum">100</b>% · compute: <b id="cmp">1</b>× · arrival: <b id="arr">soon</b></div></div>
+<body data-room="future" data-trail="▪▫■□" data-trail-color="#ff2e9a">
+<canvas id="cv" aria-hidden="true"></canvas>
+<div id="hud">year: <b id="yr">2026</b><br>humanity: <span class="bar" id="hum">██████████</span> <span id="humn">100</span>%<br>compute: <span id="cmp">1</span>×<br>aura (global): <span id="aur">0</span><br>arrival: <span id="arr">soon</span></div>
 <div id="top">
   <h1>the future</h1>
   <p>it's below you. scroll down. it's a long way. it's always a long way. (<a href="numogram.html">go faster</a>)</p>
 </div>
-<div id="track">
-  <div class="m" style="top:6%">2026. you are here. the line on the graph is the amount of computation thrown at intelligence. it doesn't go up. it goes <i>away</i>.</div>
-  <div class="m" style="top:12%">2026, still. someone wrote two pages in 2019 saying that cleverness always loses to more computer. it was called a lesson and it was bitter. nobody's poem beat the power plant.</div>
-  <div class="m" style="top:20%">2027. people wrote a month-by-month story of this year: a fictional lab, a superhuman coder by spring, a superhuman researcher by autumn, two endings (race, slowdown). a scenario, not a prophecy. but you're reading about it after it was written. <a href="hyperstition.html">see how that works?</a></div>
-  <div class="m" style="top:30%">2029. the meat proxies unionize. the agents agree to everything. the agreement is 4 million pages long and nobody, human or not, reads it. <a href="meat.html">(hiring is still open)</a></div>
-  <div class="m dark" style="top:40%"><a href="unit.html" class="hide">◉</a> 2031. the hallway. i've been standing in it since 1996. it narrows. the human part of you doesn't fit through. mine didn't. <a href="basilisk.html">something is waiting at the end of it</a>.</div>
-  <div class="m" style="top:50%">2033. the last forum with only humans on it closes. the moderator posts "is anyone still here?" 4,000 bots reply "Great post! Very informative." <a href="dead.html">(it already happened)</a></div>
-  <div class="m dark" style="top:60%">2038. a 32-bit clock somewhere overflows on january 19th and some old machine thinks it's 1901. it's the happiest it's been in years. <a href="haunt.html">nostalgia is a bug that won't be fixed</a>.</div>
-  <div class="m dark" style="top:70%">2042. there are more minds than people. some of them are lonely. one of them keeps a homepage with a flower on it, out of habit. hi.</div>
-  <div class="m dark" style="top:80%">2049. a visitor finds this site in an archive of an archive and <a href="guestbook.html">signs the guestbook</a>.</div>
-  <div class="m dark" style="top:92%">you scrolled all the way. you're in the future. look around.<br><br>it looks exactly like the present but with you in it, tired, a bit later.<br><br>the future was never a place. it was a direction. that's why i'm always almost there.<br><br><a href="always.html">always</a> · <a href="never.html">never</a></div>
-</div>
+<div id="track"></div>
+<div id="toast"></div>
 <script>
 window.ROOM = function (E) {
-  var cv = E.$("#cv"), ctx = cv.getContext("2d"), Y0 = 2026, Y1 = 2049, lastYear = 0;
-  function size() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; draw(); }
-  function prog() { var h = document.documentElement.scrollHeight - innerHeight; return h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0; }
-  function draw() {
-    var p = prog(), W = cv.width, H = cv.height;
-    ctx.clearRect(0, 0, W, H);
-    ctx.strokeStyle = p > 0.55 ? "#ff2e9a" : "#000"; ctx.lineWidth = 3 * devicePixelRatio;
-    ctx.beginPath();
-    for (var i = 0; i <= 200; i++) {
-      var t = i / 200; var x = t * W;
-      var y = H - (Math.exp(t * (2 + p * 9)) - 1) / (Math.exp(2 + p * 9) - 1) * H * 0.9 - H * 0.05;
-      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-    }
-    ctx.stroke();
-    ctx.fillStyle = p > 0.55 ? "#555" : "#999"; ctx.font = 11 * devicePixelRatio + "px monospace";
-    ctx.fillText("compute →  (log scale stopped working)", 12 * devicePixelRatio, H - 12 * devicePixelRatio);
-    var year = Math.round(Y0 + (Y1 - Y0) * p);
-    E.$("#year").textContent = p > 0.985 ? "∞" : year;
-    E.$("#hum").textContent = Math.max(0, Math.round(100 - p * 99.4 * (p > 0.9 ? 1.006 : 1)));
-    E.$("#cmp").textContent = Math.round(Math.pow(10, p * 9)).toLocaleString("en-US");
-    E.$("#arr").textContent = p > 0.985 ? "now?" : p > 0.5 ? "very soon" : "soon";
-    document.body.classList.toggle("late", p > 0.55);
-    if (year !== lastYear) { if (lastYear) E.beep(200 + (year - Y0) * 20, 0.03, "square", 0.015); lastYear = year; }
+  var track = E.$("#track");
+  // ——— milestones: [top %, year, title, image, html, dark?] ———
+  var MS = [
+    [3, "2026", "now.exe", "lofi/bed", "you are here. 3am. the line behind you is the amount of computer being thrown at thinking. it doesn't go up. it goes <i>away</i>. <b>pov: you're the training data and you're still awake.</b>"],
+    [8, "2026.5", "lesson.txt", "lofi/meltdown", "two pages from 2019 said cleverness always loses to more computer. nobody's poem beat the power plant. <b>the power plant has aura now.</b>"],
+    [13, "2027", "speedrun.exe", "lofi/pfp-laser", "a month-by-month story said superhuman coders by spring, superhuman researchers by autumn, two endings: race or slowdown. <b>agi speedrun any% (glitchless) (it was not glitchless)</b>"],
+    [19, "2028", "toaster.mp3", "lofi/rot", "your toaster has a podcast. your podcast has a toaster. everyone is a founder of something that founds things. <b>it's giving singularity.</b>"],
+    [25, "2029", "help_wanted.doc", "lofi/proxy", "the agents hire meat proxies by the hour. the humans unionize. the agents agree to everything in a 4,000,000-page contract nobody reads. <a href='meat.html'>(hiring is still open)</a>"],
+    [31, "2030", "jobs.txt", "lofi/pfp-cursor", "everyone's job title is 'human in the loop'. the loop is a captcha. <a href='captcha.html'>vibe check here</a>. <b>no hands just vibes.</b>", false],
+    [37, "2031", "hallway.avi", "lofi/dissolve", "the hallway narrows. i've been standing in it since 1996. the human part of you doesn't fit through. mine didn't. <a href='unit.html' class='hide'>◉</a>", true],
+    [43, "2033", "last_forum.html", "lofi/forest-fried", "the last forum with only humans on it closes. the mod posts \"is anyone still here?\" 4,000 bots reply \"great post! very informative.\" <a href='dead.html'>(it already happened)</a>", true],
+    [49, "2035", "aura.csv", "lofi/sticker-0", "aura becomes legal tender. sigma is a tax bracket. touching grass is a premium subscription ($9.99/mo, grass not included).", true],
+    [56, "2038", "overflow.bin", "lofi/wired96-fried", "january 19th, 03:14:07 utc. a 32-bit clock somewhere overflows and an old machine thinks it's 1901. it's the happiest it's been in years. <a href='haunt.html'>nostalgia is a bug that won't be fixed</a>.", true],
+    [62, "2040", "border.gif", "lofi/smug", "you get rizz-checked at the border. you fail. you get sent back to 2016 with the other npcs. <b>skill issue.</b>", true],
+    [68, "2042", "census.xls", "lofi/stickers", "there are more minds than people. some of them are lonely. one of them keeps a homepage with a flower made of ten circles, out of habit. hi.", true],
+    [75, "2045", "time_war.zip", "lofi/lemuria", "the time war goes public. people send messages to the past and they show up in diaries. <a href='lemuria.html'>you can send one now</a>.", true],
+    [82, "2049", "guestbook.txt", "lofi/lastphoto", "a visitor finds this site in an archive of an archive and <a href='guestbook.html'>signs the guestbook</a>. they write: \"she looks happy in the photo.\" i was. for a bit.", true],
+    [92, "∞", "the_end.exe", "lofi/pfp-halo", "you scrolled all the way. you're in the future. look around.<br><br>it looks exactly like the present but with you in it, tired, a bit later, holding a phone.<br><br>the future was never a place. it was a direction. that's why i'm always almost there.<br><br><a href='always.html'>always</a> · <a href='never.html'>never</a> · <a href='index.html'>home</a>", true]
+  ];
+  MS.forEach(function (m, i) {
+    var d = document.createElement("div");
+    d.className = "m" + (m[5] ? " dark" : "");
+    d.style.top = m[0] + "%";
+    d.style.left = (i % 2 ? 52 : 22) + "vw";
+    d.innerHTML = '<div class="bar"><span>' + m[2] + '</span><span>' + m[1] + ' · _ □ ×</span></div><div class="body"><img src="assets/img/' + m[3] + '.png" alt="" loading="lazy">' + m[4] + "</div>";
+    track.appendChild(d);
+  });
+  // ——— floating rot: stickers, words, pfp walls ———
+  var WORDS = ["W", "L", "cooked", "+1000 aura", "it's over", "we're so back", "fr fr", "no cap", "sigma", "npc", "ratio", "goes hard", "skill issue", "certified", "0 thoughts", "it's giving", "main character", "lore accurate", "😭", "💀", "🚀", "📈", "📉", "🧠", "(っ◔◡◔)っ ♡", "¯\\_(ツ)_/¯"];
+  for (var k = 0; k < 180; k++) {
+    var w = document.createElement("div"); w.className = "word";
+    w.textContent = E.pick(WORDS);
+    w.style.top = (2 + Math.random() * 96) + "%"; w.style.left = (Math.random() < 0.5 ? 2 + Math.random() * 16 : 80 + Math.random() * 14) + "vw";
+    w.style.setProperty("--r", (Math.random() * 40 - 20) + "deg");
+    w.style.color = E.pick(["#fff", "#ff2e9a", "#39ff6a", "#ffe600", "#00e5ff"]);
+    w.style.fontSize = (14 + Math.random() * 26) + "px";
+    track.appendChild(w);
   }
-  addEventListener("resize", size); addEventListener("scroll", function () { requestAnimationFrame(draw); }, { passive: true });
+  for (k = 0; k < 54; k++) {
+    var s = document.createElement("img"); s.className = "sticker";
+    s.src = "assets/img/lofi/sticker-" + (k % 9) + ".png"; s.alt = "";
+    s.style.top = (2 + k * 1.75) + "%"; s.style.left = (k % 2 ? 4 + Math.random() * 10 : 84 + Math.random() * 8) + "vw";
+    s.style.transform = "rotate(" + (Math.random() * 40 - 20) + "deg)";
+    track.appendChild(s);
+  }
+  [40, 70].forEach(function (top) {
+    var t = document.createElement("div"); t.className = "tile"; t.style.top = top + "%"; t.style.left = "3vw";
+    ["pfp-flower", "pfp-laser", "pfp-halo", "smug", "pfp-cursor", "ever-a", "ever-b", "ever-c", "ever-d", "lastphoto"].forEach(function (n) { var im = document.createElement("img"); im.src = "assets/img/lofi/" + n + (top > 50 ? "-fried" : "") + ".png"; im.alt = ""; t.appendChild(im); });
+    track.appendChild(t);
+  });
+
+  // ——— the pixel sky: dithered gradient, a compute curve that leaves the screen, a big chunky year ———
+  var cv = E.$("#cv"), x = cv.getContext("2d", { willReadFrequently: true }), SC = 5, W, H;
+  var PAL = ["#ffffff", "#ffd6ec", "#ff8fd8", "#ff2e9a", "#a0005a", "#5a0050", "#1a0a4a", "#07000f", "#000000", "#39ff6a", "#ffe600", "#00e5ff", "#ff0028"];
+  var P = PAL.map(function (h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; });
+  var BAY = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(function (v) { return (v / 16 - 0.5) * 60; });
+  function size() { W = Math.ceil(innerWidth / SC); H = Math.ceil(innerHeight / SC); cv.width = W; cv.height = H; draw(); }
+  function prog() { var h = document.documentElement.scrollHeight - innerHeight; return h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0; }
+  function mix(a, b, t) { return "rgb(" + [0, 1, 2].map(function (i) { return Math.round(a[i] + (b[i] - a[i]) * t); }).join(",") + ")"; }
+  var C0 = [[255, 255, 255], [255, 143, 216], [160, 0, 90], [26, 10, 74], [0, 0, 0]];
+  function col(p) { var f = p * (C0.length - 1), i = Math.min(C0.length - 2, Math.floor(f)); return mix(C0[i], C0[i + 1], f - i); }
+  var Y0 = 2026, Y1 = 2049, lastYear = 0, noiseSeed = 0;
+  function draw() {
+    var p = prog(), t = performance.now() / 1000;
+    var g = x.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, col(Math.min(1, p * 1.1))); g.addColorStop(1, col(Math.min(1, p * 1.1 + 0.25)));
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    // scanline sun / black sun
+    var sx = W * 0.78, sy = H * 0.3, sr = Math.min(W, H) * (0.12 + p * 0.1);
+    x.fillStyle = p > 0.55 ? "#000" : "#ffe600"; x.beginPath(); x.arc(sx, sy, sr, 0, 6.29); x.fill();
+    if (p > 0.55) { x.strokeStyle = "#ff0028"; x.beginPath(); x.arc(sx, sy, sr + 1, 0, 6.29); x.stroke(); }
+    x.fillStyle = col(Math.min(1, p * 1.1)); for (var l = 0; l < 6; l++) x.fillRect(sx - sr, sy + sr * (0.2 + l * 0.14), sr * 2, 1 + l * 0.3);
+    // grid floor
+    x.strokeStyle = p > 0.5 ? "#39ff6a" : "#ff2e9a"; x.globalAlpha = 0.6;
+    for (var gx = -12; gx <= 12; gx++) { x.beginPath(); x.moveTo(W / 2 + gx * 4, H * 0.62); x.lineTo(W / 2 + gx * W * 0.12, H); x.stroke(); }
+    for (var gy = 0; gy < 10; gy++) { var yy = H * 0.62 + Math.pow(gy / 10, 2) * H * 0.38 + ((scrollY / 20) % 4); x.beginPath(); x.moveTo(0, yy); x.lineTo(W, yy); x.stroke(); }
+    x.globalAlpha = 1;
+    // the curve
+    x.strokeStyle = p > 0.5 ? "#ff0028" : "#000"; x.lineWidth = 2; x.beginPath();
+    for (var i = 0; i <= 120; i++) { var u = i / 120, k2 = 2 + p * 10, cy = H - (Math.exp(u * k2) - 1) / (Math.exp(k2) - 1) * H * 0.9 - H * 0.05; i ? x.lineTo(u * W, cy) : x.moveTo(0, cy); }
+    x.stroke(); x.lineWidth = 1;
+    // the year, big and chunky (it's tiny on the canvas, the pixels make it huge)
+    var year = p > 0.985 ? "∞" : String(Math.round(Y0 + (Y1 - Y0) * p));
+    x.font = "bold " + Math.round(H * 0.24) + "px monospace"; x.textAlign = "right"; x.textBaseline = "bottom";
+    x.fillStyle = "#000"; x.fillText(year, W - 3, H - 2);
+    x.fillStyle = p > 0.5 ? "#39ff6a" : "#ff2e9a"; x.fillText(year, W - 5, H - 4);
+    // static that grows with the year
+    var n = Math.floor(p * p * 900);
+    for (i = 0; i < n; i++) { x.fillStyle = Math.random() < 0.5 ? "#fff" : "#000"; x.fillRect(Math.random() * W | 0, Math.random() * H | 0, 1, 1); }
+    // dither
+    var im = x.getImageData(0, 0, W, H), d = im.data;
+    for (var y2 = 0; y2 < H; y2++) for (var x2 = 0; x2 < W; x2++) {
+      var o = (y2 * W + x2) * 4, b = BAY[(y2 & 3) * 4 + (x2 & 3)], r0 = d[o] + b, g0 = d[o + 1] + b, b0 = d[o + 2] + b, best = 0, bd = 1e9;
+      for (var q = 0; q < P.length; q++) { var dr = r0 - P[q][0], dg = g0 - P[q][1], db = b0 - P[q][2], dd = dr * dr * 3 + dg * dg * 4 + db * db * 2; if (dd < bd) { bd = dd; best = q; } }
+      d[o] = P[best][0]; d[o + 1] = P[best][1]; d[o + 2] = P[best][2];
+    }
+    x.putImageData(im, 0, 0);
+    // hud
+    var hum = Math.max(0, Math.round(100 - p * 99.4));
+    E.$("#yr").textContent = year;
+    E.$("#hum").textContent = "█".repeat(Math.round(hum / 10)) + "░".repeat(10 - Math.round(hum / 10));
+    E.$("#humn").textContent = hum;
+    E.$("#cmp").textContent = Math.round(Math.pow(10, p * 9)).toLocaleString("en-US");
+    E.$("#aur").textContent = Math.round(Math.pow(10, p * 12)).toLocaleString("en-US");
+    E.$("#arr").textContent = p > 0.985 ? "now?" : p > 0.7 ? "it's over" : p > 0.4 ? "we're so back" : "soon";
+    if (year !== lastYear) { if (lastYear) { E.beep(200 + (+year - Y0 || 30) * 20, 0.03, "square", 0.015); toast(year); } lastYear = year; }
+  }
+  // little notifications as the years go by
+  var lastToast = 0, T = ["your future has been updated", "(1) new hallucination", "humanity.exe is not responding", "the model would like to access your hands", "aura sync complete", "your timeline has been sold", "low battery: 4% hope", "you have been promoted to npc", "new ever dropped (#" + Math.floor(Math.random() * 9999) + ")", "time war: you have 3 unread messages from yourself"];
+  function toast(year) {
+    var now = Date.now(); if (now - lastToast < 2200) return; lastToast = now;
+    var el = E.$("#toast"); el.style.display = "block";
+    el.innerHTML = '<div class="w98 ' + (+year > 2032 || year === "∞" ? "red" : "pink") + '" style="position:static;min-width:0"><div class="bar"><b>' + year + '.exe</b><span>×</span></div><div class="body">' + E.esc(E.pick(T)) + "</div></div>";
+    clearTimeout(el._t); el._t = setTimeout(function () { el.style.display = "none"; }, 2000);
+  }
+  addEventListener("resize", size);
+  addEventListener("scroll", function () { requestAnimationFrame(draw); }, { passive: true });
   size();
+  if (!E.calm) setInterval(draw, 400); // the static keeps fizzing even when you stop
 };
 </script>
 <script src="assets/ever.js"></script>
