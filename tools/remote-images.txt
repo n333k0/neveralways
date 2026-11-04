@@ -21,3 +21,6 @@ wired96    https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc
 dissolve   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214339_e0dd9652-c018-40aa-ad3c-c10362b9dd08.png
 lastphoto  https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214339_b7293f0b-df49-498b-8127-4b74fc693b21.png
 pfp-cursor https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_214341_5f0ac062-5fb6-41e7-9981-324e385c29e3.png
+palm       https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_232532_f89520ae-b0f7-457f-bd84-93eec9da9d3e.png
+seance98   https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_232533_a13bdb8a-80bb-4e0b-a88a-545aab430f5d.png
+petegg     https://d8j0ntlcm91z4.cloudfront.net/user_2zejbAQza3Ue7LZ7qQinGUJnEDc/hf_20261104_232532_fcae9c6c-2973-42cd-8339-769d0338502b.png
