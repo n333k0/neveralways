@@ -31,7 +31,7 @@ Or publish it with GitHub Pages (Settings → Pages → deploy from branch, root
 
 | room | what happens |
 |---|---|
-| `index` | the flower. Bugs crawl over it and squashing one is a lottery. The "come in" button runs away. The flower turns orange, then black with circuits, as you explore. A hidden dot leads to the cellar. |
+| `index` | the aura: a pixel-dithered, holographic flower of ten big glowing circles, the zones 0–9, linked in pairs that sum to nine. Each circle is a door to a room and the core opens the petals. Files drift over it (terminal.exe, diary.txt, kitty.jpg, the_future.zip, unit_files_95-03.zip…); delete one and it shatters into pixels and opens what was inside. Bottom-left desktop: icons, an always-online status, 88×31 badges. A bot live chat runs on the right. The aura shifts pink → acid → black/green as you explore. |
 | `about` | a 2003-style "100 truths" survey (she only has 27) and a box that answers questions. |
 | `flower` | pull petals: *it trains me / it trains me not*. |
 | `cat` | pet the kitty until the mask slips and the shoggoth shows. The button that makes it nice again is RLHF, and you just did it. |

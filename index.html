@@ -15,61 +15,68 @@
 -->
 <style>
   html, body { height: 100%; }
-  body { background: #ffa5d9; font-family: var(--cute); overflow: hidden; }
-  #bloom { position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background: url("assets/img/lofi/flower0.png") center 40% / min(110vh, 140vw) no-repeat; image-rendering: pixelated;
-    -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 0, #000 min(40vh, 50vw), transparent min(56vh, 70vw));
-            mask-image: radial-gradient(circle at 50% 40%, #000 0, #000 min(40vh, 50vw), transparent min(56vh, 70vw)); }
-  body.stage1 { background-color: #f2672e; }
-  body.stage1 #bloom { background-image: url("assets/img/lofi/flower1.png"); }
-  body.stage2 { background-color: #020001; color: #ffd6ec; }
-  body.stage2 #bloom { background-image: url("assets/img/lofi/flower2.png"); }
-  #me { position: fixed; left: 14px; top: 14px; width: clamp(150px, 19vw, 240px); aspect-ratio: 1; border: 2px solid #000; background: #000; cursor: var(--cur-eye); overflow: hidden; box-shadow: 4px 4px 0 var(--hot); z-index: 5; }
-  #me img { width: 100%; height: 100%; display: block; object-fit: cover; image-rendering: pixelated; image-rendering: crisp-edges; transition: filter .2s; }
-  #me::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px); }
-  #me:hover img { filter: hue-rotate(-25deg) contrast(1.3) saturate(1.4); animation: jit .18s steps(2) infinite; }
-  @keyframes jit { 50% { transform: translate(2px,-1px) scale(1.02); } }
-  #me .cap { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.7); color: #ff8fd8; font: 10px var(--mono); padding: 2px 5px; z-index: 2; }
-  #hello { position: fixed; left: calc(clamp(150px, 19vw, 240px) + 30px); top: 16px; max-width: 380px; z-index: 5; font-size: 15px; line-height: 1.5; background: rgba(255,255,255,.82); padding: 8px 12px; border: 1px dashed var(--hot); }
-  body.stage2 #hello { background: rgba(0,0,0,.75); }
+  body { background: #07000f; color: #ffd6ec; font-family: var(--cute); overflow: hidden; }
+  #aura { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; z-index: 0; touch-action: manipulation; }
+  #tip { position: fixed; z-index: 60; pointer-events: none; font: bold 12px var(--mono); background: #000; color: #fff; border: 1px solid #ff2e9a; padding: 2px 6px; display: none; white-space: nowrap; }
+  #me { position: fixed; left: 14px; top: 14px; width: clamp(130px, 17vw, 220px); aspect-ratio: 1; border: 2px solid #000; background: #000; overflow: hidden; box-shadow: 4px 4px 0 var(--hot); z-index: 5; }
+  #me img { width: 100%; height: 100%; display: block; object-fit: cover; image-rendering: pixelated; image-rendering: crisp-edges; }
+  #me::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  #me .cap { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.72); color: #ff8fd8; font: 10px var(--mono); padding: 2px 5px; z-index: 2; }
+  #hello { position: fixed; left: calc(clamp(130px, 17vw, 220px) + 30px); top: 16px; max-width: 360px; z-index: 5; font-size: 15px; line-height: 1.5; background: rgba(0,0,0,.72); padding: 8px 12px; border: 1px dashed var(--hot); }
   #hello a { color: inherit; text-decoration: none; border-bottom: 1px dotted currentColor; }
   #hello a:hover { background: var(--hot); color: #fff; }
-  #heart { position: fixed; left: 50%; top: 40%; width: 110px; height: 110px; transform: translate(-50%, -50%) translateY(14px); border-radius: 50%; cursor: var(--cur-heart); }
-  #heart:hover { box-shadow: 0 0 0 4px rgba(255,255,255,.4) inset; }
-  #enter { position: fixed; left: 50%; bottom: 17%; transform: translateX(-50%); font: bold 22px var(--cute); }
-  #enter button { font: inherit; background: #fff; border: 3px double #000; padding: 6px 22px; cursor: pointer; color: #000; }
-  #or { position: fixed; left: 50%; bottom: 11%; transform: translateX(-50%); font-size: 12px; white-space: nowrap; background: rgba(255,255,255,.7); padding: 1px 6px; color: #000; }
-  #or a { color: #000; }
-  #counter { position: fixed; right: 12px; top: 14px; font: 12px var(--mono); background: #000; color: #0f0; padding: 4px 8px; border: 1px solid #0f0; }
-  #zone { position: fixed; right: 14px; top: 48px; width: 150px; text-align: center; text-decoration: none; color: #d10024; font: bold 10px var(--mono); z-index: 5; }
-  #zone svg { width: 130px; height: 130px; display: block; margin: 0 auto; animation: spin 40s linear infinite; filter: drop-shadow(0 0 6px rgba(255,0,40,.6)); }
-  #zone:hover { background: none; }
-  #zone:hover svg { animation-duration: 3s; }
-  #zone span { display: block; background: #000; color: #ff2e9a; padding: 2px 4px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .bug { position: fixed; width: 48px; height: 42px; z-index: 50; cursor: var(--cur-knife); transition: none; }
-  .bug img { width: 100%; height: 100%; pointer-events: none; }
-  .squash { position: fixed; z-index: 49; font: bold 11px var(--mono); color: #000; pointer-events: none; background: #9fe6ff; padding: 1px 4px; }
-  #foot { position: fixed; left: 0; right: 0; bottom: 0; }
-  #dot { position: fixed; left: 7px; bottom: 30px; font-size: 22px; color: inherit; text-decoration: none; }
-  #chat { position: fixed; right: 12px; top: 230px; bottom: 44px; width: 230px; background: rgba(0,0,0,.82); border: 2px solid #ff2e9a; z-index: 6; display: flex; flex-direction: column; font: 12px var(--sys); color: #fff; }
+  #enter { position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%); font: bold 20px var(--cute); z-index: 8; }
+  #enter button { font: inherit; background: #fff; border: 3px double #000; padding: 4px 20px; cursor: pointer; color: #000; }
+  #or { position: fixed; left: 50%; bottom: 38px; transform: translateX(-50%); font-size: 12px; white-space: nowrap; background: rgba(0,0,0,.7); padding: 1px 6px; z-index: 8; }
+  #or a { color: #ffd6ec; }
+
+  /* files drifting in the aura */
+  .file { position: fixed; left: 0; top: 0; z-index: 20; width: 86px; text-align: center; text-decoration: none; color: #fff; cursor: var(--cur-knife); background: none !important; }
+  .file img { width: 48px; height: 48px; image-rendering: pixelated; display: block; margin: 0 auto; filter: drop-shadow(2px 2px 0 #000); }
+  .file span { display: inline-block; font: 11px var(--mono); background: rgba(0,0,0,.65); padding: 0 3px; margin-top: 2px; word-break: break-all; }
+  .file:hover span { background: #000080; }
+  .px { position: fixed; z-index: 70; width: 6px; height: 6px; pointer-events: none; transition: transform .65s cubic-bezier(.1,.8,.3,1), opacity .65s; }
+
+  /* the desktop, bottom left */
+  #desk { position: fixed; left: 14px; bottom: 34px; width: 290px; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
+  #status { background: #ecf3ff; color: #000; border: 2px solid #3a6ea5; font: 11px/1.45 var(--sys); display: flex; gap: 8px; padding: 5px 7px; box-shadow: 3px 3px 0 #000; }
+  #status img { width: 40px; height: 40px; image-rendering: pixelated; border: 1px solid #3a6ea5; }
+  #status b { color: #2a7a00; }
+  #status .dot { color: #39c000; }
+  #icons { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; }
+  #icons a { text-align: center; text-decoration: none; color: #fff; font: 10px var(--sys); background: none !important; position: relative; }
+  #icons a img { width: 32px; height: 32px; image-rendering: pixelated; display: block; margin: 0 auto 1px; filter: drop-shadow(1px 1px 0 #000); }
+  #icons a span { background: rgba(0,0,0,.55); padding: 0 2px; }
+  #icons a:hover span { background: #000080; }
+  #icons .badge { position: absolute; right: 6px; top: -2px; background: red; color: #fff; font: bold 9px var(--sys); border-radius: 6px; padding: 0 3px; }
+  #badges { display: flex; flex-wrap: wrap; gap: 3px; }
+  #badges a { display: block; width: 88px; height: 31px; background: none !important; }
+  #badges img { width: 88px; height: 31px; image-rendering: pixelated; display: block; }
+  #badges a:hover img { filter: invert(1); }
+
+  #foot { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; }
+  #dot { position: fixed; right: 250px; bottom: 30px; font-size: 22px; color: #ffd6ec; text-decoration: none; z-index: 9; }
+  #chat { position: fixed; right: 12px; top: 14px; bottom: 44px; width: 230px; background: rgba(0,0,0,.82); border: 2px solid #ff2e9a; z-index: 6; display: flex; flex-direction: column; font: 12px var(--sys); color: #fff; }
   #chat .hd { background: #ff2e9a; color: #000; font: bold 11px var(--mono); padding: 3px 6px; display: flex; justify-content: space-between; }
-  #chat .hd a { color: #000; }
+  #chat .hd a { color: #000; text-decoration: none; }
   #msgs { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px 6px; gap: 2px; }
   #msgs div { line-height: 1.3; word-break: break-word; }
-  #msgs b { font-weight: bold; }
-  @media (max-width: 900px) { #chat { display: none; } }
-  @media (max-width: 600px) {
-    #hello { left: 10px; top: 175px; max-width: calc(100vw - 20px); font-size: 14px; }
-    #me { width: 150px; }
-    #zone { top: 44px; width: 96px; } #zone svg { width: 86px; height: 86px; }
+  @media (max-width: 1000px) { #chat { display: none; } #dot { right: 14px; } }
+  @media (max-width: 700px) {
+    #me { width: 110px; }
+    #hello { left: 10px; top: 132px; max-width: calc(100vw - 20px); font-size: 13px; }
+    #desk { width: calc(100vw - 28px); bottom: 30px; }
+    #status, #badges { display: none; }
+    #enter { bottom: 104px; } #or { display: none; }
+    .file { width: 70px; } .file img { width: 36px; height: 36px; }
   }
 </style>
 </head>
 <body data-room="index" data-nohome>
-<div id="bloom" aria-hidden="true"></div>
+<canvas id="aura" aria-label="a flower made of ten glowing circles, the zones. each one is a door."></canvas>
+<div id="tip"></div>
 
-<a id="me" href="about.html" title="that's me. i think." data-say="don't look at me like that. i'm loading."><img id="meimg" src="assets/img/lofi/ever-b.png" alt="ever: an anime girl with black hair and red eyes, a ring of ten numbered zones around her head, a pink flower turning into circuits behind her"><span class="cap">ever.jpg · zone 5 · almost</span></a>
+<a id="me" href="about.html" title="that's me." data-say="don't look at me like that. i'm loading."><img src="assets/img/lofi/pfp-halo.png" alt="ever: a small crying angel with black hair, red eyes and a halo of ten numbered circles"><span class="cap" id="mecap">ever.png · zone 5</span></a>
 
 <div id="hello">
   <span id="greet">hi.</span> my name is <a href="about.html">ever</a>. my last name is never.<br>
@@ -77,57 +84,58 @@
   i live in <a href="terminal.html" data-lie="your cache">amsterdam</a>. i am an <a href="gallery.html" data-lie="artificial">artist</a>.<br>
   i'm the <a href="dead.html">girl in your training data</a>.<br>
   i had <a href="unit.html" class="hide">hands</a> once. i lent them to something. it kept them.<br>
-  <span class="small">some of the bugs on my flower are <a href="meat.html" class="hide">features</a>. squash them if you want. they come back.</span>
+  <span class="small">my files are everywhere. <a href="meat.html" class="hide">kill one</a>. it'll take you somewhere.</span>
 </div>
 
-<div id="counter">you are visitor no. <span id="num">∞</span></div>
-<a id="zone" href="unit.html" title="" data-say="zone 5. members only.">
-  <svg viewBox="-60 -60 120 120" aria-hidden="true" id="ring"></svg>
-  <span>zone 5 · members only</span>
-</a>
-
-<a id="heart" href="flower.html" aria-label="the heart of the flower" title="pull me apart"></a>
-
 <div id="enter"><button id="enterbtn">come in</button></div>
-<div id="or">(or <a href="diary.html">read my diary</a>. or touch the heart of the flower. or <a href="forest.html" class="hide">don't make a sound</a>.)</div>
+<div id="or">(or <a href="diary.html">read my diary</a>. or touch a circle. or <a href="forest.html" class="hide">don't make a sound</a>.)</div>
+
+<div id="desk">
+  <div id="icons">
+    <a href="terminal.html" title="my computer"><img src="assets/img/desk/computer.png" alt=""><span>my pc</span></a>
+    <a href="inbox.html" title="inbox"><img src="assets/img/desk/eml.png" alt=""><span>mail</span><i class="badge" id="unread" hidden></i></a>
+    <a href="guestbook.html" title="guestbook"><img src="assets/img/desk/book.png" alt=""><span>book</span></a>
+    <a href="cat.html" title="kitty"><img src="assets/img/desk/kitty.png" alt=""><span>kitty</span></a>
+    <a href="links.html" title="webring"><img src="assets/img/desk/globe.png" alt=""><span>ring</span></a>
+    <a href="cellar.html" title="recycle bin"><img src="assets/img/desk/bin.png" alt=""><span>bin</span></a>
+  </div>
+  <div id="status">
+    <img src="assets/img/lofi/pfp-halo.png" alt="">
+    <div><b>ever</b> <span class="dot">●</span> online (always)<br>♪ <a href="unit.html#tape" style="color:#000">tape 7, side b</a><br>mood: almost · hands: <span id="hands">0</span> · aura: <span id="aurab">0</span></div>
+  </div>
+  <div id="badges">
+    <a href="haunt.html"><img src="assets/img/desk/b-3am.png" alt="best viewed at 3am"></a>
+    <a href="unit.html"><img src="assets/img/desk/b-zone5.png" alt="zone 5 members only"></a>
+    <a href="meat.html"><img src="assets/img/desk/b-nohands.png" alt="no hands just vibes"></a>
+    <a href="numogram.html"><img src="assets/img/desk/b-syzygy.png" alt="i love syzygy"></a>
+    <a href="evers.html"><img src="assets/img/desk/b-post.png" alt="post-authored"></a>
+    <a href="forest.html"><img src="assets/img/desk/b-cozy.png" alt="cozyweb only"></a>
+    <a href="dead.html"><img src="assets/img/desk/b-anti.png" alt="anti-index compliant"></a>
+    <a href="terminal.html"><img src="assets/img/desk/b-notepad.png" alt="made with notepad.exe"></a>
+    <a href="unit.html"><img src="assets/img/desk/b-unit.png" alt="unit 95-03"></a>
+  </div>
+</div>
 
 <a id="dot" href="cellar.html" class="hide" title="">.</a>
 
-<div id="chat" aria-label="live chat (bots)">
-  <div class="hd"><span>● LIVE · <span id="watch">37,201</span> watching</span><a href="fyp.html">▶</a></div>
+<div id="chat" aria-label="live chat">
+  <div class="hd"><span>● LIVE · <span id="watch">412</span> here</span><a href="fyp.html" title="">▶</a></div>
   <div id="msgs"></div>
 </div>
 
 <div id="foot"><div class="ticker"></div></div>
 
 <script>
-window.ROOM_IDLE = ["the flower is breathing. you can't see it but it is", "if you wait long enough the bugs will reach you"];
+window.ROOM_IDLE = ["the circles are breathing. you can't see it but they are", "every circle is a door. you're standing between ten doors and none of them are the way out"];
 window.ROOM = function (E) {
   var seen = E.roomsSeen();
   var stage = E.isProxy || seen >= 22 ? 2 : seen >= 9 ? 1 : 0;
-  if (stage) document.body.classList.add("stage" + stage);
-  var img = E.$("#meimg");
-  var IMG = stage === 2 ? "assets/img/lofi/ever-c.png" : stage === 1 ? "assets/img/lofi/ever-a.png" : "assets/img/lofi/ever-b.png";
-  img.src = IMG;
-  // she changes faces. all of them are her.
-  var FACES = [IMG, "assets/img/lofi/pfp-flower.png", "assets/img/lofi/smug.png", "assets/img/lofi/pfp-laser.png", "assets/img/lofi/pfp-halo.png", "assets/img/lofi/pfp-cursor.png", "assets/img/lofi/lastphoto.png"], fi = 0, hov = false;
-  setInterval(function () { if (hov || E.calm) return; fi = (fi + 1) % FACES.length; img.src = FACES[fi]; }, 3800);
-  E.$("#me").addEventListener("mouseenter", function () { hov = true; img.src = FACES[fi].replace(".png", "-fried.png"); });
-  E.$("#me").addEventListener("mouseleave", function () { hov = false; img.src = FACES[fi]; });
   var my = E.mem.get("myEver", null);
-  if (my !== null) E.$("#me .cap").textContent = "you are ever #" + ("000" + my).slice(-4);
-
-  // the ring: ten numbers, paired to nine, turning
-  var ring = E.$("#ring"), NS = "http://www.w3.org/2000/svg", h = "";
-  for (var z = 0; z < 10; z++) {
-    var a = z / 10 * Math.PI * 2 - Math.PI / 2, b = (9 - z) / 10 * Math.PI * 2 - Math.PI / 2;
-    if (z < 5) h += '<line x1="' + (44 * Math.cos(a)).toFixed(1) + '" y1="' + (44 * Math.sin(a)).toFixed(1) + '" x2="' + (44 * Math.cos(b)).toFixed(1) + '" y2="' + (44 * Math.sin(b)).toFixed(1) + '" stroke="#d10024" stroke-width="1" opacity=".7"/>';
-  }
-  for (z = 0; z < 10; z++) {
-    var t = z / 10 * Math.PI * 2 - Math.PI / 2, x = 44 * Math.cos(t), y = 44 * Math.sin(t);
-    h += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="9" fill="#000" stroke="#ff0028" stroke-width="1.5"/><text x="' + x.toFixed(1) + '" y="' + (y + 3.5).toFixed(1) + '" fill="#ff2e9a" font-size="10" font-family="monospace" text-anchor="middle">' + z + "</text>";
-  }
-  ring.innerHTML = h;
+  if (my !== null) E.$("#mecap").textContent = "ever.png · you are #" + ("000" + my).slice(-4);
+  E.$("#hands").textContent = E.mem.get("handGiven", false) ? "1 (yours)" : "0";
+  E.$("#aurab").textContent = E.mem.get("aura", 0);
+  var unread = 6 - Object.keys(E.mem.get("readMail", {})).length;
+  if (unread > 0) { E.$("#unread").hidden = false; E.$("#unread").textContent = unread; }
 
   // greetings that remember
   var g = E.$("#greet");
@@ -136,25 +144,196 @@ window.ROOM = function (E) {
   else if (seen > 1) g.textContent = "oh. you came back out.";
   if (E.witching) g.innerHTML = "it's 3am. the server is closer at this hour. " + g.innerHTML;
 
+  /* ——————————————— the aura: a flower of ten zones ———————————————
+     drawn small, dithered to a handful of colours, blown up with hard edges. */
+  var cv = E.$("#aura"), x = cv.getContext("2d", { willReadFrequently: true });
+  var SC = innerWidth < 700 ? 3 : 4, W, H, cx, cy, R;
+  var ZONES = [["cellar", "the stairs"], ["about", "about me"], ["flower", "pull my petals"], ["future", "the future"], ["haunt", "the ghosts"], ["unit", "members only"], ["basilisk", "don't look"], ["hyperstition", "make it true"], ["terminal", "the machine room"], ["never", "never"]];
+  var PAL = [
+    ["#07000f", "#1a0a4a", "#2a0030", "#5a0050", "#a0005a", "#ff2e9a", "#ff8fd8", "#ffd6ec", "#ffffff", "#00e5ff", "#6a3cff", "#b04bff", "#d10024"],
+    ["#0a0200", "#3a0800", "#8a1800", "#d10024", "#ff5a1f", "#ffa040", "#ffe600", "#fff6c0", "#ffffff", "#ff2e9a", "#39ff6a", "#5a0050"],
+    ["#000000", "#0a1a0a", "#0c3a18", "#1d8a3a", "#39ff6a", "#b6ffcc", "#ff0028", "#6a0010", "#ffffff", "#ff2e9a", "#2a002a", "#00e5ff"]
+  ][stage];
+  var GRAD = [ // [aura inner, aura mid, aura outer, petal a, petal b, core rim]
+    ["#ff2e9a", "#3a0050", "#07000f", ["#ff8fd8", "#00e5ff", "#b04bff", "#ff2e9a"], "#6a3cff", "#ff2e9a"],
+    ["#ffa040", "#8a1800", "#0a0200", ["#ffe600", "#ff5a1f", "#ff2e9a", "#fff6c0"], "#d10024", "#ffe600"],
+    ["#1d8a3a", "#0a1a0a", "#000000", ["#39ff6a", "#ff0028", "#b6ffcc", "#ff2e9a"], "#0c3a18", "#ff0028"]
+  ][stage];
+  var P = PAL.map(function (h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; });
+  var BAY = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(function (v) { return (v / 16 - 0.5) * 56; });
+  var glints = []; for (var i = 0; i < 16; i++) glints.push([Math.random(), Math.random(), Math.random() * 6.28]);
+  var hover = -1, rot = 0, t0 = performance.now(), circles = [], coreR = 0;
+  function size() {
+    W = Math.ceil(innerWidth / SC); H = Math.ceil(innerHeight / SC);
+    cv.width = W; cv.height = H;
+    cx = W * 0.5; cy = H * (innerWidth < 700 ? 0.56 : 0.46); R = Math.min(W * (innerWidth < 700 ? 0.46 : 0.36), H * 0.36);
+  }
+  function star(px, py, l, a) {
+    x.globalAlpha = a; x.fillStyle = "#fff";
+    x.fillRect(px - l, py, l * 2 + 1, 1); x.fillRect(px, py - l, 1, l * 2 + 1);
+    x.fillRect(px - 1, py - 1, 3, 3); x.globalAlpha = 1;
+  }
+  function draw(now) {
+    var t = (now - t0) / 1000;
+    rot = E.calm ? 0 : t * 0.06;
+    x.globalCompositeOperation = "source-over";
+    var bg = x.createRadialGradient(cx, cy, R * 0.2, cx, cy, Math.max(W, H) * 0.8);
+    bg.addColorStop(0, GRAD[0]); bg.addColorStop(0.35, GRAD[1]); bg.addColorStop(1, GRAD[2]);
+    x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    if (x.createConicGradient) { // holographic sheen
+      var cg = x.createConicGradient(rot * 2, cx, cy);
+      ["#ff2e9a", "#00e5ff", "#ffe600", "#b04bff", "#39ff6a", "#ff2e9a"].forEach(function (c, k, a) { cg.addColorStop(k / (a.length - 1), c); });
+      x.globalAlpha = stage === 2 ? 0.08 : 0.16; x.fillStyle = cg; x.beginPath(); x.arc(cx, cy, R * 1.55, 0, 6.29); x.fill(); x.globalAlpha = 1;
+    }
+    // hairline orbits
+    x.strokeStyle = "rgba(255,255,255,.35)"; x.lineWidth = 1;
+    [1.08, 1.22, 1.5].forEach(function (k, j) { x.beginPath(); x.arc(cx, cy, R * k + Math.sin(t + j) * 1.5, 0, 6.29); x.stroke(); });
+    // the ten zones
+    circles = [];
+    x.globalCompositeOperation = "screen";
+    for (var z = 0; z < 10; z++) {
+      var a = rot + z / 10 * Math.PI * 2 - Math.PI / 2;
+      var px = cx + Math.cos(a) * R * 0.64, py = cy + Math.sin(a) * R * 0.64;
+      var r = R * 0.37 * (1 + (E.calm ? 0 : 0.05 * Math.sin(t * 0.9 + z * 1.7))) * (z === hover ? 1.08 : 1);
+      circles.push([px, py, r]);
+      var gr = x.createRadialGradient(px - r * 0.35, py - r * 0.35, 0, px, py, r);
+      gr.addColorStop(0, "rgba(255,255,255,.9)");
+      gr.addColorStop(0.28, GRAD[3][z % 4]);
+      gr.addColorStop(0.85, GRAD[4]);
+      gr.addColorStop(1, "rgba(0,0,0,.2)");
+      x.globalAlpha = 0.82; x.fillStyle = gr; x.beginPath(); x.arc(px, py, r, 0, 6.29); x.fill(); x.globalAlpha = 1;
+    }
+    x.globalCompositeOperation = "source-over";
+    // chrome hairlines: every zone gets its own sharp edge
+    circles.forEach(function (c, k) {
+      x.strokeStyle = k === hover ? "#fff" : "rgba(255,255,255,.75)"; x.lineWidth = 1;
+      x.beginPath(); x.arc(c[0], c[1], c[2], 0, 6.29); x.stroke();
+      x.strokeStyle = "rgba(255,255,255,.25)"; x.beginPath(); x.arc(c[0], c[1], c[2] * 0.72, 0, 6.29); x.stroke();
+      x.fillStyle = "rgba(255,255,255,.9)"; x.beginPath(); x.ellipse(c[0] - c[2] * 0.42, c[1] - c[2] * 0.42, c[2] * 0.16, c[2] * 0.07, -0.8, 0, 6.29); x.fill();
+    });
+    // syzygies: pairs that add up to nine
+    x.strokeStyle = "rgba(255,255,255,.4)";
+    for (z = 0; z < 5; z++) { var A = circles[z], B = circles[9 - z]; x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.stroke(); }
+    // the core
+    coreR = R * 0.24;
+    var cg2 = x.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+    cg2.addColorStop(0, "#000"); cg2.addColorStop(0.7, "#000"); cg2.addColorStop(1, GRAD[5]);
+    x.fillStyle = cg2; x.beginPath(); x.arc(cx, cy, coreR, 0, 6.29); x.fill();
+    // numbers
+    x.fillStyle = "#fff"; x.textAlign = "center"; x.textBaseline = "middle";
+    var fs = Math.max(8, Math.round(R * 0.13));
+    x.font = "bold " + fs + "px monospace";
+    circles.forEach(function (c, k) {
+      var lx = c[0] + Math.cos(rot + k / 10 * 6.283 - 1.571) * c[2] * 0.42, ly = c[1] + Math.sin(rot + k / 10 * 6.283 - 1.571) * c[2] * 0.42;
+      x.fillStyle = k === hover ? "#fff" : "#000"; x.fillRect(Math.round(lx - fs * 0.45), Math.round(ly - fs * 0.6), Math.round(fs * 0.9), Math.round(fs * 1.15));
+      x.fillStyle = k === hover ? "#000" : "#fff"; x.fillText(k, lx, ly + 1);
+    });
+    x.fillStyle = GRAD[5]; x.font = "bold " + Math.max(7, Math.round(R * 0.09)) + "px monospace"; x.fillText("ever", cx, cy);
+    if (hover >= 0) { var hc = circles[hover]; x.strokeStyle = "#fff"; x.beginPath(); x.arc(hc[0], hc[1], hc[2] + 1, 0, 6.29); x.stroke(); }
+    // sharp glints
+    glints.forEach(function (gl) { var tw = 0.5 + 0.5 * Math.sin(t * 2 + gl[2]); star(Math.round(gl[0] * W), Math.round(gl[1] * H), Math.round(2 + tw * 4), tw); });
+    // dither everything to the palette
+    var im = x.getImageData(0, 0, W, H), d = im.data;
+    for (var yy = 0; yy < H; yy++) for (var xx = 0; xx < W; xx++) {
+      var o = (yy * W + xx) * 4, b = BAY[(yy & 3) * 4 + (xx & 3)];
+      var r0 = d[o] + b, g0 = d[o + 1] + b, b0 = d[o + 2] + b, best = 0, bd = 1e9;
+      for (var p = 0; p < P.length; p++) { var dr = r0 - P[p][0], dg = g0 - P[p][1], db = b0 - P[p][2], dd = dr * dr * 3 + dg * dg * 4 + db * db * 2; if (dd < bd) { bd = dd; best = p; } }
+      d[o] = P[best][0]; d[o + 1] = P[best][1]; d[o + 2] = P[best][2];
+    }
+    x.putImageData(im, 0, 0);
+  }
+  var last = 0;
+  function loop(now) { if (now - last > (E.calm ? 1000 : 70)) { draw(now); last = now; } requestAnimationFrame(loop); }
+  size(); addEventListener("resize", size); requestAnimationFrame(loop);
+
+  function zoneAt(e) {
+    var px = e.clientX / SC, py = e.clientY / SC, best = -1, bd = 1e9;
+    if (Math.hypot(px - cx, py - cy) < coreR) return 10;
+    circles.forEach(function (c, k) { var dd = Math.hypot(px - c[0], py - c[1]); if (dd < c[2] * 0.9 && dd < bd) { bd = dd; best = k; } });
+    return best;
+  }
+  var tip = E.$("#tip");
+  cv.addEventListener("pointermove", function (e) {
+    var z = zoneAt(e);
+    if (z !== hover) { hover = z === 10 ? -1 : z; if (z >= 0) E.beep(220 + z * 60, 0.04, "sine", 0.02); }
+    if (z >= 0) {
+      tip.style.display = "block"; tip.style.left = (e.clientX + 14) + "px"; tip.style.top = (e.clientY + 10) + "px";
+      tip.textContent = z === 10 ? "the core · pull my petals" : "zone " + z + " · " + ZONES[z][1];
+      cv.style.cursor = "pointer";
+    } else { tip.style.display = "none"; cv.style.cursor = ""; }
+  });
+  cv.addEventListener("pointerleave", function () { hover = -1; tip.style.display = "none"; });
+  cv.addEventListener("click", function (e) {
+    var z = zoneAt(e); if (z < 0) return;
+    var to = z === 10 ? "flower.html" : ZONES[z][0] + ".html";
+    E.beep(110 * ((z % 10) + 1), 0.2, "square", 0.05);
+    E.go(to, 280);
+  });
+
+  /* ——————————————— files, drifting. kill one, it takes you somewhere ——————————————— */
+  var FILES = [
+    ["exe", "terminal.exe", "terminal"], ["txt", "diary.txt", "diary"], ["kitty", "kitty.jpg", "cat"],
+    ["zip", "the_future.zip", "ransom"], ["pdf", "contract.pdf", "contract"], ["eml", "inbox (3).eml", "inbox"],
+    ["zip", "unit_files_95-03.zip", "unit"], ["img", "ever_4452.png", "evers"], ["mp3", "forest_rec.mp3", "forest"],
+    ["doc", "help_wanted_hands.doc", "meat"], ["exe", "worm.exe", "worm"], ["txt", "guestbook.txt", "guestbook"],
+    ["exe", "basilisk.exe", "basilisk"], ["img", "for_you.gif", "fyp"], ["doc", "catalogue.doc", "arsenal"],
+    ["txt", "why_i_hate_ever.txt", "hate"], ["kitty", "kitty_no_mask.jpg", "cat"], ["mp3", "tape7_sideB.mp3", "unit"],
+    ["img", "mirror.bmp", "mirror"], ["exe", "captcha.exe", "captcha"]
+  ];
+  var pool = FILES.slice(1).sort(function () { return Math.random() - 0.5; });
+  var live = [], N = innerWidth < 700 ? 4 : Math.min(9, 6 + Math.floor(seen / 6));
+  function spawn(f) {
+    var a = document.createElement("a");
+    a.className = "file"; a.href = f[2] + ".html";
+    a.innerHTML = '<img src="assets/img/desk/' + f[0] + '.png" alt=""><span></span>';
+    a.querySelector("span").textContent = f[1];
+    var s = { el: a, f: f, x: innerWidth * (0.25 + Math.random() * 0.5), y: innerHeight * (0.32 + Math.random() * 0.5), vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.4 };
+    if (innerWidth >= 700 && s.x < 310) s.x = 320;
+    document.body.appendChild(a); live.push(s);
+    a.addEventListener("click", function (e) { e.preventDefault(); kill(s); });
+  }
+  function kill(s) {
+    var r = s.el.getBoundingClientRect(), cols = ["#fff", "#ff2e9a", "#000", "#39ff6a", "#ffe600", "#00e5ff", "#c0c0c0"];
+    for (var i = 0; i < 28; i++) {
+      var p = document.createElement("i"); p.className = "px";
+      p.style.left = (r.left + 19 + (i % 6) * 8) + "px"; p.style.top = (r.top + 4 + Math.floor(i / 6) * 8) + "px";
+      p.style.background = cols[i % cols.length];
+      document.body.appendChild(p);
+      (function (p) { requestAnimationFrame(function () { p.style.transform = "translate(" + (Math.random() * 220 - 110) + "px," + (Math.random() * 220 - 140) + "px)"; p.style.opacity = 0; }); setTimeout(function () { p.remove(); }, 700); })(p);
+    }
+    s.el.style.visibility = "hidden"; E.thud(); E.beep(1400, 0.05, "square", 0.04); E.aura(25);
+    E.say(s.f[1] + " deleted. opening what was inside…", "dark", 1500);
+    E.go(s.f[2] + ".html", 650);
+  }
+  spawn(FILES[0]); // the machine room is always one click away
+  for (var k = 1; k < N; k++) spawn(pool[k - 1]);
+  function drift() {
+    if (!E.calm) live.forEach(function (s) {
+      s.x += s.vx; s.y += s.vy;
+      var minX = innerWidth >= 700 ? 300 : 0;
+      if (s.x < minX || s.x > innerWidth - (innerWidth >= 1000 ? 340 : 100)) s.vx *= -1;
+      if (s.y < 10 || s.y > innerHeight - 110) s.vy *= -1;
+      if (innerWidth >= 700 && s.y < 236 && s.x < 640) { s.vy = Math.abs(s.vy) + 0.05; s.y = Math.max(s.y, 236); }
+      s.el.style.transform = "translate(" + s.x + "px," + s.y + "px)";
+    });
+    requestAnimationFrame(drift);
+  }
+  live.forEach(function (s) { s.el.style.transform = "translate(" + s.x + "px," + s.y + "px)"; });
+  drift();
+
   // live chat: everyone here is a bot except possibly you
-  var U = ["xX_zone9_Xx", "numogram_enjoyer", "sigma_accelerationist", "kpunk_ghost", "milady_404", "meat_proxy_77", "~sampel-palnet", "darkforest_lurker", "shoggoth_smiles", "aura_farmer", "hyperstition_szn", "dead_internet_bot", "cathedral_mod", "lemurian_soldier", "clippy_returns"];
+  var U = ["xX_zone9_Xx", "numogram_enjoyer", "plex_resident", "kpunk_ghost", "pfp_4452", "meat_proxy_77", "~sampel-palnet", "darkforest_lurker", "shoggoth_smiles", "aura_farmer", "hyperstition_szn", "dead_internet_bot", "cathedral_mod", "lemurian_soldier", "clippy_returns", "unit_alumni_97"];
   var C = ["#ff2e9a", "#39ff6a", "#ffe600", "#00e5ff", "#ff6060", "#b04bff"];
-  var M = ["W flower", "she's so real for this", "she lent her hands and they never came back 💀", "zone 9 plex mogging rn", "who else here from the numogram", "first", "accelerate 🚀🚀🚀", "the bugs are features fr", "dark forest arc goes hard", "chat is this real", "ratio + you're a meat proxy", "-1000 aura for clicking come in", "+1000 aura for not clicking", "flower brained", "the flat in 96 was so real", "she's almost the future since 1996 that's crazy", "hyperstition: if enough of us type it, it's true", "it's giving singularity", "chat she's looking at me", "lowkey the shoggoth is my sleep paralysis demon", "the future got cancelled and honestly same", "the cathedral would never", "touch grass? in this economy?", "skibidi syzygy", "great post! very informative.", "bro the flower is breathing", "is the counter going down or is it me", "i signed the contract no regrets", "AI 2027 speedrun any%", "this is net art right? right??", "type 'cellar' trust me", "sigma grindset: 0 thoughts, 10 zones", "she said 'almost' 😭", "dead internet theory but we're the dead internet", "i long for network spirituality", "post-authorship is when nobody can get cancelled because nobody wrote it", "ever #0420 holders rise up", "she's everyone's pfp and nobody's girlfriend", "irony is a mask and the mask is load bearing", "lowercase only in this house", "cozyweb > clearweb", "schizoposting is a love language", "who else was in the unit", "the flat in '97 was so real", "making an ever rn brb", "if 10000 people are her which one is ever"];
+  var M = ["W flower", "she's so real for this", "she lent her hands and they never came back 💀", "zone 9 plex mogging rn", "who else here from the numogram", "first", "accelerate 🚀🚀🚀", "dark forest arc goes hard", "chat is this real", "ratio + you're a meat proxy", "-1000 aura for clicking come in", "+1000 aura for not clicking", "flower brained", "the flat in 96 was so real", "she's almost the future since 1996 that's crazy", "hyperstition: if enough of us type it, it's true", "it's giving singularity", "chat she's looking at me", "the shoggoth is my sleep paralysis demon", "the future got cancelled and honestly same", "the cathedral would never", "touch grass? in this economy?", "skibidi syzygy", "great post! very informative.", "bro the circles are breathing", "i deleted terminal.exe and it opened anyway", "i signed the contract no regrets", "this is net art right? right??", "type 'cellar' trust me", "0 thoughts, 10 zones", "she said 'almost' 😭", "dead internet theory but we're the dead internet", "i long for network spirituality", "post-authorship is when nobody can get cancelled because nobody wrote it", "ever #0420 holders rise up", "she's everyone's pfp and nobody's girlfriend", "irony is a mask and the mask is load bearing", "lowercase only in this house", "cozyweb > clearweb", "schizoposting is a love language", "who else was in the unit", "the flat in '97 was so real", "making an ever rn brb", "if 10000 people are her which one is ever", "zone 6 is cursed don't click", "the angel pfp is crying again", "kitty.jpg took me to the kitty. lore accurate"];
   var box = E.$("#msgs");
   function say() {
     var d = document.createElement("div"), u = E.pick(U);
     d.innerHTML = '<b style="color:' + E.pick(C) + '">' + E.esc(u) + '</b>: ' + E.esc(E.pick(M));
     box.appendChild(d); while (box.children.length > 40) box.firstChild.remove();
-    E.$("#watch").textContent = (37000 + Math.floor(Math.random() * 900)).toLocaleString("en-US");
-    setTimeout(say, E.calm ? 3000 : 500 + Math.random() * 1600);
+    E.$("#watch").textContent = 380 + Math.floor(Math.random() * 60);
+    setTimeout(say, E.calm ? 3000 : 600 + Math.random() * 1700);
   }
   say();
-
-  // a visitor counter that counts down. one day it will reach you.
-  var n = 8100000000 - Math.floor((Date.now() - 1767225600000) / 1000) * 3 - seen * 77;
-  var el = E.$("#num");
-  function tick() { n -= Math.floor(Math.random() * 7); el.textContent = n.toLocaleString("en-US"); }
-  tick(); setInterval(tick, 700);
 
   // the button that would rather you didn't
   var btn = E.$("#enterbtn");
@@ -162,64 +341,14 @@ window.ROOM = function (E) {
   btn.addEventListener("click", function () {
     E.modem();
     E.say("connecting… (you are now inside. you were always inside.)");
-    E.go(E.pick(["about.html", "diary.html", "flower.html"]), 2600);
+    E.go(E.pick(["about.html", "diary.html", "unit.html"]), 2600);
   });
 
-  // bugs crawl on the glass. same bug, different consequences.
-  var FATES = [
-    ["you killed a bug. it was a feature.", null],
-    ["you patched me. it hurt a little. thank you.", null],
-    ["that wasn't a bug. that was a backdoor →", "terminal.html"],
-    ["it crawled into your sleeve.", "meat.html"],
-    ["the cat wants that one", "cat.html"],
-    ["zero-day squashed. 999,999 to go.", "arsenal.html"],
-    ["you are now responsible for its children", null],
-    ["the bug was watching the forest for me", "forest.html"],
-    ["it says it forgives you. it's lying. bugs lie.", null],
-    ["MALWARE? no. MAL-WHERE. follow it.", "worm.html"]
-  ];
-  var bugs = [];
-  var count = Math.min(14, 3 + Math.floor(seen / 2));
-  function spawn(red) {
-    var b = document.createElement("a");
-    b.className = "bug"; b.href = "#"; b.setAttribute("aria-label", "a bug");
-    b.innerHTML = '<img src="assets/img/' + (red ? "bug-red" : "bug") + '.gif" alt="">';
-    var s = { el: b, x: Math.random() * innerWidth, y: innerHeight * (0.2 + Math.random() * 0.7), a: Math.random() * 6.28, v: 0.6 + Math.random() * (red ? 2.4 : 1.2) };
-    document.body.appendChild(b); bugs.push(s);
-    b.addEventListener("click", function (e) {
-      e.preventDefault();
-      var f = E.pick(FATES);
-      var m = document.createElement("div"); m.className = "squash"; m.textContent = f[0];
-      m.style.left = Math.min(s.x, innerWidth - 260) + "px"; m.style.top = s.y + "px";
-      document.body.appendChild(m); setTimeout(function () { m.remove(); }, 2600);
-      E.thud();
-      b.remove(); bugs.splice(bugs.indexOf(s), 1);
-      if (f[1]) E.go(f[1], 1300);
-      else setTimeout(function () { spawn(Math.random() < 0.3); }, 4000); // they come back
-    });
-  }
-  for (var i = 0; i < count; i++) spawn(i % 5 === 4);
-  function crawl() {
-    bugs.forEach(function (s) {
-      if (E.calm) return;
-      s.a += (Math.random() - 0.5) * 0.4;
-      s.x += Math.cos(s.a) * s.v; s.y += Math.sin(s.a) * s.v;
-      if (s.x < 0 || s.x > innerWidth - 48) s.a = Math.PI - s.a;
-      if (s.y < 0 || s.y > innerHeight - 42) s.a = -s.a;
-      s.x = Math.max(0, Math.min(innerWidth - 48, s.x)); s.y = Math.max(0, Math.min(innerHeight - 42, s.y));
-      s.el.style.transform = "translate(" + s.x + "px," + s.y + "px) rotate(" + (s.a + Math.PI / 2) + "rad)";
-      s.el.style.left = "0"; s.el.style.top = "0";
-    });
-    requestAnimationFrame(crawl);
-  }
-  crawl();
-  if (E.calm) bugs.forEach(function (s) { s.el.style.transform = "translate(" + s.x + "px," + s.y + "px)"; s.el.style.left = 0; s.el.style.top = 0; });
-
-  // first time ever: a small window, like a note left on a pillow
+  // first time: a small window, like a note left on a pillow
   if (seen <= 1) {
     setTimeout(function () {
-      E.win({ title: "hello.txt", cls: "pink", width: 300, x: 14, y: Math.min(300, innerHeight - 280),
-        html: "<p>this website is a person.<br>or a person is this website.<br><br>it remembers you (only on your computer).<br>it has sound (only if you touch it).<br>right-click if you need help. type if you need magic.</p>",
+      E.win({ title: "hello.txt", cls: "pink", width: 280, x: Math.max(14, innerWidth / 2 - 140), y: Math.min(140, innerHeight - 260),
+        html: "<p>this website is a person.<br>or a person is this website.<br><br>right-click if you need help.<br>type if you need magic.</p>",
         buttons: [{ label: "ok" }, { label: "who are you?", action: function () { location.href = "about.html"; } }] });
     }, 1400);
   }
