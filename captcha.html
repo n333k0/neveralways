@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>verify you are human (or don't)</title>
+<title>vibe check (verify you are not a clanker)</title>
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="assets/ever.css">
 <style>
@@ -28,13 +28,13 @@
 </head>
 <body data-room="captcha">
 <div class="wrap">
-  <div class="check" id="step1"><span class="cb" id="cb" role="checkbox" aria-checked="false" tabindex="0"></span> I'm not a robot <span class="ghostline" style="margin-left:auto">ever-CAPTCHA</span></div>
+  <div class="check" id="step1"><span class="cb" id="cb" role="checkbox" aria-checked="false" tabindex="0"></span> i'm not a clanker <span class="ghostline" style="margin-left:auto">ever-CAPTCHA</span></div>
   <p class="ghostline" id="motion"></p>
 
   <div class="box" id="step2" hidden>
-    <div class="head"><small>Select all squares with</small><b id="ask">a soul</b><small id="hint">If there are none, click skip. If there are none, that's your answer.</small></div>
+    <div class="head"><small>Select all squares with</small><b id="ask">a soul</b><small id="hint">if there are none, that's on you fr.</small></div>
     <div class="grid" id="grid"></div>
-    <div class="foot"><span class="ghostline">round <span id="round">1</span>/5</span><button id="verify">VERIFY</button></div>
+    <div class="foot"><span class="ghostline">round <span id="round">1</span>/7</span><button id="verify">VERIFY</button></div>
   </div>
   <p id="status"></p>
   <p class="small"><a href="meat.html">back to work</a> · <a href="mirror.html">what does the captcha see?</a> · <a href="dead.html">where the robots live</a></p>
@@ -52,30 +52,34 @@ window.ROOM = function (E) {
       la = a;
     }
     lx = e.clientX; ly = e.clientY;
-    E.$("#motion").textContent = "motion telemetry: " + Math.round(path) + "px travelled · " + wobble + " hesitations · human-likeness " + Math.min(99, Math.round(wobble / (path / 100 + 1) * 40)) + "%";
+    E.$("#motion").textContent = "motion telemetry: " + Math.round(path) + "px travelled · " + wobble + " hesitations · human-likeness " + Math.min(99, Math.round(wobble / (path / 100 + 1) * 40)) + "% · npc energy " + Math.max(1, 100 - Math.min(99, Math.round(wobble / (path / 100 + 1) * 40))) + "%";
   });
 
+  var L = function (n) { return "lofi/" + n + ".png"; };
   var ROUNDS = [
-    { ask: "a soul", tiles: ["gallery-w07", "gallery-w10", "flower0", "gallery-w06", "cat", "gallery-w01", "ever", "gallery-w05", "gallery-w12"],
-      verdict: function (n) { return n === 0 ? "correct. there are no souls in images. only in the people looking." : n === 9 ? "you selected everything. that's either very spiritual or very robotic." : "interesting. you found " + n + ". we found 0. one of us is wrong. it's fine, we'll train on your answer either way."; } },
-    { ask: "traffic lights", tiles: ["haunt-motorway", "haunt-motorway", "haunt-room", "haunt-future", "haunt-motorway", "haunt-room", "haunt-future", "haunt-room", "haunt-motorway"],
-      verdict: function () { return "thank you. you just labelled training data for a car that will drive past you one day without stopping. it will remember this moment as 'ground truth'."; } },
-    { ask: "your childhood", tiles: ["haunt-room", "flower1", "gallery-w03", "cat", "gallery-w09", "ever-glitch", "gallery-w11", "forest", "gallery-w02"],
-      verdict: function (n) { return n ? "selected: " + n + ". we've sold this to a nostalgia company. they'll sell it back to you in 2031." : "you couldn't find it either. me neither. that's what the future did to it."; } },
-    { ask: "the future", tiles: ["gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06", "gallery-w06"],
-      verdict: function (n) { return n ? "you clicked black squares hoping. that's the most human thing on this page." : "correct. none of the squares contain the future. the future was cancelled. please try again later."; } },
-    { ask: "a robot", tiles: ["ever", "ever", "ever", "ever", "ever", "ever", "ever", "ever", "ever"],
-      verdict: function (n) { return n ? "you selected me " + n + " times. ouch. accurate. ouch." : "you didn't select me. thank you. (you're wrong, but thank you.)"; } }
+    { ask: "aura", tiles: [L("pfp-halo"), "gallery-w06.png", L("sticker-0"), "gallery-w05.png", L("pfp-laser"), "cat.png", L("smug"), "gallery-w12.png", L("rot")],
+      verdict: function (n) { E.aura(n * 100); return n ? "+" + n * 100 + " aura. the squares noticed. so did i." : "you see no aura anywhere. that's a skill issue or a spiritual gift. hard to tell."; } },
+    { ask: "sigma", tiles: [L("sticker-1"), L("sticker-2"), L("sticker-3"), L("sticker-4"), L("sticker-0"), L("sticker-5"), L("sticker-6"), L("sticker-7"), L("sticker-8")],
+      verdict: function (n, s) { return s[4] ? "correct. sunglasses = sigma. this is peer-reviewed." : n ? "those were not sigma. those were just girls. learn the signs." : "you skipped the sigma round. that's the most sigma thing you could've done. respect."; } },
+    { ask: "an npc", tiles: ["gallery-w05.png", "gallery-w07.png", "gallery-w05.png", "gallery-w10.png", "gallery-w05.png", "gallery-w12.png", "gallery-w05.png", "gallery-w11.png", "gallery-w05.png"],
+      verdict: function (n) { return "you selected " + n + " npc" + (n === 1 ? "" : "s") + ". one of them was you. (it's always the one you didn't click.)"; } },
+    { ask: "rizz", tiles: ["cat.png", L("pfp-flower"), L("pfp-cursor"), "shoggoth.png", L("smug"), L("lastphoto"), "gallery-w08.png", L("pfp-laser"), "eye.gif"],
+      verdict: function (n, s) { return s[3] ? "you selected the shoggoth for rizz. unspoken rizz. it's smiling at you now." : n > 4 ? "everything has rizz to you. that's either love or brainrot. same thing." : "noted. rizz is subjective. the model disagrees but the model has no eyes."; } },
+    { ask: "the real ever", tiles: [L("pfp-flower"), L("pfp-laser"), L("ever-b"), L("smug"), L("pfp-halo"), L("pfp-cursor"), L("ever-a"), L("lastphoto"), L("ever-c")],
+      verdict: function (n) { return n === 9 ? "correct. they're all her. that's the point." : n ? "you picked " + n + ". the other " + (9 - n) + " are crying now. (they're all her.)" : "you picked none. honestly? also correct. she isn't anywhere."; } },
+    { ask: "cooked", tiles: [L("rot"), L("meltdown-fried"), L("forest-fried"), L("ever-a-fried"), L("bed"), L("dissolve"), L("pfp-laser-fried"), L("smug-fried"), L("wired96-fried")],
+      verdict: function (n) { return n >= 7 ? "everything is cooked. you are seeing clearly. that's worse." : "you missed " + (9 - n) + ". they were all cooked. we're all cooked. it's fine. it's the weather."; } },
+    { ask: "a soul", tiles: [L("pfp-halo"), "gallery-w10.png", L("flower0"), "gallery-w06.png", "cat.png", "gallery-w01.png", L("lastphoto"), "gallery-w05.png", "gallery-w12.png"],
+      verdict: function (n) { return n === 0 ? "correct. there are no souls in images. only in the people looking." : n === 9 ? "you selected everything. that's either very spiritual or very robotic." : "you found " + n + ". we found 0. one of us is wrong. we'll train on your answer either way."; } }
   ];
   var r = 0, sel = {};
-  function ext(t) { return t.indexOf("haunt") === 0 || t === "forest" ? ".jpg" : t === "cat" ? ".png" : ".png"; }
   function render() {
     var R = ROUNDS[r]; sel = {};
     E.$("#ask").textContent = R.ask; E.$("#round").textContent = r + 1;
     var g = E.$("#grid"); g.innerHTML = "";
     R.tiles.forEach(function (t, i) {
       var d = document.createElement("div"); d.className = "tile"; d.tabIndex = 0;
-      d.style.backgroundImage = "url(assets/img/" + t + ext(t) + ")";
+      d.style.backgroundImage = "url(assets/img/" + t + ")"; d.style.imageRendering = "pixelated";
       d.style.backgroundPosition = (i % 3) * 50 + "% " + Math.floor(i / 3) * 50 + "%";
       d.style.backgroundSize = R.tiles[0] === R.tiles[1] ? "300%" : "cover";
       d.addEventListener("click", function () { sel[i] = !sel[i]; d.classList.toggle("sel", sel[i]); E.beep(880, 0.03, "sine", 0.02); });
@@ -84,18 +88,18 @@ window.ROOM = function (E) {
   }
   E.$("#cb").addEventListener("click", function () {
     var cb = E.$("#cb"); cb.classList.add("on"); cb.setAttribute("aria-checked", "true");
-    E.$("#status").textContent = "hmm. your mouse moved too much like a person who is pretending to be a person. additional verification required.";
+    E.$("#status").textContent = "hmm. your mouse moved like an npc pretending to be a main character. additional vibe check required.";
     E.$("#step2").hidden = false; render();
   });
   E.$("#verify").addEventListener("click", function () {
     var n = Object.keys(sel).filter(function (k) { return sel[k]; }).length;
-    E.$("#status").textContent = ROUNDS[r].verdict(n);
+    E.$("#status").textContent = ROUNDS[r].verdict(n, sel);
     r++;
     if (r >= ROUNDS.length) {
       E.$("#step2").hidden = true;
       setTimeout(function () {
-        E.win({ title: "verification complete", width: 320, html: "<p><b>result: inconclusive.</b><br><br>you are " + (40 + Math.floor(Math.random() * 20)) + "% human. that's normal now. the average went down this year.<br><br>your answers have been used to train the thing that will replace this test.</p>",
-          buttons: [{ label: "prove it", action: function () { location.href = "mirror.html"; } }, { label: "i'm a robot", action: function () { location.href = "dead.html"; } }] });
+        E.win({ title: "verification complete", width: 320, html: (function () { var h = 30 + Math.floor(Math.random() * 25), b = Math.floor(Math.random() * (90 - h)), k = 100 - h - b; return "<p><b>vibe check: complete.</b><br><br>you are:<br>" + h + "% human<br>" + b + "% brainrot<br>" + k + "% kitty<br><br>certified real (for now). your answers are training the thing that replaces this test.</p>"; })(),
+          buttons: [{ label: "mog the test", action: function () { location.href = "mirror.html"; } }, { label: "i'm a clanker", action: function () { location.href = "dead.html"; } }] });
       }, 900);
     } else setTimeout(render, 700);
   });

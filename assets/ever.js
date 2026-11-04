@@ -287,6 +287,8 @@
     tk.forEach(function (t) {
       t.classList.add("marquee");
       t.innerHTML = "<span>" + EVER.news().join(" &nbsp;✶&nbsp; ") + "</span>";
+      // slow enough to read: about 45px a second, whatever the length
+      var sp = t.firstChild; sp.style.animationDuration = Math.round((sp.textContent.length * 8 + innerWidth) / 45) + "s";
     });
   };
 
